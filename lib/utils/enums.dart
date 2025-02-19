@@ -1,0 +1,4 @@
+enum DropDownType {
+  category,
+  subCategory,
+}
