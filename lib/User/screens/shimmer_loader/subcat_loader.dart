@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/categories_contro.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/global.dart';
@@ -21,7 +22,7 @@ Widget SubcatLoader(BuildContext context) {
         sizeBoxHeight(18),
         Container(
             decoration: BoxDecoration(
-              color: Theme.of(context).brightness == Brightness.dark
+              color: !themeContro.isLightMode.value
                   ? AppColors.darkColor
                   : Colors.white,
             ),
@@ -32,13 +33,12 @@ Widget SubcatLoader(BuildContext context) {
                 scrollDirection: Axis.vertical,
                 itemBuilder: (context, index) {
                   return Shimmer.fromColors(
-                    baseColor: Theme.of(context).brightness == Brightness.dark
+                    baseColor: !themeContro.isLightMode.value
                         ? Colors.white12
                         : Colors.grey.shade300,
-                    highlightColor:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Colors.white24
-                            : Colors.grey.shade100,
+                    highlightColor: !themeContro.isLightMode.value
+                        ? Colors.white24
+                        : Colors.grey.shade100,
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
                       child: Container(

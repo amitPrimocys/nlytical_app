@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/add_review_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/edit_review_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/review_contro.dart';
@@ -84,31 +85,6 @@ class _ReviewState extends State<Review> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: AppColors.white,
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.appbar,
-        //   automaticallyImplyLeading: false,
-        //   title: Row(
-        //     children: [
-        //       GestureDetector(
-        //           onTap: () {
-        //             Get.to(TabbarScreen(
-        //               currentIndex: 4,
-        //             ));
-        //           },
-        //           child: Image.asset(
-        //             'assets/images/arrow-left1.png',
-        //             height: 24,
-        //           )),
-        //       sizeBoxWidth(10),
-        //       label(
-        //         'My Review',
-        //         fontSize: 20,
-        //         textColor: Colors.black,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ],
-        //   ),
-        // ),
         body: SizedBox(
           height: Get.height,
           child: Stack(
@@ -152,13 +128,6 @@ class _ReviewState extends State<Review> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      // Uncomment and use if required
-                      // sizeBoxWidth(240),
-                      // Image.asset(
-                      //   AppAsstes.search,
-                      //   scale: 3.5,
-                      //   color: Colors.white,
-                      // ),
                     ],
                   ).paddingSymmetric(horizontal: 20),
                 ),
@@ -168,8 +137,10 @@ class _ReviewState extends State<Review> {
                 child: Container(
                   width: Get.width,
                   height: getProportionateScreenHeight(800),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: themeContro.isLightMode.value
+                          ? Colors.white
+                          : AppColors.darkMainBlack,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
@@ -177,28 +148,11 @@ class _ReviewState extends State<Review> {
                   child: Column(
                     children: [
                       sizeBoxHeight(10),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     color: Color.fromRGBO(0, 0, 0, 0.12),
-                      //     boxShadow: [
-                      //       BoxShadow(
-                      //         color: Colors.black54,
-                      //         blurRadius: 10,
-                      //         spreadRadius: 0,
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-
                       Expanded(
                         child: Obx(() {
                           return reviewcontro.isfav.value &&
                                   reviewcontro.riviewlist.isEmpty
                               ? reviewlistLoader(context)
-                              //  Center(
-                              //     child: CircularProgressIndicator(
-                              //     color: AppColors.blue,
-                              //   ))
                               : SingleChildScrollView(
                                   controller: scrollController,
                                   child: Column(
@@ -301,13 +255,18 @@ class _ReviewState extends State<Review> {
                     : SizedBox.shrink(); // If no more data, show nothing
               }
               return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(vertical: 10),
                 child: Container(
                   // height: Get.height * 0.19,
                   width: Get.width,
                   decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey.shade200),
+                      color: themeContro.isLightMode.value
+                          ? Colors.white
+                          : AppColors.darkGray,
+                      border: Border.all(
+                          color: themeContro.isLightMode.value
+                              ? Colors.grey.shade200
+                              : Colors.transparent),
                       boxShadow: const [
                         BoxShadow(
                             color: Colors.black12,
@@ -322,113 +281,6 @@ class _ReviewState extends State<Review> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Row(
-                        //   children: [
-                        //     Container(
-                        //       height: getProportionateScreenHeight(60),
-                        //       width: getProportionateScreenWidth(60),
-                        //       decoration: BoxDecoration(
-                        //         borderRadius: BorderRadius.circular(10),
-                        //         image: DecorationImage(
-                        //             image: NetworkImage(reviewcontro
-                        //                 .riviewlist[index].serviceImages![0]
-                        //                 .toString()),
-                        //             fit: BoxFit.fill),
-                        //       ),
-                        //     ),
-                        //     Expanded(
-                        //       child: Column(
-                        //         mainAxisAlignment: MainAxisAlignment.start,
-                        //         crossAxisAlignment: CrossAxisAlignment.start,
-                        //         children: [
-                        //           Row(
-                        //             mainAxisAlignment:
-                        //                 MainAxisAlignment.spaceBetween,
-                        //             children: [
-                        //               Container(
-                        //                 height: 15,
-                        //                 decoration: BoxDecoration(
-                        //                   color: AppColors.blue,
-                        //                   borderRadius:
-                        //                       BorderRadius.circular(3),
-                        //                 ),
-                        //                 child: Center(
-                        //                   child: label(
-                        //                     reviewcontro
-                        //                         .riviewlist[index].categoryName
-                        //                         .toString(),
-                        //                     style: TextStyle(
-                        //                       color: Colors.white,
-                        //                       fontSize: 8,
-                        //                     ),
-                        //                   ).paddingOnly(left: 4, right: 4),
-                        //                 ),
-                        //               ),
-                        //               Row(
-                        //                 children: [
-                        //                   Text(
-                        //                     formatDateTime(DateTime.parse(
-                        //                         reviewcontro.riviewlist[index]
-                        //                             .createdAt!)),
-                        //                     style: TextStyle(
-                        //                       fontSize: 10,
-                        //                       color: AppColors.black,
-                        //                       fontWeight: FontWeight.w400,
-                        //                     ),
-                        //                   ),
-                        //                   sizeBoxWidth(5),
-                        //                   GestureDetector(
-                        //                     onTap: () {
-                        //                       confirmReview();
-                        //                     },
-                        //                     child: Icon(
-                        //                       Icons.more_vert,
-                        //                       size: 22,
-                        //                       color: Colors.black,
-                        //                     ),
-                        //                   ),
-                        //                 ],
-                        //               )
-
-                        //               // Container(
-                        //               //   height: 13,
-                        //               //   width: 45,
-                        //               //   decoration: BoxDecoration(
-                        //               //     color: AppColors.blue,
-                        //               //     borderRadius: BorderRadius.circular(3),
-                        //               //   ),
-                        //               //   child: Center(
-                        //               //     child: Text(
-                        //               //       reviewcontro
-                        //               //           .riviewlist[index].categoryName
-                        //               //           .toString(),
-                        //               //       style: TextStyle(
-                        //               //           color: Colors.white, fontSize: 5),
-                        //               //     ),
-                        //               //   ),
-                        //               // ),
-                        //             ],
-                        //           ).paddingOnly(left: 14),
-                        //           sizeBoxHeight(8),
-                        //           SizedBox(
-                        //             width: 243,
-                        //             child: label(
-                        //               reviewcontro.riviewlist[index].serviceName
-                        //                   .toString(),
-                        //               fontSize: 11,
-                        //               maxLines: 1,
-                        //               overflow: TextOverflow.ellipsis,
-                        //               textColor: AppColors.brown,
-                        //               fontWeight: FontWeight.w600,
-                        //             ).paddingOnly(
-                        //               left: 14,
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     )
-                        //   ],
-                        // ),
                         SizedBox(
                           width: Get.width * 0.9,
                           child: label(
@@ -437,7 +289,9 @@ class _ReviewState extends State<Review> {
                             fontSize: 14,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            textColor: AppColors.brown,
+                            textColor: themeContro.isLightMode.value
+                                ? AppColors.brown
+                                : AppColors.white,
                             fontWeight: FontWeight.w600,
                           ).paddingOnly(
                             left: 3,
@@ -476,7 +330,9 @@ class _ReviewState extends State<Review> {
                                   reviewcontro.riviewlist[index].createdAt!)),
                               style: TextStyle(
                                 fontSize: 10,
-                                color: AppColors.black,
+                                color: themeContro.isLightMode.value
+                                    ? AppColors.black
+                                    : AppColors.white,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -489,7 +345,11 @@ class _ReviewState extends State<Review> {
                             reviewcontro.riviewlist[index].reviewMessage
                                 .toString(),
                             style: poppinsFont(
-                                11, AppColors.brown, FontWeight.w400),
+                                11,
+                                themeContro.isLightMode.value
+                                    ? AppColors.brown
+                                    : AppColors.colorFFFFFF,
+                                FontWeight.w400),
                           ),
                         ),
                         sizeBoxHeight(10),
@@ -531,8 +391,6 @@ class _ReviewState extends State<Review> {
                                   reviewid: reviewcontro.riviewlist[index].id
                                       .toString(),
                                 );
-                                // reviewcontro.riviewlist.refresh();
-
                                 print('Tapped');
                                 _confirmReview(index);
                               },
@@ -541,12 +399,19 @@ class _ReviewState extends State<Review> {
                                 width: 100,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: AppColors.blue)),
+                                    border: Border.all(
+                                        color: themeContro.isLightMode.value
+                                            ? AppColors.blue
+                                            : AppColors.colorFFFFFF)),
                                 child: Center(
                                   child: Text(
                                     'Edit',
                                     style: poppinsFont(
-                                        11, AppColors.blue, FontWeight.w400),
+                                        11,
+                                        themeContro.isLightMode.value
+                                            ? AppColors.blue
+                                            : AppColors.colorFFFFFF,
+                                        FontWeight.w400),
                                   ),
                                 ),
                               ),
@@ -581,7 +446,9 @@ class _ReviewState extends State<Review> {
           label(
             "Review not Found",
             fontSize: 18,
-            textColor: AppColors.black,
+            textColor: themeContro.isLightMode.value
+                ? AppColors.black
+                : AppColors.white,
             fontWeight: FontWeight.w500,
           )
         ],

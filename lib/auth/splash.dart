@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/auth/welcome.dart';
 import 'package:nlytical_app/User/screens/bottamBar/newtabbar.dart';
+import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
@@ -15,6 +16,7 @@ import 'package:nlytical_app/Vendor/screens/add_store.dart';
 import 'package:nlytical_app/Vendor/screens/auth/subcription.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/vendor_new_tabbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 ThemeContro themeContro = Get.find();
 
@@ -51,6 +53,8 @@ class SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     assignValueForMode();
+    Stripe.publishableKey =
+        "pk_test_51OP303SJayPbST1licbf3gkBs6pS2Bg886xDS0hhh7Y9NydxCm0ezpqTCNpPGPiBmmX4mly6uXtAXMzxO1KwjRso00YmA0KNUB";
     animationController = new AnimationController(
         vsync: this, duration: new Duration(seconds: 2));
     animation = new CurvedAnimation(
@@ -127,7 +131,7 @@ class SplashScreenState extends State<SplashScreen>
     } else if (userid != null) {
       userID = prefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
       print("ROLE: ${prefs.getString(SharedPreferencesKey.ROlE)}");
-
+      Get.find<HomeContro>().checkLocationPermission();
       return TabbarScreen(currentIndex: 0);
     } else if (vendorid != null) {
       if (prefs.getString(SharedPreferencesKey.SUBSCRIBE)?.isEmpty ?? true) {

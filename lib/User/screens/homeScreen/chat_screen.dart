@@ -3,11 +3,14 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/block_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/chat_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/report_contro.dart';
@@ -68,6 +71,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
+    print("Block_status:${widget.block}");
     reportcontro.reportgetApi();
     timer = Timer.periodic(const Duration(seconds: 3), (timer) {
       messageController.onlineuser(onlineStatus: "1");
@@ -93,7 +97,9 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeContro.isLightMode.value
+          ? Colors.white
+          : AppColors.darkMainBlack,
       body: SizedBox(
         height: Get.height,
         child: Stack(
@@ -176,57 +182,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                         FontWeight.w500,
                                       ),
                                     ),
-
-                              // widget.isRought == true
-                              //     ? label(
-                              //         widget.lastSeen!,
-                              //         overflow: TextOverflow.ellipsis,
-                              //         style: poppinsFont(
-                              //           14,
-                              //           const Color(0xffE6E6E6),
-                              //           FontWeight.w500,
-                              //         ),
-                              //       )
-                              //     : label(
-                              //         widget.lastSeen!,
-                              //         overflow: TextOverflow.ellipsis,
-                              //         style: poppinsFont(
-                              //           14,
-                              //           const Color(0xffE6E6E6),
-                              //           FontWeight.w500,
-                              //         ),
-                              //       ),
-
-                              // StreamBuilder(
-                              //   stream:
-                              //       messageController.streamControlleronline.stream,
-                              //   builder: (BuildContext context,
-                              //       AsyncSnapshot<OnlineModel> snapshot) {
-                              //     if (snapshot.hasData) {
-                              //       return Text(
-                              //         messageController.isonlinestatus.value == "1"
-                              //             ? "Online"
-                              //             : formatLastSeen(messageController
-                              //                 .getMessageModel
-                              //                 .value
-                              //                 .toUserDetails!
-                              //                 .updatedAt!
-                              //                 .toString()),
-                              //         style: const TextStyle(
-                              //           color: Color(0xffE6E6E6),
-                              //           fontSize: 12,
-                              //           fontWeight: FontWeight.w400,
-                              //         ),
-                              //       );
-                              //     } else if (snapshot.connectionState ==
-                              //         ConnectionState.waiting) {
-                              //       return const SizedBox();
-                              //     } else {
-                              //       return const Text('123');
-                              //     }
-                              //   },
-                              // )
-
                               StreamBuilder(
                                 stream: messageController
                                     .streamControlleronline.stream,
@@ -269,12 +224,16 @@ class _ChatScreenState extends State<ChatScreen> {
                         data: Theme.of(context).copyWith(
                           popupMenuTheme: PopupMenuThemeData(
                             color: Colors.white, // Background color
-                            shadowColor:
-                                Colors.grey.withOpacity(0.5), // Shadow color
+                            shadowColor: themeContro.isLightMode.value
+                                ? Colors.grey.withOpacity(0.5)
+                                : AppColors.darkShadowColor, // Shadow color
                             elevation: 12, // Elevation for box shadow
                           ),
                         ),
                         child: PopupMenuButton<String>(
+                          color: themeContro.isLightMode.value
+                              ? AppColors.white
+                              : AppColors.darkGray,
                           icon: const Icon(
                             Icons.more_vert,
                             color: AppColors.white,
@@ -283,29 +242,46 @@ class _ChatScreenState extends State<ChatScreen> {
                           onSelected: (value) {
                             if (value == 'Report') {
                               reportcontro.reportgetApi();
-                              report();
+                              bottomSheetGobal(
+                                  bottomsheetHeight: 370,
+                                  title: "Report",
+                                  child: report());
                             } else if (value == 'Block') {
-                              selectblock();
+                              bottomSheetGobal(
+                                  bottomsheetHeight: 250,
+                                  title: widget.block == 1
+                                      ? "Block Account"
+                                      : "Unblock Account",
+                                  child: selectblock());
                             }
                           },
                           itemBuilder: (BuildContext context) => [
-                            const PopupMenuItem<String>(
+                            PopupMenuItem<String>(
                               value: 'Report',
                               child: Text(
                                 'Report',
-                                style: TextStyle(color: Colors.black),
+                                style: TextStyle(
+                                    color: themeContro.isLightMode.value
+                                        ? Colors.black
+                                        : AppColors.white),
                               ),
                             ),
                             PopupMenuItem<String>(
                               value: 'Block',
                               child: widget.block == 1
-                                  ? const Text(
+                                  ? Text(
                                       'Block',
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(
+                                          color: themeContro.isLightMode.value
+                                              ? Colors.black
+                                              : AppColors.white),
                                     )
-                                  : const Text(
+                                  : Text(
                                       'UnBlock',
-                                      style: TextStyle(color: Colors.black),
+                                      style: TextStyle(
+                                          color: themeContro.isLightMode.value
+                                              ? Colors.black
+                                              : AppColors.white),
                                     ),
                             ),
                           ],
@@ -319,9 +295,11 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Container(
                   width: Get.width,
                   height: getProportionateScreenHeight(800),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                      color: themeContro.isLightMode.value
+                          ? Colors.white
+                          : AppColors.darkMainBlack,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
                       )),
@@ -439,80 +417,125 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           Align(
                             alignment: Alignment.bottomCenter,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: globalTextField(
-                                      controller: sendMessageController,
-                                      onEditingComplete: () {
-                                        FocusScope.of(context).requestFocus(
-                                            signUpPasswordFocusNode);
-                                      },
-                                      focusNode: signUpEmailIDFocusNode,
-                                      // onEditingComplete: () {},
-                                      hintText: 'Type Message',
-                                      context: context,
-                                      suffixIcon: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              // openImagePickerGALLERY();
-                                              // getDocsFromLocal();
-                                              // pickAndSendFile();
-                                              // setState(() {
-                                              //   onTapbutton = !onTapbutton;
-                                              // });
-
-                                              chatimageselect();
+                            child: widget.block == 1
+                                ? Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Expanded(
+                                        child: globalTextField(
+                                            controller: sendMessageController,
+                                            onEditingComplete: () {
+                                              FocusScope.of(context)
+                                                  .requestFocus(
+                                                      signUpPasswordFocusNode);
                                             },
-                                            child: Image.asset(
-                                              AppAsstes.pin,
-                                              scale: 3.5,
-                                            ),
-                                          ),
-                                          sizeBoxWidth(5),
-                                          GestureDetector(
-                                            onTap: () {
-                                              openImagePickerCAMERA();
-                                            },
-                                            child: Image.asset(
-                                              AppAsstes.camerachat,
-                                              scale: 3.5,
-                                            ),
-                                          ),
-                                        ],
-                                      ).paddingOnly(right: 13)),
-                                ),
-                                sizeBoxWidth(13),
-                                InkWell(
-                                  onTap: () {
-                                    (sendMessageController.text.isEmpty ||
-                                            sendMessageController.text
-                                                .trim()
-                                                .isEmpty)
-                                        ? null
-                                        : addChatAPI();
+                                            focusNode: signUpEmailIDFocusNode,
+                                            // onEditingComplete: () {},
+                                            hintText: 'Type Message',
+                                            context: context,
+                                            suffixIcon: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    // openImagePickerGALLERY();
+                                                    // getDocsFromLocal();
+                                                    // pickAndSendFile();
+                                                    // setState(() {
+                                                    //   onTapbutton = !onTapbutton;
+                                                    // });
 
-                                    sendMessageController.clear();
-                                  },
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: AppColors.color0046AE,
-                                        borderRadius: BorderRadius.circular(
-                                          10,
+                                                    chatimageselect();
+                                                  },
+                                                  child: Image.asset(
+                                                    AppAsstes.pin,
+                                                    scale: 3.5,
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? Colors.transparent
+                                                        : AppColors.grey1,
+                                                  ),
+                                                ),
+                                                sizeBoxWidth(5),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    openImagePickerCAMERA();
+                                                  },
+                                                  child: Image.asset(
+                                                    AppAsstes.camerachat,
+                                                    scale: 3.5,
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? Colors.transparent
+                                                        : AppColors.grey1,
+                                                  ),
+                                                ),
+                                              ],
+                                            ).paddingOnly(right: 13)),
+                                      ),
+                                      sizeBoxWidth(13),
+                                      InkWell(
+                                        onTap: () {
+                                          (sendMessageController.text.isEmpty ||
+                                                  sendMessageController.text
+                                                      .trim()
+                                                      .isEmpty)
+                                              ? snackBar("Please type message")
+                                              : addChatAPI();
+
+                                          sendMessageController.clear();
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: AppColors.color0046AE,
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                10,
+                                              )),
+                                          child: Image.asset(
+                                            AppAsstes.share,
+                                            height:
+                                                getProportionateScreenHeight(
+                                                    24),
+                                            width:
+                                                getProportionateScreenWidth(24),
+                                          ).paddingSymmetric(
+                                              horizontal: 13, vertical: 11),
+                                        ).paddingOnly(top: 13),
+                                      )
+                                    ],
+                                  ).paddingOnly(left: 14, right: 14, bottom: 15)
+                                : InkWell(
+                                    onTap: () {
+                                      // blockApi();
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 10.0,
+                                      ),
+                                      child: Container(
+                                        height: 40,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.95,
+                                        decoration: BoxDecoration(
+                                          color: AppColors.blue,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: const Center(
+                                            child: Text(
+                                          " This user is currently blocked and unavailable.",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: 13.5,
+                                              color: Colors.white,
+                                              fontFamily: 'Poppins'),
                                         )),
-                                    child: Image.asset(
-                                      AppAsstes.share,
-                                      height: getProportionateScreenHeight(24),
-                                      width: getProportionateScreenWidth(24),
-                                    ).paddingSymmetric(
-                                        horizontal: 13, vertical: 11),
-                                  ).paddingOnly(top: 13),
-                                )
-                              ],
-                            ).paddingOnly(left: 14, right: 14, bottom: 15),
+                                      ).paddingOnly(bottom: 15),
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -546,7 +569,7 @@ class _ChatScreenState extends State<ChatScreen> {
         return getTextMessageType(index, data);
       case "image":
         return getIMAGEMessageType(index, data);
-      case "document":
+      case "doc":
         return getDOCMessageType(index, data);
       default:
         return const SizedBox.shrink();
@@ -696,15 +719,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                       gradient:
                                           data.fromUser.toString() != userID
                                               ? AppColors.oppositechat
-                                              : AppColors.ownchat
-
-                                      // data.fromUser.toString() !=
-                                      //         SharedPrefs.getString(
-                                      //             SharedPreferencesKey
-                                      //                 .LOGGED_IN_USERID)
-                                      //     ? Colors.grey.shade300
-                                      //     : const Color.fromRGBO(176, 208, 255, 1),
-                                      ),
+                                              : AppColors.ownchat),
                                   padding: const EdgeInsets.all(4),
                                   child: GestureDetector(
                                     onTap: () {
@@ -748,28 +763,53 @@ class _ChatScreenState extends State<ChatScreen> {
                                       height: 100,
                                       width: 100,
                                       decoration: BoxDecoration(
-                                          borderRadius: data.fromUser
-                                                      .toString() !=
-                                                  userID
-                                              ? const BorderRadius.only(
-                                                  topLeft: Radius.circular(15),
-                                                  topRight: Radius.circular(15),
-                                                  bottomRight:
-                                                      Radius.circular(15),
-                                                  bottomLeft:
-                                                      Radius.circular(0))
-                                              : const BorderRadius.only(
-                                                  topLeft: Radius.circular(15),
-                                                  topRight: Radius.circular(15),
-                                                  bottomRight:
-                                                      Radius.circular(0),
-                                                  bottomLeft:
-                                                      Radius.circular(15)),
-                                          image: DecorationImage(
-                                              image: NetworkImage(
-                                                data.url!,
-                                              ),
-                                              fit: BoxFit.cover)),
+                                        borderRadius: data.fromUser
+                                                    .toString() !=
+                                                userID
+                                            ? const BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(0))
+                                            : const BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15),
+                                                bottomRight: Radius.circular(0),
+                                                bottomLeft:
+                                                    Radius.circular(15)),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: data.fromUser
+                                                    .toString() !=
+                                                userID
+                                            ? const BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15),
+                                                bottomRight:
+                                                    Radius.circular(15),
+                                                bottomLeft: Radius.circular(0))
+                                            : const BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15),
+                                                bottomRight: Radius.circular(0),
+                                                bottomLeft:
+                                                    Radius.circular(15)),
+                                        child: CachedNetworkImage(
+                                          imageUrl: data.url!,
+                                          fit: BoxFit.cover,
+                                          placeholder: (context, url) {
+                                            return const CupertinoActivityIndicator();
+                                          },
+                                          errorWidget: (context, url, error) {
+                                            return const Icon(
+                                              Icons.error,
+                                              size: 20,
+                                              color: Colors.red,
+                                            );
+                                          },
+                                        ),
+                                      ),
                                     ),
                                   )),
                             ],
@@ -1422,286 +1462,176 @@ class _ChatScreenState extends State<ChatScreen> {
         });
   }
 
-  Future<dynamic> selectblock() {
-    final ap = Get.bottomSheet(
-        isDismissible: false,
-        isScrollControlled: true,
-        barrierColor: const Color.fromRGBO(0, 0, 0, 0.57),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+  selectblock() {
+    return Column(
+      children: [
+        sizeBoxHeight(20),
+        Center(
+          child: Text(
+            widget.block == 1
+                ? "Are you sure you want to \nBlock Account?"
+                : "Are you sure you want to \nUnblock Account?",
+            textAlign: TextAlign.center,
+            style: poppinsFont(16, AppColors.greyColor, FontWeight.w500),
           ),
         ),
-        BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 3.8,
-            sigmaY: 3.8,
-          ),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
+        sizeBoxHeight(20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              onTap: () => Get.back(),
+              child: Container(
+                height: getProportionateScreenHeight(50),
+                width: getProportionateScreenWidth(150),
+                decoration: BoxDecoration(
+                  color: themeContro.isLightMode.value
+                      ? Colors.white
+                      : Colors.transparent,
+                  border: Border.all(
+                      color: themeContro.isLightMode.value
+                          ? AppColors.blue
+                          : AppColors.grey1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: label(
+                    'Cancel',
+                    fontSize: 14,
+                    textColor: themeContro.isLightMode.value
+                        ? Colors.black
+                        : AppColors.white,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ),
             ),
-            height: getProportionateScreenHeight(230),
-            width: Get.width,
-            child: Column(
-              children: [
-                Container(
-                  height: getProportionateScreenHeight(70),
-                  width: Get.width,
-                  decoration: BoxDecoration(
-                    // color: AppColors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.12),
-                        blurRadius: 10.0,
-                        spreadRadius: 0.0,
-                        offset: const Offset(
-                            0.0, 2.0), // shadow direction: bottom right
-                      )
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        "Block Account",
-                        style:
-                            poppinsFont(16, AppColors.black, FontWeight.w500),
+            sizeBoxWidth(30),
+            widget.block == 1
+                ? GestureDetector(
+                    onTap: () {
+                      blockcontro.BlockApi(oppsiteId: widget.toUserID);
+                      setState(() {
+                        widget.block = 0;
+                      });
+                      Get.back();
+                    },
+                    child: Container(
+                      height: getProportionateScreenHeight(50),
+                      width: getProportionateScreenWidth(150),
+                      decoration: BoxDecoration(
+                        color: AppColors.blue,
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      sizeBoxWidth(100),
-                      GestureDetector(
-                          onTap: () {
-                            print("back");
-                            Get.back();
-                          },
-                          child: const Icon(Icons.close, size: 25)
-                              .paddingOnly(right: 20)),
-                    ],
-                  ),
-                ),
-                sizeBoxHeight(20),
-                Center(
-                  child: Text(
-                    "Are you sure you want to \nBlock Account?",
-                    textAlign: TextAlign.center,
-                    style:
-                        poppinsFont(16, AppColors.greyColor, FontWeight.w500),
-                  ),
-                ),
-                sizeBoxHeight(20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.back(),
-                      child: Container(
-                        height: getProportionateScreenHeight(50),
-                        width: getProportionateScreenWidth(150),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: AppColors.blue),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Center(
-                          child: label(
-                            'Cancel',
-                            fontSize: 14,
-                            textColor: Colors.black,
-                            fontWeight: FontWeight.w400,
-                          ),
+                      child: Center(
+                        child: label(
+                          widget.block == 1 ? 'Block' : "Unblock",
+                          fontSize: 14,
+                          textColor: Colors.white,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ),
-                    sizeBoxWidth(30),
-                    widget.block == 1
-                        ? GestureDetector(
-                            onTap: () {
-                              blockcontro.BlockApi(oppsiteId: widget.toUserID);
-                              Get.back();
-                            },
-                            child: Container(
-                              height: getProportionateScreenHeight(50),
-                              width: getProportionateScreenWidth(150),
-                              decoration: BoxDecoration(
-                                color: AppColors.blue,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: label(
-                                  'Block',
-                                  fontSize: 14,
-                                  textColor: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          )
-                        : GestureDetector(
-                            onTap: () {
-                              blockcontro.UnBlockApi(
-                                  oppsiteId: widget.toUserID);
-                              Get.back();
-                            },
-                            child: Container(
-                              height: getProportionateScreenHeight(50),
-                              width: getProportionateScreenWidth(150),
-                              decoration: BoxDecoration(
-                                color: AppColors.blue,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Center(
-                                child: label(
-                                  'UnBlock',
-                                  fontSize: 14,
-                                  textColor: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                          ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ));
-    return ap;
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      blockcontro.UnBlockApi(oppsiteId: widget.toUserID);
+                      setState(() {
+                        widget.block = 1;
+                      });
+                      Get.back();
+                    },
+                    child: Container(
+                      height: getProportionateScreenHeight(50),
+                      width: getProportionateScreenWidth(150),
+                      decoration: BoxDecoration(
+                        color: AppColors.blue,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: label(
+                          'UnBlock',
+                          fontSize: 14,
+                          textColor: Colors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+          ],
+        ),
+      ],
+    );
   }
 
-  Future<dynamic> report() {
-    final ap = Get.bottomSheet(
-        isDismissible: false,
-        isScrollControlled: true,
-        barrierColor: const Color.fromRGBO(0, 0, 0, 0.57),
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        BackdropFilter(
-          filter: ImageFilter.blur(
-            sigmaX: 3.8,
-            sigmaY: 3.8,
-          ),
-          child: Obx(() {
-            return reportcontro.isreport.value
-                ? const Center(
-                    child: CircularProgressIndicator(
-                    color: Colors.transparent,
-                  ))
-                : Container(
-                    decoration: const BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    height: getProportionateScreenHeight(370),
-                    width: Get.width,
-                    child: Column(
-                      children: [
-                        Container(
-                          height: getProportionateScreenHeight(70),
-                          width: Get.width,
-                          decoration: BoxDecoration(
-                            // color: AppColors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.12),
-                                blurRadius: 10.0,
-                                spreadRadius: 0.0,
-                                offset: const Offset(
-                                    0.0, 2.0), // shadow direction: bottom right
-                              )
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(
-                                "Report",
-                                style: poppinsFont(
-                                    16, AppColors.black, FontWeight.w500),
-                              ),
-                              sizeBoxWidth(145),
-                              GestureDetector(
-                                  onTap: () {
-                                    print("back");
-                                    Get.back();
-                                  },
-                                  child: const Icon(Icons.close, size: 25)
-                                      .paddingOnly(right: 20)),
-                            ],
-                          ),
-                        ),
-                        sizeBoxHeight(20),
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: Text(
-                            "why are you reporting this Post?",
-                            textAlign: TextAlign.center,
-                            style: poppinsFont(
-                                12, AppColors.greyColor, FontWeight.w600),
-                          ),
-                        ).paddingSymmetric(horizontal: 20),
-                        sizeBoxHeight(10),
-                        reportcontro.reportlist.isNotEmpty
-                            ? ListView.separated(
-                                itemCount: reportcontro.reportlist.length,
-                                shrinkWrap: true,
-                                clipBehavior: Clip.antiAlias,
-                                physics: const BouncingScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                padding: EdgeInsets.zero,
-                                separatorBuilder: (context, index) {
-                                  return const Divider(
-                                    color: AppColors.colorE9E9E9,
-                                    height: 1,
-                                  );
-                                },
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      reportcontro.ReportUserApi(
-                                          reportoppsiteId: widget.toUserID,
-                                          reportText: reportcontro
-                                              .reportlist[index].text
-                                              .toString());
-                                      Get.back();
-                                    },
-                                    child: label(
-                                            reportcontro.reportlist[index].text
-                                                .toString(),
-                                            fontSize: 12,
-                                            textColor: const Color.fromRGBO(
-                                                58, 58, 58, 1),
-                                            fontWeight: FontWeight.w400)
-                                        .paddingSymmetric(vertical: 10)
-                                        .paddingSymmetric(horizontal: 20),
-                                  );
-                                })
-                            : const Text('Report List Empty')
-                      ],
-                    ),
-                  );
-          }),
-        ));
-    return ap;
+  report() {
+    return Obx(() {
+      return reportcontro.isreport.value
+          ? Center(
+              child: CircularProgressIndicator(
+              color: themeContro.isLightMode.value
+                  ? Colors.transparent
+                  : AppColors.blue,
+            ))
+          : Column(
+              children: [
+                sizeBoxHeight(20),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    "why are you reporting this Post?",
+                    textAlign: TextAlign.center,
+                    style: poppinsFont(
+                        12,
+                        themeContro.isLightMode.value
+                            ? AppColors.greyColor
+                            : AppColors.white,
+                        FontWeight.w600),
+                  ),
+                ).paddingSymmetric(horizontal: 20),
+                sizeBoxHeight(10),
+                reportcontro.reportlist.isNotEmpty
+                    ? ListView.separated(
+                        itemCount: reportcontro.reportlist.length,
+                        shrinkWrap: true,
+                        clipBehavior: Clip.antiAlias,
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        padding: EdgeInsets.zero,
+                        separatorBuilder: (context, index) {
+                          return Divider(
+                            color: themeContro.isLightMode.value
+                                ? AppColors.colorE9E9E9
+                                : Colors.grey.shade900,
+                            height: 1,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              reportcontro.ReportUserApi(
+                                  reportoppsiteId: widget.toUserID,
+                                  reportText: reportcontro
+                                      .reportlist[index].text
+                                      .toString());
+                              Get.back();
+                            },
+                            child: label(
+                                    reportcontro.reportlist[index].text
+                                        .toString(),
+                                    fontSize: 12,
+                                    textColor: themeContro.isLightMode.value
+                                        ? const Color.fromRGBO(58, 58, 58, 1)
+                                        : AppColors.grey1,
+                                    fontWeight: FontWeight.w600)
+                                .paddingSymmetric(vertical: 10)
+                                .paddingSymmetric(horizontal: 20),
+                          );
+                        })
+                    : const Text('Report List Empty')
+              ],
+            );
+    });
   }
 }

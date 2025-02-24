@@ -1,8 +1,6 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, use_key_in_widget_constructors, library_private_types_in_public_api, deprecated_member_use, use_full_hex_values_for_flutter_colors
 
-import 'dart:developer';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/categories_contro.dart';
@@ -21,9 +19,8 @@ import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
-import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/utils/global.dart';
-import '../../../utils/global_fonts.dart';
+import 'package:nlytical_app/utils/global_fonts.dart';
 
 // ignore: must_be_immutable
 class TabbarScreen extends StatefulWidget {
@@ -45,7 +42,7 @@ class _TabbarScreenState extends State<TabbarScreen>
   // MessageController messageController = Get.put(MessageController());
   ChatController messageController = Get.put(ChatController());
 
-  UserTabController userTabController = Get.put(UserTabController());
+  UserTabController userTabController = Get.find();
   // ignore: unused_field
   List<dynamic> _handlePages = [
     Home(),
@@ -72,7 +69,7 @@ class _TabbarScreenState extends State<TabbarScreen>
 
     // reviewcontro.reviewApi(page: page.toString());
 
-    _checkLocationPermission();
+    // _checkLocationPermission();
 
     // _checkLocationPermission();
     // getUserDataFromPrefs();
@@ -97,49 +94,49 @@ class _TabbarScreenState extends State<TabbarScreen>
     }
   }
 
-  Future<void> _checkLocationPermission() async {
-    log("start");
-    LocationPermission permission = await Geolocator.checkPermission();
+  // Future<void> _checkLocationPermission() async {
+  //   log("start");
+  //   LocationPermission permission = await Geolocator.checkPermission();
 
-    if (permission == LocationPermission.deniedForever) {
-      snackBar(
-          "Nlytical app need location Permmision otherwise You are not able to see nearby stores, Please Allow location");
-    } else if (permission == LocationPermission.denied) {
-      LocationPermission newPermission = await Geolocator.requestPermission();
-      if (newPermission == LocationPermission.denied) {
-        snackBar("Please Allow location");
-      } else if (newPermission == LocationPermission.whileInUse ||
-          newPermission == LocationPermission.always) {
-        await _getCurrentLocation();
-      }
-    } else {
-      await _getCurrentLocation();
-    }
-  }
+  //   if (permission == LocationPermission.deniedForever) {
+  //     snackBar(
+  //         "Nlytical app need location Permmision otherwise You are not able to see nearby stores, Please Allow location");
+  //   } else if (permission == LocationPermission.denied) {
+  //     LocationPermission newPermission = await Geolocator.requestPermission();
+  //     if (newPermission == LocationPermission.denied) {
+  //       snackBar("Please Allow location");
+  //     } else if (newPermission == LocationPermission.whileInUse ||
+  //         newPermission == LocationPermission.always) {
+  //       await _getCurrentLocation();
+  //     }
+  //   } else {
+  //     await _getCurrentLocation();
+  //   }
+  // }
 
-  Future<void> _getCurrentLocation() async {
-    try {
-      // Fetch the current position (latitude and longitude)
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+  // Future<void> _getCurrentLocation() async {
+  //   try {
+  //     // Fetch the current position (latitude and longitude)
+  //     Position position = await Geolocator.getCurrentPosition(
+  //         desiredAccuracy: LocationAccuracy.high);
 
-      Latitude = position.latitude.toString();
-      Longitude = position.longitude.toString();
+  //     Latitude = position.latitude.toString();
+  //     Longitude = position.longitude.toString();
 
-      log("☺☺☺☺☺☺☺☺☺LAT :$Latitude");
-      log("☺☺☺☺☺☺☺☺☺LONG : $Longitude");
-      homecontro.homeApi(
-        latitudee: Latitude,
-        longitudee: Longitude,
-      );
-    } catch (e) {
-      debugPrint(e.toString());
-      homecontro.homeApi(
-        latitudee: '',
-        longitudee: '',
-      );
-    }
-  }
+  //     log("☺☺☺☺☺☺☺☺☺LAT :$Latitude");
+  //     log("☺☺☺☺☺☺☺☺☺LONG : $Longitude");
+  //     homecontro.homeApi(
+  //       latitudee: Latitude,
+  //       longitudee: Longitude,
+  //     );
+  //   } catch (e) {
+  //     debugPrint(e.toString());
+  //     homecontro.homeApi(
+  //       latitudee: '',
+  //       longitudee: '',
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +305,8 @@ class _TabbarScreenState extends State<TabbarScreen>
     return ClipPath(
       clipper: BottomNavBarClipper(),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20),
+        height: 53,
+        padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 18),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: const [
@@ -321,13 +319,16 @@ class _TabbarScreenState extends State<TabbarScreen>
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
               selectedIcon,
               height: 25,
             ),
+            SizedBox(height: 2),
             Text(
               label,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 8,
                 fontWeight: FontWeight.bold,
@@ -355,6 +356,7 @@ class _TabbarScreenState extends State<TabbarScreen>
           color:
               themeContro.isLightMode.value ? AppColors.black : AppColors.white,
         ),
+        SizedBox(height: 2),
         Text(
           label,
           style: TextStyle(

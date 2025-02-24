@@ -3,6 +3,7 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/get_profile_contro.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/login_controller.dart';
@@ -30,7 +31,9 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: themeContro.isLightMode.value
+            ? AppColors.white
+            : AppColors.darkMainBlack,
         body: SizedBox(
             height: Get.height,
             child: Stack(children: [
@@ -81,9 +84,11 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
                 child: Container(
                     width: Get.width,
                     height: getProportionateScreenHeight(800),
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                        color: themeContro.isLightMode.value
+                            ? AppColors.white
+                            : AppColors.darkMainBlack,
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                         )),
@@ -160,9 +165,20 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
                                                     height: Get.height * 0.54,
                                                     width: Get.width * 0.9,
                                                     decoration: BoxDecoration(
+                                                        color: themeContro
+                                                                .isLightMode
+                                                                .value
+                                                            ? Colors.white
+                                                            : AppColors
+                                                                .darkGray,
                                                         border: Border.all(
-                                                            color:
-                                                                AppColors.blue1,
+                                                            color: themeContro
+                                                                    .isLightMode
+                                                                    .value
+                                                                ? AppColors
+                                                                    .blue1
+                                                                : AppColors
+                                                                    .darkgray2,
                                                             width: 3),
                                                         borderRadius:
                                                             BorderRadius
@@ -206,9 +222,13 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500,
-                                                              textColor:
-                                                                  AppColors
-                                                                      .black),
+                                                              textColor: themeContro
+                                                                      .isLightMode
+                                                                      .value
+                                                                  ? AppColors
+                                                                      .black
+                                                                  : AppColors
+                                                                      .colorFFFFFF),
                                                         ),
                                                         sizeBoxHeight(10),
                                                         Align(
@@ -233,11 +253,16 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
                                                                           index]
                                                                       .price!,
                                                                   style:
-                                                                      const TextStyle(
+                                                                      TextStyle(
                                                                     fontSize:
                                                                         36,
-                                                                    color: AppColors
-                                                                        .black,
+                                                                    color: themeContro
+                                                                            .isLightMode
+                                                                            .value
+                                                                        ? AppColors
+                                                                            .black
+                                                                        : AppColors
+                                                                            .colorFFFFFF,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w600,
@@ -304,6 +329,7 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
                                                                               loginContro.subscriptionDetailsData[index].planServices![index1].status == 1 ? 'assets/images/right 1.png' : 'assets/images/right 2.png',
                                                                               height: getProportionateScreenHeight(20),
                                                                               width: getProportionateScreenWidth(20),
+                                                                              color: loginContro.subscriptionDetailsData[index].planServices![index1].status == 1 ? AppColors.blue : AppColors.white,
                                                                             ),
                                                                             sizeBoxWidth(10),
                                                                             SizedBox(
@@ -314,7 +340,7 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
                                                                                 maxLines: 2,
                                                                                 style: poppinsFont(
                                                                                   14,
-                                                                                  AppColors.color000000,
+                                                                                  themeContro.isLightMode.value ? AppColors.black : AppColors.colorFFFFFF,
                                                                                   FontWeight.w500,
                                                                                 ),
                                                                               ),

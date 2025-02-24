@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/chat_contro.dart';
 import 'package:nlytical_app/User/screens/homeScreen/chat_screen.dart';
 import 'package:nlytical_app/utils/assets.dart';
@@ -45,7 +48,9 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeContro.isLightMode.value
+          ? Colors.white
+          : AppColors.darkMainBlack,
       body: SizedBox(
         height: Get.height,
         child: Stack(
@@ -81,7 +86,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                   sizeBoxWidth(90),
                   GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
                       },
                       child: Image.asset(
                         'assets/images/search.png',
@@ -106,9 +111,11 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                   Container(
                     width: Get.width,
                     height: getProportionateScreenHeight(800),
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                        color: themeContro.isLightMode.value
+                            ? Colors.white
+                            : AppColors.darkMainBlack,
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                         )),
@@ -176,8 +183,11 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                                             scrollDirection: Axis.vertical,
                                             padding: EdgeInsets.zero,
                                             separatorBuilder: (context, index) {
-                                              return const Divider(
-                                                color: AppColors.colorE9E9E9,
+                                              return Divider(
+                                                color: themeContro
+                                                        .isLightMode.value
+                                                    ? AppColors.colorE9E9E9
+                                                    : AppColors.darkGray,
                                                 height: 1,
                                               );
                                             },
@@ -220,28 +230,20 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                                                         .chatList![index]
                                                         .isBlock!,
                                                     isRought: false,
-                                                  ));
+                                                  ))!
+                                                      .then((_) {
+                                                    setState(() {
+                                                      messageController.chatApi(
+                                                          issearch: false);
+                                                    });
+                                                  });
                                                 },
                                                 child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
                                                   children: [
                                                     Center(
-                                                        child:
-                                                            // commonImage(
-                                                            //   image: snapshot
-                                                            //       .data!
-                                                            //       .chatList![index]
-                                                            //       .profilePic!,
-                                                            //   height:
-                                                            //       getProportionateScreenHeight(
-                                                            //           50),
-                                                            //   width:
-                                                            //       getProportionateScreenWidth(
-                                                            //           50),
-                                                            //   radius: 30,
-                                                            // ),
-                                                            Stack(
+                                                        child: Stack(
                                                       clipBehavior: Clip.none,
                                                       children: [
                                                         Container(
@@ -255,20 +257,31 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                                                                       .grey
                                                                       .shade300)),
                                                           child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        100),
-                                                            child:
-                                                                Image.network(
-                                                              snapshot
-                                                                  .data!
-                                                                  .chatList![
-                                                                      index]
-                                                                  .profilePic!,
-                                                              fit: BoxFit.cover,
-                                                            ),
-                                                          ),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100),
+                                                              child:
+                                                                  CachedNetworkImage(
+                                                                imageUrl: snapshot
+                                                                    .data!
+                                                                    .chatList![
+                                                                        index]
+                                                                    .profilePic!,
+                                                                fit: BoxFit
+                                                                    .cover,
+                                                                errorWidget:
+                                                                    (context,
+                                                                        url,
+                                                                        error) {
+                                                                  return const Icon(
+                                                                      Icons
+                                                                          .error,
+                                                                      color: Colors
+                                                                          .red,
+                                                                      size: 20);
+                                                                },
+                                                              )),
                                                         ),
                                                         Positioned(
                                                           bottom: 4,
@@ -312,7 +325,13 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                                                                     .ellipsis,
                                                             style: poppinsFont(
                                                               15,
-                                                              AppColors.black,
+                                                              themeContro
+                                                                      .isLightMode
+                                                                      .value
+                                                                  ? AppColors
+                                                                      .black
+                                                                  : AppColors
+                                                                      .white,
                                                               FontWeight.w500,
                                                             ),
                                                           ),
@@ -406,31 +425,6 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                                               );
                                             },
                                           ),
-                                    // :Center(
-                                    //     child: Column(
-                                    //       mainAxisAlignment:
-                                    //           MainAxisAlignment.center,
-                                    //       crossAxisAlignment:
-                                    //           CrossAxisAlignment.center,
-                                    //       children: [
-                                    //         sizeBoxHeight(200),
-                                    //         SizedBox(
-                                    //           height: 160,
-                                    //           child: Image.asset(
-                                    //             'assets/images/Animation - 1736233762512.gif', // Path to your Lottie JSON file
-                                    //             width: 200,
-                                    //             height: 180,
-                                    //           ),
-                                    //         ),
-                                    //         label(
-                                    //           "No Messages to show",
-                                    //           fontSize: 18,
-                                    //           textColor: AppColors.black,
-                                    //           fontWeight: FontWeight.w500,
-                                    //         )
-                                    //       ],
-                                    //     ),
-                                    //   ),
                                     sizeBoxHeight(20),
                                   ],
                                 );
@@ -439,215 +433,6 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                               }
                             },
                           ),
-
-                          // SingleChildScrollView(
-                          //   clipBehavior: Clip.antiAlias,
-                          //   child:
-                          //    Obx(() {
-                          //     return messageController.isChatListLoading.value ==
-                          //             true
-                          //         ? Center(child: commonLoading())
-                          //         : Column(
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.start,
-                          //             children: [
-                          //               messageController.chatlist.isNotEmpty
-                          //                   ? ListView.separated(
-                          //                       itemCount: messageController
-                          //                           .chatlist.length,
-                          //                       shrinkWrap: true,
-                          //                       clipBehavior: Clip.antiAlias,
-                          //                       physics:
-                          //                           const BouncingScrollPhysics(),
-                          //                       scrollDirection: Axis.vertical,
-                          //                       padding: EdgeInsets.zero,
-                          //                       separatorBuilder:
-                          //                           (context, index) {
-                          //                         return const Divider(
-                          //                           color: AppColors.colorE9E9E9,
-                          //                           height: 1,
-                          //                         );
-                          //                       },
-                          //                       itemBuilder: (context, index) {
-                          //                         return GestureDetector(
-                          //                           behavior: HitTestBehavior
-                          //                               .translucent,
-                          //                           onTap: () {
-                          //                              messageController.chatlistIndex.value = index;
-                          //                             Get.to(ChatScreen(
-                          //                               toUserID:
-                          //                                   messageController
-                          //                                       .chatlist[index]
-                          //                                       .secondId
-                          //                                       .toString(),
-                          //                               isRought: false,
-                          //                             ));
-                          //                           },
-                          //                           // onTap: () {
-                          //                           //   messageController.chatlistIndex.value = index;
-                          //                           //   Get.to(
-                          //                           //     ChatScreen(
-                          //                           //         toUserID: messageController
-                          //                           //             .chatListData[index].secondId
-                          //                           //             .toString(),
-                          //                           //         isRought: false),
-                          //                           //   );
-                          //                           // },
-                          //                           child: Row(
-                          //                             crossAxisAlignment:
-                          //                                 CrossAxisAlignment
-                          //                                     .center,
-                          //                             children: [
-                          //                               commonImage(
-                          //                                 image: messageController
-                          //                                     .chatlist[index]
-                          //                                     .profilePic!,
-                          //                                 height:
-                          //                                     getProportionateScreenHeight(
-                          //                                         50),
-                          //                                 width:
-                          //                                     getProportionateScreenWidth(
-                          //                                         50),
-                          //                                 radius: 30,
-                          //                               ),
-                          //                               sizeBoxWidth(10),
-                          //                               Expanded(
-                          //                                 child: Column(
-                          //                                   crossAxisAlignment:
-                          //                                       CrossAxisAlignment
-                          //                                           .start,
-                          //                                   mainAxisAlignment:
-                          //                                       MainAxisAlignment
-                          //                                           .spaceBetween,
-                          //                                   children: [
-                          //                                     label(
-                          //                                       "${messageController.chatlist[index].firstName!} ${messageController.chatlist[index].lastName!}",
-                          //                                       overflow:
-                          //                                           TextOverflow
-                          //                                               .ellipsis,
-                          //                                       style:
-                          //                                           poppinsFont(
-                          //                                         15,
-                          //                                         AppColors.black,
-                          //                                         FontWeight.w500,
-                          //                                       ),
-                          //                                     ),
-                          //                                     label(
-                          //                                       messageController
-                          //                                           .chatlist[
-                          //                                               index]
-                          //                                           .lastMessage!,
-                          //                                       overflow:
-                          //                                           TextOverflow
-                          //                                               .ellipsis,
-                          //                                       style:
-                          //                                           poppinsFont(
-                          //                                         12,
-                          //                                         AppColors
-                          //                                             .colorA4A4A4,
-                          //                                         FontWeight.w400,
-                          //                                       ),
-                          //                                     ),
-                          //                                   ],
-                          //                                 ),
-                          //                               ),
-                          //                               Expanded(
-                          //                                 child: Column(
-                          //                                   crossAxisAlignment:
-                          //                                       CrossAxisAlignment
-                          //                                           .end,
-                          //                                   mainAxisAlignment:
-                          //                                       MainAxisAlignment
-                          //                                           .spaceBetween,
-                          //                                   children: [
-                          //                                     label(
-                          //                                       messageController
-                          //                                           .chatlist[
-                          //                                               index]
-                          //                                           .time!,
-                          //                                       overflow:
-                          //                                           TextOverflow
-                          //                                               .ellipsis,
-                          //                                       style:
-                          //                                           poppinsFont(
-                          //                                         8,
-                          //                                         AppColors
-                          //                                             .colorA4A4A4,
-                          //                                         FontWeight.w400,
-                          //                                       ),
-                          //                                     ),
-                          //                                     messageController
-                          //                                                 .chatlist[
-                          //                                                     index]
-                          //                                                 .unreadMessage ==
-                          //                                             "0"
-                          //                                         ? const SizedBox
-                          //                                             .shrink()
-                          //                                         : Container(
-                          //                                             decoration:
-                          //                                                 const BoxDecoration(
-                          //                                               shape: BoxShape
-                          //                                                   .circle,
-                          //                                               color: AppColors
-                          //                                                   .color0046AE,
-                          //                                             ),
-                          //                                             child:
-                          //                                                 label(
-                          //                                               messageController
-                          //                                                   .chatlist[
-                          //                                                       index]
-                          //                                                   .unreadMessage!,
-                          //                                               overflow:
-                          //                                                   TextOverflow
-                          //                                                       .ellipsis,
-                          //                                               style:
-                          //                                                   poppinsFont(
-                          //                                                 8,
-                          //                                                 AppColors
-                          //                                                     .colorFFFFFF,
-                          //                                                 FontWeight
-                          //                                                     .w500,
-                          //                                               ),
-                          //                                             ).paddingAll(
-                          //                                                     6),
-                          //                                           )
-                          //                                   ],
-                          //                                 ),
-                          //                               ),
-                          //                             ],
-                          //                           ).paddingSymmetric(
-                          //                               horizontal: 20,
-                          //                               vertical: 12),
-                          //                         );
-                          //                       },
-                          //                     )
-                          //                   : Column(
-                          //                       children: [
-                          //                         sizeBoxHeight(260),
-                          //                         Image.asset(
-                          //                             "assets/images/empty_image.png",
-                          //                             height:
-                          //                                 getProportionateScreenHeight(
-                          //                                     72)),
-                          //                         sizeBoxHeight(20),
-                          //                         Center(
-                          //                           child: label(
-                          //                             "No messages to show",
-                          //                             fontSize: 16,
-                          //                             maxLines: 1,
-                          //                             overflow:
-                          //                                 TextOverflow.ellipsis,
-                          //                             fontWeight: FontWeight.w600,
-                          //                           ),
-                          //                         ),
-                          //                       ],
-                          //                     ),
-                          //               sizeBoxHeight(20)
-                          //             ],
-                          //           );
-                          //   }),
-
-                          // ),
                         ),
                       ],
                     ),
@@ -684,7 +469,7 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
           label(
             "No Messages to show",
             fontSize: 18,
-            textColor: AppColors.black,
+            textColor: AppColors.brown,
             fontWeight: FontWeight.w500,
           )
         ],
@@ -698,18 +483,23 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
       height: 42,
       child: TextField(
         controller: searchcontroller,
-        onTap: () {
-          // Get.to(Search());
-        },
         onChanged: (value) {
           setState(() {
             messageController.chatApi(xyz: value, issearch: true);
           });
         },
-        cursorColor: Colors.grey.shade300,
+        style: poppinsFont(
+            13,
+            themeContro.isLightMode.value ? Colors.black : AppColors.white,
+            FontWeight.w500),
+        cursorColor: themeContro.isLightMode.value
+            ? Colors.grey.shade300
+            : AppColors.white,
         readOnly: false,
         decoration: InputDecoration(
-            fillColor: Colors.white,
+            fillColor: themeContro.isLightMode.value
+                ? Colors.white
+                : AppColors.darkGray,
             filled: true,
             contentPadding: const EdgeInsets.symmetric(vertical: 8),
             border: OutlineInputBorder(
@@ -717,12 +507,18 @@ class _UserMessageScreenState extends State<UserMessageScreen> {
                 borderSide: BorderSide.none),
             focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide:
-                    BorderSide(color: Colors.grey.shade300, width: 1.5)),
+                borderSide: BorderSide(
+                    color: themeContro.isLightMode.value
+                        ? Colors.grey.shade300
+                        : AppColors.darkGray,
+                    width: 1.5)),
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide:
-                    BorderSide(color: Colors.grey.shade300, width: 1.5)),
+                borderSide: BorderSide(
+                    color: themeContro.isLightMode.value
+                        ? Colors.grey.shade300
+                        : AppColors.darkGray,
+                    width: 1.5)),
             disabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide:

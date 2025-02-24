@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/global.dart';
@@ -53,12 +54,17 @@ class CommanScreenNew extends StatelessWidget {
             height: Get.height * 0.8,
             width: Get.width * 0.85,
             decoration: BoxDecoration(
-                border: Border.all(color: AppColors.white),
+                border: Border.all(
+                    color: themeContro.isLightMode.value
+                        ? AppColors.white
+                        : AppColors.darkGray),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 16,
                     spreadRadius: 0,
-                    color: Colors.grey.shade300,
+                    color: themeContro.isLightMode.value
+                        ? Colors.grey.shade300
+                        : AppColors.darkShadowColor,
                     offset: const Offset(2.0, 2.0),
                   ),
                 ],
@@ -69,25 +75,16 @@ class CommanScreenNew extends StatelessWidget {
                     bottomRight: Radius.circular(20)),
                 image: DecorationImage(
                     image: NetworkImage(storeImages), fit: BoxFit.cover)),
-            // child: ClipRRect(
-            //   borderRadius: const BorderRadius.only(
-            //       topLeft: Radius.circular(15),
-            //       topRight: Radius.circular(15),
-            //       bottomLeft: Radius.circular(15),
-            //       bottomRight: Radius.circular(15)),
-            //   child: Image.network(
-            //     storeImages,
-            //     fit: BoxFit.fill,
-            //   ),
-            // ),
           ),
           Positioned(
             bottom: 0,
             left: 0,
             right: 0,
             child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
+              decoration: BoxDecoration(
+                color: themeContro.isLightMode.value
+                    ? Colors.white
+                    : AppColors.darkGray,
                 borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10),
@@ -116,7 +113,9 @@ class CommanScreenNew extends StatelessWidget {
                         label(
                           vname,
                           fontSize: 11,
-                          textColor: Color.fromRGBO(99, 99, 99, 1),
+                          textColor: themeContro.isLightMode.value
+                              ? Color.fromRGBO(99, 99, 99, 1)
+                              : AppColors.white,
                           fontWeight: FontWeight.w500,
                         ),
                       ],
@@ -125,7 +124,9 @@ class CommanScreenNew extends StatelessWidget {
                     label(
                       sname,
                       fontSize: 16,
-                      textColor: AppColors.black,
+                      textColor: themeContro.isLightMode.value
+                          ? AppColors.black
+                          : AppColors.white,
                       fontWeight: FontWeight.w600,
                     ),
                     SizedBox(height: 5),
@@ -159,7 +160,9 @@ class CommanScreenNew extends StatelessWidget {
                             label(
                               '($avrageReview Review)',
                               fontSize: 10,
-                              textColor: Color.fromRGBO(99, 99, 99, 1),
+                              textColor: themeContro.isLightMode.value
+                                  ? Color.fromRGBO(99, 99, 99, 1)
+                                  : AppColors.colorFFFFFF,
                               fontWeight: FontWeight.w400,
                             ),
                           ],
@@ -167,7 +170,9 @@ class CommanScreenNew extends StatelessWidget {
                         label(
                           year.toString(),
                           fontSize: 10,
-                          textColor: Color.fromRGBO(99, 99, 99, 1),
+                          textColor: themeContro.isLightMode.value
+                              ? Color.fromRGBO(99, 99, 99, 1)
+                              : AppColors.colorFFFFFF,
                           fontWeight: FontWeight.w400,
                         ),
                       ],
@@ -177,7 +182,9 @@ class CommanScreenNew extends StatelessWidget {
                       children: [
                         Image.asset(
                           'assets/images/location.png',
-                          color: AppColors.blue,
+                          color: themeContro.isLightMode.value
+                              ? AppColors.blue
+                              : AppColors.colorFFFFFF,
                           height: 13,
                           width: 13,
                         ),
@@ -189,7 +196,9 @@ class CommanScreenNew extends StatelessWidget {
                             fontSize: 10,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            textColor: Color.fromRGBO(99, 99, 99, 1),
+                            textColor: themeContro.isLightMode.value
+                                ? Color.fromRGBO(99, 99, 99, 1)
+                                : AppColors.colorFFFFFF,
                             fontWeight: FontWeight.w400,
                           ),
                         ),
@@ -248,24 +257,6 @@ class CommanScreenNew extends StatelessWidget {
                 ),
               ),
             ),
-            // GestureDetector(
-            //   onTap: onTaplike,
-
-            //   child: Container(
-            //     height: 26,
-            //     width: 26,
-            //     decoration: const BoxDecoration(
-            //       shape: BoxShape.circle,
-            //       color: Colors.white,
-            //     ),
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(6.0),
-            //       child: isLike == 0
-            //           ? Image.asset(AppAsstes.heart) // Unlike
-            //           : Image.asset(AppAsstes.fill_heart), // Liked
-            //     ),
-            //   ),
-            // ),
           ),
           Positioned(
             top: 12,

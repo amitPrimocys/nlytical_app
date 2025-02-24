@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/models/user_models/login_model.dart';
 import 'package:nlytical_app/User/screens/bottamBar/newtabbar.dart';
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
@@ -80,7 +81,7 @@ class LoginContro extends GetxController {
 
           userID =
               preferences.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
-
+          Get.find<HomeContro>().checkLocationPermission();
           Get.offAll(() => TabbarScreen(currentIndex: 0));
         } else {
           await SharedPrefs.remove(SharedPreferencesKey.LOGGED_IN_USERID);

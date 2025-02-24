@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/subcate_service_contro.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
@@ -60,12 +61,12 @@ Widget storelist() {
       padding: EdgeInsets.symmetric(horizontal: 12),
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 6),
+          padding: EdgeInsets.symmetric(horizontal: 6),
           child: Shimmer.fromColors(
-            baseColor: Theme.of(context).brightness == Brightness.dark
+            baseColor: !themeContro.isLightMode.value
                 ? Colors.white12
                 : Colors.grey.shade300,
-            highlightColor: Theme.of(context).brightness == Brightness.dark
+            highlightColor: !themeContro.isLightMode.value
                 ? Colors.white24
                 : Colors.grey.shade100,
             child: SizedBox(
@@ -232,8 +233,12 @@ Widget allstore(BuildContext context) {
             //     Theme.of(context).brightness == Brightness.dark
             //         ? Colors.white24
             //         : Colors.grey.shade100,
-            baseColor: Colors.grey.shade300,
-            highlightColor: Colors.grey.shade100,
+            baseColor: !themeContro.isLightMode.value
+                ? Colors.white12
+                : Colors.grey.shade300,
+            highlightColor: !themeContro.isLightMode.value
+                ? Colors.white24
+                : Colors.grey.shade100,
             child: Card(
               color: Colors.white,
               shape: const RoundedRectangleBorder(

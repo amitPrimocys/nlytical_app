@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/categories_contro.dart';
 import 'package:nlytical_app/User/screens/categories/subcategories.dart';
 import 'package:nlytical_app/User/screens/shimmer_loader/categories_loader.dart';
@@ -28,34 +29,9 @@ class _CategoriesState extends State<Categories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        // extendBodyBehindAppBar: true,
-        backgroundColor: AppColors.white,
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.white,
-        //   automaticallyImplyLeading: false,
-        //   scrolledUnderElevation: 0,
-        //   shadowColor: Colors.white,
-        //   elevation: 5,
-        //   title: Row(
-        //     children: [
-        //       // GestureDetector(
-        //       //     onTap: () {
-        //       //       Navigator.pop(context);
-        //       //     },
-        //       //     child: Image.asset(
-        //       //       'assets/images/arrow-left1.png',
-        //       //       height: 24,
-        //       //     )),
-        //       sizeBoxWidth(10),
-        //       label(
-        //         'Categories',
-        //         fontSize: 20,
-        //         textColor: Colors.black,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        backgroundColor: themeContro.isLightMode.value
+            ? AppColors.white
+            : AppColors.darkMainBlack,
         body: SizedBox(
           height: Get.height,
           child: Stack(
@@ -87,13 +63,6 @@ class _CategoriesState extends State<Categories> {
                         textColor: AppColors.white,
                         fontWeight: FontWeight.w500,
                       ),
-                      // Uncomment and use if required
-                      // sizeBoxWidth(240),
-                      // Image.asset(
-                      //   AppAsstes.search,
-                      //   scale: 3.5,
-                      //   color: Colors.white,
-                      // ),
                     ],
                   ).paddingSymmetric(horizontal: 20),
                 ),
@@ -103,9 +72,11 @@ class _CategoriesState extends State<Categories> {
                 child: Container(
                   width: Get.width,
                   height: getProportionateScreenHeight(750),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                      color: themeContro.isLightMode.value
+                          ? AppColors.white
+                          : AppColors.darkMainBlack,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
                       )),
@@ -220,7 +191,9 @@ class _CategoriesState extends State<Categories> {
                 label(
                   "Categories Not Found",
                   fontSize: 18,
-                  textColor: AppColors.black,
+                  textColor: themeContro.isLightMode.value
+                      ? AppColors.black
+                      : AppColors.white,
                   fontWeight: FontWeight.w500,
                 )
               ],

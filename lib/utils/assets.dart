@@ -93,7 +93,10 @@ class AppAsstes {
   static const String pin = 'assets/images/Pin.png';
   static const String right1 = 'assets/images/right 1.png';
   static const String right2 = 'assets/images/profile2.png';
+  static const String category2 = 'assets/images/category-2.png';
+  static const String subcategory = 'assets/images/subcategory.png';
   static const String payment = 'assets/images/payment.png';
+  static const String doller = 'assets/images/doller.png';
   static const String Darkanalytics = 'assets/images/Dark analytics-bro 1.png';
   static const String customersupport =
       'assets/images/Star - Iconly Pro (1).png';

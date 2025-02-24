@@ -329,7 +329,10 @@ Widget review({
       Container(
         width: Get.width,
         decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade200),
+            border: Border.all(
+                color: themeContro.isLightMode.value
+                    ? Colors.grey.shade200
+                    : AppColors.darkMainBlack),
             borderRadius: BorderRadius.circular(10)),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -342,7 +345,12 @@ Widget review({
                   width: 120,
                   child: Text(
                     fname,
-                    style: poppinsFont(10, AppColors.black, FontWeight.w600),
+                    style: poppinsFont(
+                        10,
+                        themeContro.isLightMode.value
+                            ? AppColors.black
+                            : AppColors.white,
+                        FontWeight.w600),
                   ),
                 ),
                 RatingBar.builder(
@@ -382,7 +390,12 @@ Widget review({
             // sizeBoxHeight(5),
             Text(
               descname,
-              style: poppinsFont(11, AppColors.black, FontWeight.w400),
+              style: poppinsFont(
+                  11,
+                  themeContro.isLightMode.value
+                      ? AppColors.black
+                      : AppColors.white,
+                  FontWeight.w400),
             ).paddingOnly(left: 15, right: 15),
             sizeBoxHeight(20),
           ],

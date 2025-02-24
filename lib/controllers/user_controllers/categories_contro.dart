@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, unused_local_variable
 
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nlytical_app/models/user_models/cate_model.dart';
@@ -10,6 +11,8 @@ import 'package:nlytical_app/utils/api_helper.dart';
 final ApiHelper apiHelper = ApiHelper();
 
 class CategoriesContro extends GetxController {
+  TextEditingController searchCategoriesCtrl = TextEditingController();
+  TextEditingController searchSubCategoriesCtrl = TextEditingController();
   RxBool iscat = false.obs;
   Rx<CategoriesModel?> catemodel = CategoriesModel().obs;
   RxList<Data> catelist = <Data>[].obs;
@@ -42,6 +45,20 @@ class CategoriesContro extends GetxController {
     } catch (e) {
       iscat.value = false;
     }
+  }
+
+  void filterSearchPeople() {
+    if (searchCategoriesCtrl.text.isEmpty) {
+      catemodel.value!.data = List.from(catelist);
+    } else {
+      catemodel.value!.data = catelist.where((element) {
+        return element.categoryName!
+            .toLowerCase()
+            .contains(searchCategoriesCtrl.text.toLowerCase());
+      }).toList();
+    }
+    refresh();
+    update();
   }
 
   RxBool issubcat = false.obs;
@@ -83,6 +100,21 @@ class CategoriesContro extends GetxController {
       }
     } catch (e) {
       issubcat.value = false;
+      print(e.toString());
     }
+  }
+
+  void filterSearchSubCate() {
+    if (searchSubCategoriesCtrl.text.isEmpty) {
+      subcatemodel.value!.subCategoryData = List.from(subcatelist);
+    } else {
+      subcatemodel.value!.subCategoryData = subcatelist.where((element) {
+        return element.subcategoryName!
+            .toLowerCase()
+            .contains(searchSubCategoriesCtrl.text.toLowerCase());
+      }).toList();
+    }
+    refresh();
+    update();
   }
 }

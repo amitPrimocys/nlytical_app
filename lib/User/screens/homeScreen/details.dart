@@ -10,6 +10,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:intl/intl.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/add_review_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/like_contro.dart';
@@ -91,11 +92,15 @@ class _DetailsState extends State<Details>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeContro.isLightMode.value
+          ? Colors.white
+          : AppColors.darkMainBlack,
       bottomNavigationBar: BottomAppBar(
         height: 73,
         elevation: 0,
-        color: Colors.white,
+        color: themeContro.isLightMode.value
+            ? Colors.white
+            : AppColors.darkMainBlack,
         child: bottam(),
       ),
       body: Obx(() {
@@ -105,13 +110,9 @@ class _DetailsState extends State<Details>
                 length: 4,
                 initialIndex: 0,
                 child: Scaffold(
-                    backgroundColor: Colors.white,
-                    // appBar: PreferredSize(
-                    //     preferredSize: Size(0, 0),
-                    //     child: AppBar(
-                    //       // systemOverlayStyle: SystemUiOverlayStyle.dark,
-                    //     )
-                    //     ),
+                    backgroundColor: themeContro.isLightMode.value
+                        ? Colors.white
+                        : AppColors.darkMainBlack,
                     body: NestedScrollView(
                       // controller: scrollCtrl,
                       headerSliverBuilder:
@@ -134,8 +135,10 @@ class _DetailsState extends State<Details>
                         children: [
                           DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Colors
-                                  .white, // Background color for the tab bar
+                              color: themeContro.isLightMode.value
+                                  ? Colors.white
+                                  : AppColors
+                                      .darkMainBlack, // Background color for the tab bar
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(18),
                                 topRight: Radius.circular(18),
@@ -162,18 +165,52 @@ class _DetailsState extends State<Details>
                                   horizontal: 6, vertical: 8),
                               unselectedLabelColor: Colors.black,
                               indicator: BoxDecoration(
-                                color: AppColors.blue,
+                                color: Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
-                                  color: AppColors.blue,
+                                  color: Colors.transparent,
                                 ),
                               ),
-                              tabs: const [
-                                Tab(child: Text('Overview')),
-                                Tab(child: Text('Services')),
-                                Tab(child: Text('Photos')),
-                                Tab(child: Text('Reviews')),
-                              ],
+                              tabs: List.generate(4, (index) {
+                                bool isSelected = _tabController.index == index;
+                                return Tab(
+                                    child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8.5, horizontal: 16),
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? themeContro.isLightMode.value
+                                            ? AppColors.coloropcity
+                                            : AppColors.blue
+                                        : Colors.transparent,
+                                    border: Border.all(
+                                        color: themeContro.isLightMode.value
+                                            ? AppColors.blue
+                                            : isSelected
+                                                ? AppColors.black
+                                                : AppColors
+                                                    .grey1), // Blue border for all tabs
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Text(
+                                    [
+                                      'Overview',
+                                      'Services',
+                                      'Photos',
+                                      'Reviews'
+                                    ][index],
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                      color: themeContro.isLightMode.value
+                                          ? Colors.black
+                                          : isSelected
+                                              ? AppColors.white
+                                              : AppColors.grey1,
+                                    ),
+                                  ),
+                                ));
+                              }),
                             ),
                           ),
                           Expanded(
@@ -387,7 +424,9 @@ class _DetailsState extends State<Details>
       height: Get.height,
       width: Get.width,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeContro.isLightMode.value
+            ? Colors.white
+            : AppColors.darkMainBlack,
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -398,11 +437,15 @@ class _DetailsState extends State<Details>
                 width: Get.width * 0.9,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: themeContro.isLightMode.value
+                        ? Colors.white
+                        : AppColors.darkGray,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
+                    boxShadow: [
                       BoxShadow(
-                        color: AppColors.color909092,
+                        color: themeContro.isLightMode.value
+                            ? AppColors.color909092
+                            : AppColors.darkShadowColor,
                         blurRadius: 14.0,
                         spreadRadius: 0.0,
                         offset:
@@ -418,7 +461,9 @@ class _DetailsState extends State<Details>
                         label(
                           'Business Information',
                           fontSize: 13,
-                          textColor: AppColors.black,
+                          textColor: themeContro.isLightMode.value
+                              ? AppColors.black
+                              : AppColors.white,
                           fontWeight: FontWeight.w600,
                         ),
                         SizedBox(height: 5),
@@ -432,7 +477,11 @@ class _DetailsState extends State<Details>
                           linkColor: AppColors.blue,
                           linkStyle: TextStyle(fontWeight: FontWeight.w600),
                           style: TextStyle(
-                              fontSize: 11, fontWeight: FontWeight.w400),
+                              fontSize: 11,
+                              fontWeight: FontWeight.w400,
+                              color: themeContro.isLightMode.value
+                                  ? AppColors.black
+                                  : AppColors.white),
                         ),
                       ],
                     ),
@@ -445,10 +494,14 @@ class _DetailsState extends State<Details>
               // height: 70,
               width: Get.width,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: const [
+                  color: themeContro.isLightMode.value
+                      ? Colors.white
+                      : AppColors.darkGray,
+                  boxShadow: [
                     BoxShadow(
-                      color: AppColors.color909092,
+                      color: themeContro.isLightMode.value
+                          ? AppColors.color909092
+                          : AppColors.darkShadowColor,
                       blurRadius: 14.0,
                       spreadRadius: 0.0,
                       offset:
@@ -465,15 +518,19 @@ class _DetailsState extends State<Details>
                     label('Address',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        textColor: AppColors.black),
+                        textColor: themeContro.isLightMode.value
+                            ? AppColors.black
+                            : AppColors.white),
                     sizeBoxHeight(10),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Image.asset(
                           'assets/images/location1.png',
-                          height: 14,
-                          color: Colors.black,
+                          height: 20,
+                          color: themeContro.isLightMode.value
+                              ? Colors.black
+                              : AppColors.blue,
                         ),
                         sizeBoxWidth(5),
                         SizedBox(
@@ -483,7 +540,11 @@ class _DetailsState extends State<Details>
                                 .servicemodel.value!.serviceDetail!.address!
                                 .toString(),
                             style: poppinsFont(
-                                11, AppColors.black, FontWeight.w500),
+                                11,
+                                themeContro.isLightMode.value
+                                    ? AppColors.black
+                                    : AppColors.white,
+                                FontWeight.w500),
                           ),
                         ),
                       ],
@@ -510,14 +571,20 @@ class _DetailsState extends State<Details>
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
-                                color: AppColors.blue,
+                                color: themeContro.isLightMode.value
+                                    ? AppColors.blue
+                                    : AppColors.white,
                               ),
                             ),
                             child: Center(
                               child: Text(
                                 'Get Direction',
                                 style: poppinsFont(
-                                    8, AppColors.blue, FontWeight.w600),
+                                    8,
+                                    themeContro.isLightMode.value
+                                        ? AppColors.blue
+                                        : AppColors.white,
+                                    FontWeight.w600),
                               ),
                             ),
                           ),
@@ -538,14 +605,20 @@ class _DetailsState extends State<Details>
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               border: Border.all(
-                                color: AppColors.blue,
+                                color: themeContro.isLightMode.value
+                                    ? AppColors.blue
+                                    : AppColors.white,
                               ),
                             ),
                             child: Center(
                               child: Text(
                                 'Copy',
                                 style: poppinsFont(
-                                    8, AppColors.blue, FontWeight.w600),
+                                    8,
+                                    themeContro.isLightMode.value
+                                        ? AppColors.blue
+                                        : AppColors.white,
+                                    FontWeight.w600),
                               ),
                             ),
                           ),
@@ -556,7 +629,9 @@ class _DetailsState extends State<Details>
                     label('Business Hours',
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        textColor: Color(0xff3E5155)),
+                        textColor: themeContro.isLightMode.value
+                            ? Color(0xff3E5155)
+                            : AppColors.blue),
                     sizeBoxHeight(10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -565,7 +640,9 @@ class _DetailsState extends State<Details>
                             '${servicecontro.servicemodel.value!.serviceDetail!.openTime.toString()} to ${servicecontro.servicemodel.value!.serviceDetail!.closeTime.toString()}',
                             fontSize: 11,
                             fontWeight: FontWeight.w500,
-                            textColor: AppColors.black),
+                            textColor: themeContro.isLightMode.value
+                                ? AppColors.black
+                                : AppColors.white),
                         GestureDetector(
                           onTap: () {
                             _buisnessHour();
@@ -585,7 +662,9 @@ class _DetailsState extends State<Details>
                                 'assets/images/arrow-left (1).png',
                                 height: 13,
                                 width: 13,
-                                color: AppColors.blue,
+                                color: themeContro.isLightMode.value
+                                    ? AppColors.blue
+                                    : AppColors.white,
                               )
                             ],
                           ),
@@ -605,7 +684,9 @@ class _DetailsState extends State<Details>
                           label('Visit Website',
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              textColor: Color(0xff3E5155)),
+                              textColor: themeContro.isLightMode.value
+                                  ? Color(0xff3E5155)
+                                  : AppColors.white),
                           Row(
                             children: [
                               SizedBox(
@@ -660,7 +741,9 @@ class _DetailsState extends State<Details>
                           label('Email on',
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              textColor: Color(0xff3E5155)),
+                              textColor: themeContro.isLightMode.value
+                                  ? Color(0xff3E5155)
+                                  : AppColors.white),
                           sizeBoxWidth(5),
                           label(
                               servicecontro.servicemodel.value!.serviceDetail!
@@ -676,7 +759,9 @@ class _DetailsState extends State<Details>
                     label('Follow us on',
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        textColor: Color(0xff3E5155)),
+                        textColor: themeContro.isLightMode.value
+                            ? Color(0xff3E5155)
+                            : AppColors.white),
                     sizeBoxHeight(10),
                     servicecontro.servicemodel.value!.serviceDetail!
                                     .whatsappLink ==
@@ -720,7 +805,10 @@ class _DetailsState extends State<Details>
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 border: Border.all(
-                                                    color: AppColors.blue)),
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.blue
+                                                        : AppColors.white)),
                                             child: Row(
                                               children: [
                                                 Image.asset(
@@ -731,7 +819,10 @@ class _DetailsState extends State<Details>
                                                 label('Whatsapp',
                                                     fontSize: 8,
                                                     fontWeight: FontWeight.w600,
-                                                    textColor: AppColors.black),
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.black
+                                                        : AppColors.white),
                                               ],
                                             ).paddingSymmetric(horizontal: 4),
                                           ),
@@ -765,7 +856,10 @@ class _DetailsState extends State<Details>
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 border: Border.all(
-                                                    color: AppColors.blue)),
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.blue
+                                                        : AppColors.white)),
                                             child: Row(
                                               children: [
                                                 Image.asset(
@@ -776,7 +870,10 @@ class _DetailsState extends State<Details>
                                                 label('Facebook',
                                                     fontSize: 8,
                                                     fontWeight: FontWeight.w600,
-                                                    textColor: AppColors.black),
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.black
+                                                        : AppColors.white),
                                               ],
                                             ).paddingSymmetric(horizontal: 5),
                                           ),
@@ -815,7 +912,10 @@ class _DetailsState extends State<Details>
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 border: Border.all(
-                                                    color: AppColors.blue)),
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.blue
+                                                        : AppColors.white)),
                                             child: Row(
                                               children: [
                                                 Image.asset(
@@ -826,7 +926,10 @@ class _DetailsState extends State<Details>
                                                 label('Instagram',
                                                     fontSize: 8,
                                                     fontWeight: FontWeight.w600,
-                                                    textColor: AppColors.black),
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.black
+                                                        : AppColors.white),
                                               ],
                                             ).paddingSymmetric(horizontal: 4),
                                           ),
@@ -865,7 +968,10 @@ class _DetailsState extends State<Details>
                                                 borderRadius:
                                                     BorderRadius.circular(8),
                                                 border: Border.all(
-                                                    color: AppColors.blue)),
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.blue
+                                                        : AppColors.white)),
                                             child: Row(
                                               children: [
                                                 Image.asset(
@@ -876,7 +982,10 @@ class _DetailsState extends State<Details>
                                                 label('Twitter',
                                                     fontSize: 8,
                                                     fontWeight: FontWeight.w600,
-                                                    textColor: AppColors.black),
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.black
+                                                        : AppColors.white),
                                               ],
                                             ).paddingSymmetric(horizontal: 5),
                                           ),
@@ -913,7 +1022,9 @@ class _DetailsState extends State<Details>
                     child: label('Services',
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        textColor: AppColors.black),
+                        textColor: themeContro.isLightMode.value
+                            ? AppColors.black
+                            : AppColors.white),
                   ).paddingSymmetric(horizontal: 20)
                 : SizedBox.shrink(),
             servicecontro.servicemodel.value!.stores!.isNotEmpty
@@ -923,10 +1034,14 @@ class _DetailsState extends State<Details>
                 ? Container(
                     width: Get.width,
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: const [
+                        color: themeContro.isLightMode.value
+                            ? AppColors.white
+                            : AppColors.darkGray,
+                        boxShadow: [
                           BoxShadow(
-                            color: AppColors.color909092,
+                            color: themeContro.isLightMode.value
+                                ? AppColors.color909092
+                                : AppColors.darkShadowColor,
                             blurRadius: 14.0,
                             spreadRadius: 0.0,
                             offset: Offset(
@@ -1021,17 +1136,23 @@ class _DetailsState extends State<Details>
               child: label('Photos',
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
-                  textColor: AppColors.black),
+                  textColor: themeContro.isLightMode.value
+                      ? AppColors.black
+                      : AppColors.white),
             ).paddingSymmetric(horizontal: 20),
             sizeBoxHeight(10),
             Container(
               height: 70,
               width: Get.width,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: const [
+                  color: themeContro.isLightMode.value
+                      ? Colors.white
+                      : AppColors.darkGray,
+                  boxShadow: [
                     BoxShadow(
-                      color: AppColors.color909092,
+                      color: themeContro.isLightMode.value
+                          ? AppColors.color909092
+                          : AppColors.darkShadowColor,
                       blurRadius: 14.0,
                       spreadRadius: 0.0,
                       offset:
@@ -1153,7 +1274,9 @@ class _DetailsState extends State<Details>
                       label(
                         'Customer Review',
                         fontSize: 13,
-                        textColor: Colors.black,
+                        textColor: themeContro.isLightMode.value
+                            ? Colors.black
+                            : AppColors.white,
                         fontWeight: FontWeight.w600,
                       ),
                       servicecontro.servicemodel.value!.serviceDetail!.reviews!
@@ -1182,10 +1305,14 @@ class _DetailsState extends State<Details>
                 ? Container(
                     width: Get.width,
                     decoration: BoxDecoration(
-                        color: Colors.white,
-                        boxShadow: const [
+                        color: themeContro.isLightMode.value
+                            ? Colors.white
+                            : AppColors.darkGray,
+                        boxShadow: [
                           BoxShadow(
-                            color: AppColors.color909092,
+                            color: themeContro.isLightMode.value
+                                ? AppColors.color909092
+                                : AppColors.darkShadowColor,
                             blurRadius: 14.0,
                             spreadRadius: 0.0,
                             offset: Offset(
@@ -1199,7 +1326,9 @@ class _DetailsState extends State<Details>
                         label(
                           'Start Your Review',
                           fontSize: 12,
-                          textColor: Colors.black,
+                          textColor: themeContro.isLightMode.value
+                              ? Colors.black
+                              : AppColors.white,
                           fontWeight: FontWeight.w500,
                         ).paddingOnly(left: 14, right: 14, top: 14, bottom: 5),
                         sizeBoxHeight(5),
@@ -1232,7 +1361,10 @@ class _DetailsState extends State<Details>
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(5),
-                                              color: Color(0xffE8E8E8)),
+                                              color:
+                                                  themeContro.isLightMode.value
+                                                      ? Color(0xffE8E8E8)
+                                                      : Color(0xff323232)),
                                           child: Padding(
                                             padding: const EdgeInsets.all(8.0),
                                             child: Image.asset(
@@ -1273,7 +1405,9 @@ class _DetailsState extends State<Details>
                             label(
                               '${servicecontro.servicemodel.value!.serviceDetail!.totalReviewCount.toString()} rattings',
                               fontSize: 11,
-                              textColor: Colors.black,
+                              textColor: themeContro.isLightMode.value
+                                  ? Colors.black
+                                  : AppColors.white,
                               fontWeight: FontWeight.w500,
                             )
                           ],
@@ -1353,7 +1487,9 @@ class _DetailsState extends State<Details>
       height: Get.height,
       width: Get.width,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeContro.isLightMode.value
+            ? Colors.white
+            : AppColors.darkMainBlack,
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -1366,7 +1502,9 @@ class _DetailsState extends State<Details>
                 'Reviews',
                 fontSize: 17,
                 fontWeight: FontWeight.w500,
-                textColor: AppColors.black,
+                textColor: themeContro.isLightMode.value
+                    ? AppColors.black
+                    : AppColors.white,
               ),
             ),
             const Divider(color: Color(0xffCCCCCC), thickness: 1),
@@ -1374,7 +1512,9 @@ class _DetailsState extends State<Details>
             label(
               'Start Your Review',
               fontSize: 12,
-              textColor: Colors.black,
+              textColor: themeContro.isLightMode.value
+                  ? Colors.black
+                  : AppColors.white,
               fontWeight: FontWeight.w500,
             ).paddingOnly(left: 22, right: 14, top: 14, bottom: 5),
             sizeBoxHeight(5),
@@ -1403,7 +1543,9 @@ class _DetailsState extends State<Details>
                               width: 35,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(5),
-                                  color: Color(0xffE8E8E8)),
+                                  color: themeContro.isLightMode.value
+                                      ? Color(0xffE8E8E8)
+                                      : Color(0xff323232)),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Image.asset(
@@ -1444,7 +1586,9 @@ class _DetailsState extends State<Details>
                 label(
                   '${servicecontro.servicemodel.value!.serviceDetail!.totalReviewCount.toString()} rattings',
                   fontSize: 11,
-                  textColor: Colors.black,
+                  textColor: themeContro.isLightMode.value
+                      ? Colors.black
+                      : AppColors.white,
                   fontWeight: FontWeight.w500,
                 )
               ],
@@ -1522,7 +1666,9 @@ class _DetailsState extends State<Details>
     return Container(
       width: Get.width,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeContro.isLightMode.value
+            ? Colors.white
+            : AppColors.darkMainBlack,
       ),
       child: SingleChildScrollView(
         physics: NeverScrollableScrollPhysics(),
@@ -1535,18 +1681,24 @@ class _DetailsState extends State<Details>
                 'Photos',
                 fontSize: 17,
                 fontWeight: FontWeight.w500,
-                textColor: AppColors.black,
+                textColor: themeContro.isLightMode.value
+                    ? AppColors.black
+                    : AppColors.white,
               ),
             ),
-            const Divider(color: Color(0xffCCCCCC), thickness: 1),
-            SizedBox(height: 4),
+            Divider(
+                color: themeContro.isLightMode.value
+                    ? Color(0xffCCCCCC)
+                    : AppColors.grey1,
+                thickness: 1),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 5),
               child: SizedBox(
                 // Set an appropriate height for the GridView
                 child: servicecontro.servicemodel.value!.serviceDetail!
                         .serviceImages!.isNotEmpty
                     ? GridView.builder(
+                        padding: EdgeInsets.all(0),
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 3, // 3 items per row
@@ -1639,7 +1791,9 @@ class _DetailsState extends State<Details>
       height: Get.height,
       width: Get.width,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: themeContro.isLightMode.value
+            ? Colors.white
+            : AppColors.darkMainBlack,
       ),
       child: SingleChildScrollView(
         child: Column(
@@ -1652,10 +1806,16 @@ class _DetailsState extends State<Details>
                 'Services',
                 fontSize: 17,
                 fontWeight: FontWeight.w500,
-                textColor: AppColors.black,
+                textColor: themeContro.isLightMode.value
+                    ? AppColors.black
+                    : AppColors.white,
               ),
             ),
-            const Divider(color: Color(0xffCCCCCC), thickness: 1),
+            Divider(
+                color: themeContro.isLightMode.value
+                    ? Color(0xffCCCCCC)
+                    : AppColors.grey1,
+                thickness: 1),
             SizedBox(height: 4),
             searchBar(),
             sizeBoxHeight(10),
@@ -1664,7 +1824,9 @@ class _DetailsState extends State<Details>
                   .toString(),
               fontSize: 15,
               fontWeight: FontWeight.w600,
-              textColor: AppColors.black,
+              textColor: themeContro.isLightMode.value
+                  ? AppColors.black
+                  : AppColors.white,
             ).paddingSymmetric(horizontal: 20),
             sizeBoxHeight(10),
             servicecontro.servicemodel.value!.stores!.isNotEmpty
@@ -1703,7 +1865,9 @@ class _DetailsState extends State<Details>
                                     sizeBoxHeight(10),
                                     label("No Service found",
                                         fontSize: 16,
-                                        textColor: AppColors.black,
+                                        textColor: themeContro.isLightMode.value
+                                            ? AppColors.black
+                                            : AppColors.brown,
                                         fontWeight: FontWeight.w500)
                                   ],
                                 ),
@@ -1771,6 +1935,7 @@ class _DetailsState extends State<Details>
             transition: Transition.rightToLeft);
       },
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 90,
@@ -1793,7 +1958,9 @@ class _DetailsState extends State<Details>
                       store.storeName.toString(),
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      textColor: AppColors.black,
+                      textColor: themeContro.isLightMode.value
+                          ? AppColors.black
+                          : AppColors.blue,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -1818,7 +1985,9 @@ class _DetailsState extends State<Details>
                     store.storeDescription.toString(),
                     style: poppinsFont(
                       11,
-                      Colors.black,
+                      themeContro.isLightMode.value
+                          ? Colors.black
+                          : AppColors.colorFFFFFF,
                       FontWeight.w500,
                     ),
                   ).paddingOnly(right: 10),
@@ -1842,6 +2011,7 @@ class _DetailsState extends State<Details>
             transition: Transition.rightToLeft);
       },
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             height: 90,
@@ -1864,7 +2034,9 @@ class _DetailsState extends State<Details>
                       store.storeName.toString(),
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
-                      textColor: AppColors.black,
+                      textColor: themeContro.isLightMode.value
+                          ? AppColors.black
+                          : AppColors.white,
                     ),
                     GestureDetector(
                       onTap: () {
@@ -1889,7 +2061,9 @@ class _DetailsState extends State<Details>
                     store.storeDescription.toString(),
                     style: poppinsFont(
                       11,
-                      Colors.black,
+                      themeContro.isLightMode.value
+                          ? Colors.black
+                          : AppColors.white,
                       FontWeight.w500,
                     ),
                   ).paddingOnly(right: 10),
@@ -1913,8 +2087,16 @@ class _DetailsState extends State<Details>
         controller: searchController,
         cursorColor: Colors.grey.shade400,
         onChanged: onSearchTextChanged,
+        style: poppinsFont(
+            13,
+            themeContro.isLightMode.value
+                ? Colors.grey.shade400
+                : AppColors.white,
+            FontWeight.w500),
         decoration: InputDecoration(
-            fillColor: const Color(0xffF3F3F3),
+            fillColor: themeContro.isLightMode.value
+                ? const Color(0xffF3F3F3)
+                : AppColors.darkGray,
             filled: true,
             contentPadding: const EdgeInsets.symmetric(vertical: 10),
             border: OutlineInputBorder(
@@ -2565,8 +2747,8 @@ class _DetailsState extends State<Details>
         ),
         Positioned(
           bottom: -100,
-          right: 20,
-          left: 20,
+          // right: 20,
+          // left: 20,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
@@ -2578,11 +2760,15 @@ class _DetailsState extends State<Details>
                     height: Get.height * 0.15,
                     width: Get.width,
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: themeContro.isLightMode.value
+                          ? Colors.white
+                          : AppColors.darkGray,
                       borderRadius: BorderRadius.circular(12),
-                      boxShadow: const [
+                      boxShadow: [
                         BoxShadow(
-                          color: AppColors.color909092,
+                          color: themeContro.isLightMode.value
+                              ? AppColors.color909092
+                              : AppColors.darkShadowColor,
                           blurRadius: 0.0,
                           spreadRadius: 0.0,
                           offset: Offset(
@@ -2592,7 +2778,7 @@ class _DetailsState extends State<Details>
                     ),
                     child: Padding(
                       padding: const EdgeInsets.only(
-                          left: 12, right: 12, top: 11, bottom: 4),
+                          left: 20, right: 20, top: 11, bottom: 4),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -2619,7 +2805,9 @@ class _DetailsState extends State<Details>
                                     .firstName
                                     .toString(),
                                 fontSize: 11,
-                                textColor: AppColors.black,
+                                textColor: themeContro.isLightMode.value
+                                    ? AppColors.black
+                                    : AppColors.white,
                                 fontWeight: FontWeight.w400,
                               ),
                             ],
@@ -2632,7 +2820,9 @@ class _DetailsState extends State<Details>
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             fontSize: 16,
-                            textColor: AppColors.black,
+                            textColor: themeContro.isLightMode.value
+                                ? AppColors.black
+                                : AppColors.white,
                             fontWeight: FontWeight.w600,
                           ),
                           const SizedBox(height: 3),
@@ -2644,14 +2834,6 @@ class _DetailsState extends State<Details>
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   RatingBar.builder(
-                                    // initialRating: servicecontro.servicemodel.value!
-                                    //             .serviceDetail!.totalAvgReview!
-                                    //             .toString() !=
-                                    //         ''
-                                    //     ? double.parse(servicecontro
-                                    //         .servicemodel.value!.serviceDetail!.totalAvgReview!
-                                    //         .toString())
-                                    //     : 0.0,
                                     initialRating: servicecontro
                                             .servicemodel
                                             .value!
@@ -2680,9 +2862,10 @@ class _DetailsState extends State<Details>
                                   const SizedBox(width: 5),
                                   label(
                                     '(${servicecontro.servicemodel.value!.serviceDetail!.totalReviewCount!.toString()} Review)',
-                                    // '(${avrageReview} Review)',
                                     fontSize: 10,
-                                    textColor: AppColors.black,
+                                    textColor: themeContro.isLightMode.value
+                                        ? AppColors.black
+                                        : AppColors.white,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ],
@@ -2691,7 +2874,9 @@ class _DetailsState extends State<Details>
                                 '${servicecontro.servicemodel.value!.serviceDetail!.totalYearsCount!.toString()} Years in Business',
                                 // ${avrageReview} Years in Business,
                                 fontSize: 11,
-                                textColor: AppColors.black,
+                                textColor: themeContro.isLightMode.value
+                                    ? AppColors.black
+                                    : AppColors.white,
                                 fontWeight: FontWeight.w400,
                               ),
                             ],
@@ -2713,7 +2898,9 @@ class _DetailsState extends State<Details>
                                         .toString(),
                                     // ${avrageReview} Years in Business,
                                     fontSize: 11,
-                                    textColor: AppColors.black,
+                                    textColor: themeContro.isLightMode.value
+                                        ? AppColors.black
+                                        : AppColors.white,
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ],
@@ -2730,7 +2917,10 @@ class _DetailsState extends State<Details>
                                         label(
                                           ' Until ${servicecontro.servicemodel.value!.serviceDetail!.closeTime!.toString()}',
                                           fontSize: 11,
-                                          textColor: AppColors.black,
+                                          textColor:
+                                              themeContro.isLightMode.value
+                                                  ? AppColors.black
+                                                  : AppColors.white,
                                           fontWeight: FontWeight.w400,
                                         )
                                       ],
