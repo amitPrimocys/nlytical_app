@@ -530,9 +530,15 @@ class _ProfileState extends State<Profile> {
                                   }, errorBuilder: (BuildContext? context,
                                         Object? exception,
                                         StackTrace? stackTrace) {
-                                    return const Icon(Icons.abc, size: 100);
+                                    return Image.asset(
+                                      'assets/images/default_user.jpg',
+                                      fit: BoxFit.cover,
+                                    );
                                   })
-                                : const Icon(Icons.person, size: 100)
+                                : Image.asset(
+                                    'assets/images/default_user.jpg',
+                                    fit: BoxFit.cover,
+                                  )
                             : Image.file(selectedImages!, fit: BoxFit.cover))
                     .paddingAll(3),
               ).paddingAll(3),
