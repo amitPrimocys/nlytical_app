@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/User/screens/controller/user_tab_controller.dart';
 import 'package:nlytical_app/auth/splash.dart';
@@ -16,8 +15,6 @@ import 'package:dynamic_themes/dynamic_themes.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPrefs.init();
-  Stripe.publishableKey =
-      "pk_test_51OP303SJayPbST1licbf3gkBs6pS2Bg886xDS0hhh7Y9NydxCm0ezpqTCNpPGPiBmmX4mly6uXtAXMzxO1KwjRso00YmA0KNUB";
   Get.put(PaymentController());
 
   await SharedPrefs.init();
