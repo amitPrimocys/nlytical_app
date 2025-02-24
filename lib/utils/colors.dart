@@ -134,4 +134,5 @@ class AppColors {
   static const Color darkgray3 = Color.fromARGB(255, 152, 152, 152);
   static const Color darkblue = Color.fromRGBO(28, 45, 107, 0.13);
   static const Color darkShadowColor = Color(0xff0000000f);
+  static const Color dark1E242C = Color(0xff1E242C);
 }

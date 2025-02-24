@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/utils/global_text_form_field.dart';
 import 'package:nlytical_app/utils/theame_switch.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/store_controller.dart';
@@ -354,12 +355,14 @@ class _AddStoreState extends State<AddStore> {
         body: GestureDetector(
           onTap: () => FocusScope.of(context).unfocus(),
           child: Container(
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(30),
                   topRight: Radius.circular(30),
                 ),
-                color: AppColors.blueeShine),
+                color: themeContro.isLightMode.value
+                    ? AppColors.blueeShine
+                    : AppColors.dark1E242C),
             child: Column(
               children: [
                 sizeBoxHeight(20),
@@ -367,12 +370,14 @@ class _AddStoreState extends State<AddStore> {
                 sizeBoxHeight(20),
                 Expanded(
                   child: Container(
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(15),
                           topRight: Radius.circular(15),
                         ),
-                        color: AppColors.white),
+                        color: themeContro.isLightMode.value
+                            ? AppColors.white
+                            : AppColors.darkMainBlack),
                     child: SingleChildScrollView(
                       controller: _scrollController,
                       child: Column(
@@ -573,7 +578,10 @@ class _AddStoreState extends State<AddStore> {
       children: [
         Text(
           "Business Detail",
-          style: poppinsFont(14, AppColors.black, FontWeight.w600),
+          style: poppinsFont(
+              14,
+              themeContro.isLightMode.value ? AppColors.black : AppColors.white,
+              FontWeight.w600),
         ),
         sizeBoxHeight(20),
         globalTextField2(
@@ -640,15 +648,18 @@ class _AddStoreState extends State<AddStore> {
                                   .getLonLat(businessAddressController.text);
                             });
                           },
-                          child: Text(storeController.mapresult[index]
-                                  ['description'])
-                              .paddingOnly(
-                                  left: 12,
-                                  bottom:
-                                      storeController.mapresult.length - 1 ==
-                                              index
-                                          ? 0
-                                          : 15),
+                          child: Text(
+                            storeController.mapresult[index]['description'],
+                            style: TextStyle(
+                                color: themeContro.isLightMode.value
+                                    ? Colors.black
+                                    : AppColors.white),
+                          ).paddingOnly(
+                              left: 12,
+                              bottom:
+                                  storeController.mapresult.length - 1 == index
+                                      ? 0
+                                      : 15),
                         );
                       },
                     ),
@@ -668,8 +679,13 @@ class _AddStoreState extends State<AddStore> {
           child: Container(
             width: Get.width,
             decoration: BoxDecoration(
+              color: themeContro.isLightMode.value
+                  ? AppColors.white
+                  : AppColors.darkGray,
               border: Border.all(
-                color: AppColors.colorEFEFEF,
+                color: themeContro.isLightMode.value
+                    ? AppColors.colorEFEFEF
+                    : AppColors.darkBorder,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -773,8 +789,13 @@ class _AddStoreState extends State<AddStore> {
           child: Container(
             width: Get.width,
             decoration: BoxDecoration(
+              color: themeContro.isLightMode.value
+                  ? AppColors.white
+                  : AppColors.darkGray,
               border: Border.all(
-                color: AppColors.colorEFEFEF,
+                color: themeContro.isLightMode.value
+                    ? AppColors.colorEFEFEF
+                    : AppColors.darkBorder,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -872,7 +893,7 @@ class _AddStoreState extends State<AddStore> {
           "Add Business Video",
           style: poppinsFont(
             10,
-            AppColors.black,
+            themeContro.isLightMode.value ? AppColors.black : AppColors.white,
             FontWeight.w600,
           ),
         ),
@@ -884,8 +905,13 @@ class _AddStoreState extends State<AddStore> {
           child: Container(
             width: Get.width,
             decoration: BoxDecoration(
+              color: themeContro.isLightMode.value
+                  ? AppColors.white
+                  : AppColors.darkGray,
               border: Border.all(
-                color: AppColors.colorEFEFEF,
+                color: themeContro.isLightMode.value
+                    ? AppColors.colorEFEFEF
+                    : AppColors.darkBorder,
               ),
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1026,7 +1052,9 @@ class _AddStoreState extends State<AddStore> {
                         storeController.caategoryName.value,
                         style: poppinsFont(
                           9,
-                          AppColors.black,
+                          themeContro.isLightMode.value
+                              ? Colors.black
+                              : AppColors.white,
                           FontWeight.w500,
                         ),
                       ),
@@ -1038,9 +1066,11 @@ class _AddStoreState extends State<AddStore> {
                           storeController.subCategories = [];
                           setState(() {});
                         },
-                        child: const Icon(
+                        child: Icon(
                           Icons.close,
-                          color: AppColors.black,
+                          color: themeContro.isLightMode.value
+                              ? Colors.black
+                              : AppColors.white,
                           size: 10,
                         ),
                       ),
@@ -1081,7 +1111,9 @@ class _AddStoreState extends State<AddStore> {
                             storeController.subCategoryNames[index],
                             style: poppinsFont(
                               9,
-                              AppColors.black,
+                              themeContro.isLightMode.value
+                                  ? Colors.black
+                                  : AppColors.white,
                               FontWeight.w500,
                             ),
                           ),
@@ -1090,9 +1122,11 @@ class _AddStoreState extends State<AddStore> {
                             onTap: () {
                               storeController.subCategoryNames.removeAt(index);
                             },
-                            child: const Icon(
+                            child: Icon(
                               Icons.close,
-                              color: AppColors.black,
+                              color: themeContro.isLightMode.value
+                                  ? Colors.black
+                                  : AppColors.white,
                               size: 10,
                             ),
                           ),
@@ -1122,7 +1156,10 @@ class _AddStoreState extends State<AddStore> {
         sizeBoxHeight(20),
         Text(
           "Year of Establishment",
-          style: poppinsFont(13, AppColors.black, FontWeight.w600),
+          style: poppinsFont(
+              13,
+              themeContro.isLightMode.value ? AppColors.black : AppColors.white,
+              FontWeight.w600),
         ),
         sizeBoxHeight(10),
         monthYearWidget(),
@@ -1137,7 +1174,13 @@ class _AddStoreState extends State<AddStore> {
       width: Get.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.colorEFEFEF),
+        color: themeContro.isLightMode.value
+            ? AppColors.white
+            : AppColors.darkGray,
+        border: Border.all(
+            color: themeContro.isLightMode.value
+                ? AppColors.colorEFEFEF
+                : AppColors.darkBorder),
         // color: Colors.white,
       ),
       child: Row(
@@ -1148,7 +1191,9 @@ class _AddStoreState extends State<AddStore> {
               label(
                 "Featured Service",
                 fontSize: 12,
-                textColor: Colors.black,
+                textColor: themeContro.isLightMode.value
+                    ? Colors.black
+                    : AppColors.white,
                 fontWeight: FontWeight.w500,
               )
             ],
@@ -1173,18 +1218,28 @@ class _AddStoreState extends State<AddStore> {
   Widget selectEmployee() {
     return Container(
       decoration: BoxDecoration(
-        border: Border.all(color: AppColors.colorEFEFEF),
+        color: themeContro.isLightMode.value
+            ? AppColors.white
+            : AppColors.darkGray,
+        border: Border.all(
+            color: themeContro.isLightMode.value
+                ? AppColors.colorEFEFEF
+                : AppColors.darkBorder),
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: DropdownButton<String>(
-        dropdownColor: Colors.white,
+        dropdownColor:
+            themeContro.isLightMode.value ? Colors.white : AppColors.darkGray,
         isExpanded: true,
         underline: const SizedBox(),
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.only(left: 15),
         hint: Text(
           selectedVtypes ?? 'Select an option',
-          style: poppinsFont(12, AppColors.black, FontWeight.w500),
+          style: poppinsFont(
+              12,
+              themeContro.isLightMode.value ? AppColors.black : AppColors.white,
+              FontWeight.w500),
         ),
         items: [
           'Less than 10',
@@ -1203,7 +1258,12 @@ class _AddStoreState extends State<AddStore> {
                 contentPadding: const EdgeInsets.only(left: 0),
                 title: Text(
                   value,
-                  style: poppinsFont(12, AppColors.black, FontWeight.w600),
+                  style: poppinsFont(
+                      12,
+                      themeContro.isLightMode.value
+                          ? AppColors.black
+                          : AppColors.white,
+                      FontWeight.w600),
                 ),
                 leading: Radio<String>(
                   activeColor: AppColors.blue,
@@ -1225,6 +1285,9 @@ class _AddStoreState extends State<AddStore> {
             child: Image.asset(
               "assets/images/arrow-left1.png",
               height: 20,
+              color: themeContro.isLightMode.value
+                  ? AppColors.black
+                  : AppColors.white,
             ),
           ),
         ),
@@ -1256,37 +1319,57 @@ class _AddStoreState extends State<AddStore> {
                 return InputDecorator(
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 15, right: 15),
-                    fillColor: Colors.white,
+                    fillColor: themeContro.isLightMode.value
+                        ? Colors.white
+                        : AppColors.darkGray,
                     filled: true,
                     errorStyle: const TextStyle(
                         color: Colors.redAccent, fontSize: 16.0),
-                    enabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
-                        borderSide: BorderSide(color: AppColors.bluee4)),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(10)),
+                        borderSide: BorderSide(
+                            color: themeContro.isLightMode.value
+                                ? AppColors.bluee4
+                                : AppColors.darkBorder)),
                     focusedBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide:
                             BorderSide(color: AppColors.black, width: 1)),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: const BorderSide(color: AppColors.black)),
                     disabledBorder: const OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(5)),
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
                         borderSide: BorderSide(color: AppColors.black)),
                   ),
                   isEmpty: selectedMonthValue == '',
                   child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
+                    dropdownColor: themeContro.isLightMode.value
+                        ? Colors.white
+                        : AppColors.darkGray,
                     menuMaxHeight: getProportionateScreenHeight(300),
                     icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                    iconEnabledColor: AppColors.black,
-                    iconDisabledColor: AppColors.black,
+                    iconEnabledColor: themeContro.isLightMode.value
+                        ? Colors.black
+                        : AppColors.white,
+                    iconDisabledColor: themeContro.isLightMode.value
+                        ? Colors.black
+                        : AppColors.white,
                     value: selectedMonthValue,
                     isDense: true,
                     hint: Text("Select month*",
-                        style:
-                            poppinsFont(12, AppColors.black, FontWeight.w400)),
-                    style: const TextStyle(color: Colors.black),
+                        style: poppinsFont(
+                            12,
+                            themeContro.isLightMode.value
+                                ? AppColors.black
+                                : AppColors.white,
+                            FontWeight.w400)),
+                    style: TextStyle(
+                        color: themeContro.isLightMode.value
+                            ? Colors.black
+                            : AppColors.white),
                     onChanged: (String? newValue) async {
                       setState(() {
                         selectedMonthValue = newValue!;
@@ -1298,7 +1381,12 @@ class _AddStoreState extends State<AddStore> {
                         value: month,
                         child: Text(
                           month.toString(),
-                          style: poppinsFont(12, Colors.black, FontWeight.w400),
+                          style: poppinsFont(
+                              12,
+                              themeContro.isLightMode.value
+                                  ? Colors.black
+                                  : AppColors.white,
+                              FontWeight.w400),
                         ),
                       );
                     }).toList(),
@@ -1331,24 +1419,29 @@ class _AddStoreState extends State<AddStore> {
                 return InputDecorator(
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 15, right: 15),
-                    fillColor: Colors.white,
+                    fillColor: themeContro.isLightMode.value
+                        ? Colors.white
+                        : AppColors.darkGray,
                     filled: true,
                     errorStyle: const TextStyle(
                         color: Colors.redAccent, fontSize: 16.0),
-                    enabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
-                      borderSide: BorderSide(color: AppColors.bluee4),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      borderSide: BorderSide(
+                          color: themeContro.isLightMode.value
+                              ? AppColors.bluee4
+                              : AppColors.darkBorder),
                     ),
                     focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(color: AppColors.black, width: 1),
                     ),
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: AppColors.black),
                     ),
                     disabledBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(5)),
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
                       borderSide: BorderSide(color: AppColors.black),
                     ),
                   ),
@@ -1357,16 +1450,30 @@ class _AddStoreState extends State<AddStore> {
                     child: DropdownButton<String>(
                       menuMaxHeight: getProportionateScreenHeight(300),
                       icon: const Icon(Icons.keyboard_arrow_down_rounded),
-                      iconEnabledColor: AppColors.black,
-                      iconDisabledColor: AppColors.black,
+                      dropdownColor: themeContro.isLightMode.value
+                          ? Colors.white
+                          : AppColors.darkGray,
+                      iconEnabledColor: themeContro.isLightMode.value
+                          ? Colors.black
+                          : AppColors.white,
+                      iconDisabledColor: themeContro.isLightMode.value
+                          ? Colors.black
+                          : AppColors.white,
                       value: selectedYearValue,
                       isDense: true,
                       hint: Text(
                         "Select Year*",
-                        style:
-                            poppinsFont(12, AppColors.black, FontWeight.w400),
+                        style: poppinsFont(
+                            12,
+                            themeContro.isLightMode.value
+                                ? Colors.black
+                                : AppColors.white,
+                            FontWeight.w400),
                       ),
-                      style: const TextStyle(color: Colors.black),
+                      style: TextStyle(
+                          color: themeContro.isLightMode.value
+                              ? Colors.black
+                              : AppColors.white),
                       onChanged: (String? newValue) async {
                         setState(() {
                           selectedYearValue = newValue!;
@@ -1378,8 +1485,12 @@ class _AddStoreState extends State<AddStore> {
                           value: year,
                           child: Text(
                             year,
-                            style:
-                                poppinsFont(12, Colors.black, FontWeight.w400),
+                            style: poppinsFont(
+                                12,
+                                themeContro.isLightMode.value
+                                    ? Colors.black
+                                    : AppColors.white,
+                                FontWeight.w400),
                           ),
                         );
                       }).toList(),
@@ -1411,7 +1522,10 @@ class _AddStoreState extends State<AddStore> {
       children: [
         Text(
           "Contact Details",
-          style: poppinsFont(14, AppColors.black, FontWeight.w600),
+          style: poppinsFont(
+              14,
+              themeContro.isLightMode.value ? Colors.black : AppColors.white,
+              FontWeight.w600),
         ),
         sizeBoxHeight(20),
         twoText(
@@ -1422,6 +1536,10 @@ class _AddStoreState extends State<AddStore> {
         ),
         sizeBoxHeight(7),
         IntlPhoneField(
+          dropdownTextStyle: TextStyle(
+              color: themeContro.isLightMode.value
+                  ? Colors.black
+                  : AppColors.white),
           initialValue: contrycode,
           showCountryFlag: true,
           showDropdownIcon: false,
@@ -1449,26 +1567,35 @@ class _AddStoreState extends State<AddStore> {
               : AppColors.bluee4,
           autofocus: false,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          style: const TextStyle(
+          style: TextStyle(
               fontSize: 14,
-              color: Colors.black,
+              color: themeContro.isLightMode.value
+                  ? Colors.black
+                  : AppColors.white,
               fontWeight: FontWeight.w400,
               fontFamily: "Poppins"),
           controller: mobilecontroller,
           keyboardType: TextInputType.number,
           flagsButtonPadding: const EdgeInsets.only(left: 5),
           decoration: InputDecoration(
+            filled: true,
+            fillColor: themeContro.isLightMode.value
+                ? Colors.white
+                : AppColors.darkGray,
             counterText: '',
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: AppColors.bluee4)),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
-                borderSide: const BorderSide(color: AppColors.colorEFEFEF)),
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(
+                    color: themeContro.isLightMode.value
+                        ? AppColors.colorEFEFEF
+                        : AppColors.darkBorder)),
             disabledBorder: const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(5)),
+                borderRadius: BorderRadius.all(Radius.circular(10)),
                 borderSide: BorderSide(color: AppColors.colorEFEFEF)),
             hintText: "Add Mobile Number".tr,
             hintStyle: const TextStyle(
@@ -1477,10 +1604,10 @@ class _AddStoreState extends State<AddStore> {
                 fontWeight: FontWeight.w400,
                 fontFamily: "Poppins"),
             errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: AppColors.colorEFEFEF)),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: AppColors.colorEFEFEF)),
             errorStyle: const TextStyle(color: Colors.redAccent, fontSize: 10),
           ),
@@ -1527,7 +1654,13 @@ class _AddStoreState extends State<AddStore> {
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Colors.grey.shade200)),
+          color: themeContro.isLightMode.value
+              ? AppColors.white
+              : AppColors.darkgray1,
+          border: Border.all(
+              color: themeContro.isLightMode.value
+                  ? Colors.grey.shade200
+                  : AppColors.darkBorder)),
       child: Column(
         children: [
           Row(
@@ -1583,14 +1716,21 @@ class _AddStoreState extends State<AddStore> {
   Widget followContainer({required String img, required String title}) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
+          color:
+              themeContro.isLightMode.value ? Colors.white : AppColors.darkGray,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: AppColors.blue)),
       child: Row(
         children: [
           Image.asset(img, height: 16),
           sizeBoxWidth(5),
-          Text(title, style: poppinsFont(7, AppColors.black, FontWeight.w500))
+          Text(title,
+              style: poppinsFont(
+                  7,
+                  themeContro.isLightMode.value
+                      ? AppColors.black
+                      : AppColors.white,
+                  FontWeight.w500))
         ],
       ).paddingAll(5),
     );
@@ -1605,7 +1745,10 @@ class _AddStoreState extends State<AddStore> {
       children: [
         Text(
           "Business Time",
-          style: poppinsFont(14, AppColors.black, FontWeight.w600),
+          style: poppinsFont(
+              14,
+              themeContro.isLightMode.value ? AppColors.black : AppColors.white,
+              FontWeight.w600),
         ),
         sizeBoxHeight(20),
         twoText(
@@ -1619,7 +1762,9 @@ class _AddStoreState extends State<AddStore> {
           width: Get.width,
           decoration: BoxDecoration(
             border: Border.all(
-              color: AppColors.colorEFEFEF,
+              color: themeContro.isLightMode.value
+                  ? AppColors.colorEFEFEF
+                  : AppColors.darkBorder,
             ),
             borderRadius: BorderRadius.circular(10),
           ),
@@ -1662,7 +1807,9 @@ class _AddStoreState extends State<AddStore> {
                               storeController.openingAndClosingDays
                                       .contains(storeController.days[index])
                                   ? AppColors.white
-                                  : AppColors.black,
+                                  : themeContro.isLightMode.value
+                                      ? AppColors.black
+                                      : AppColors.white,
                               FontWeight.w400),
                           radius: 5,
                           horizontal: 7,
@@ -1766,8 +1913,13 @@ class _AddStoreState extends State<AddStore> {
         Container(
           width: Get.width,
           decoration: BoxDecoration(
+            color: themeContro.isLightMode.value
+                ? AppColors.white
+                : AppColors.darkGray,
             border: Border.all(
-              color: AppColors.colorEFEFEF,
+              color: themeContro.isLightMode.value
+                  ? AppColors.colorEFEFEF
+                  : AppColors.darkBorder,
             ),
             borderRadius: BorderRadius.circular(10),
           ),
@@ -1803,10 +1955,14 @@ class _AddStoreState extends State<AddStore> {
                         textStyle: poppinsFont(
                             10,
                             storeController.openingAndClosingDays.isEmpty
-                                ? AppColors.black
+                                ? themeContro.isLightMode.value
+                                    ? AppColors.black
+                                    : AppColors.white
                                 : storeController.openingAndClosingDays
                                         .contains(storeController.days[index])
-                                    ? AppColors.black
+                                    ? themeContro.isLightMode.value
+                                        ? AppColors.black
+                                        : AppColors.white
                                     : AppColors.white,
                             FontWeight.w400),
                         radius: 5,
@@ -1853,7 +2009,9 @@ class _AddStoreState extends State<AddStore> {
                       "Closed" "        ",
                       style: poppinsFont(
                         9,
-                        AppColors.black,
+                        themeContro.isLightMode.value
+                            ? AppColors.black
+                            : AppColors.white,
                         FontWeight.w500,
                       ),
                     ),

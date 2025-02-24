@@ -359,11 +359,12 @@ class _ReviewState extends State<Review> {
                           children: [
                             GestureDetector(
                               onTap: () {
-                                reviewcontro.riviewlist.removeAt(index);
+                                print(reviewcontro.riviewlist[index].id);
                                 editreview.reviewdelete(
                                   reviewid: reviewcontro.riviewlist[index].id
                                       .toString(),
                                 );
+                                reviewcontro.riviewlist.removeAt(index);
                               },
                               child: Container(
                                 height: 32,
@@ -481,8 +482,10 @@ class _ReviewState extends State<Review> {
                             Container(
                               height: getProportionateScreenHeight(380),
                               width: Get.width,
-                              decoration:
-                                  const BoxDecoration(color: Colors.white),
+                              decoration: BoxDecoration(
+                                  color: themeContro.isLightMode.value
+                                      ? Colors.white
+                                      : AppColors.darkGray),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -490,7 +493,9 @@ class _ReviewState extends State<Review> {
                                   label(
                                     'Feel Free to share your review and ratings',
                                     fontSize: 14,
-                                    textColor: Colors.black,
+                                    textColor: themeContro.isLightMode.value
+                                        ? Colors.black
+                                        : AppColors.white,
                                     fontWeight: FontWeight.w500,
                                   ).paddingSymmetric(horizontal: 25),
                                   sizeBoxHeight(12),
@@ -533,18 +538,16 @@ class _ReviewState extends State<Review> {
                                   ).paddingSymmetric(horizontal: 25),
                                   sizeBoxHeight(22),
                                   TextFormField(
-                                    cursorColor: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white
-                                        : AppColors.black,
+                                    cursorColor: themeContro.isLightMode.value
+                                        ? Colors.black
+                                        : AppColors.white,
                                     autofocus: false,
                                     controller: editreview.msgController,
                                     style: TextStyle(
                                         fontSize: 14,
-                                        color: Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white
-                                            : AppColors.black,
+                                        color: themeContro.isLightMode.value
+                                            ? Colors.black
+                                            : AppColors.white,
                                         fontWeight: FontWeight.w400),
                                     autovalidateMode:
                                         AutovalidateMode.onUserInteraction,
@@ -618,8 +621,12 @@ class _ReviewState extends State<Review> {
                                                           140),
                                                   decoration: BoxDecoration(
                                                       border: Border.all(
-                                                          color:
-                                                              AppColors.blue),
+                                                          color: themeContro
+                                                                  .isLightMode
+                                                                  .value
+                                                              ? AppColors.blue
+                                                              : AppColors
+                                                                  .colorFFFFFF),
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               12)),
@@ -627,7 +634,10 @@ class _ReviewState extends State<Review> {
                                                     child: label(
                                                       'Cancel',
                                                       fontSize: 14,
-                                                      textColor: Colors.black,
+                                                      textColor: themeContro
+                                                              .isLightMode.value
+                                                          ? Colors.black
+                                                          : AppColors.white,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                     ),
@@ -686,7 +696,16 @@ class _ReviewState extends State<Review> {
                                                       reviewstar: editreview
                                                           .rateValue
                                                           .toString());
-
+                                                  reviewcontro.riviewlist[index]
+                                                          .reviewMessage =
+                                                      editreview
+                                                          .msgController.text;
+                                                  reviewcontro.riviewlist[index]
+                                                          .reviewStar =
+                                                      editreview.rateValue
+                                                          .toString();
+                                                  reviewcontro.riviewlist
+                                                      .refresh();
                                                   reviewcontro.riviewmodel
                                                       .refresh();
 
@@ -738,7 +757,9 @@ class _ReviewState extends State<Review> {
                                   height: 58,
                                   width: Get.width,
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: themeContro.isLightMode.value
+                                          ? Colors.white
+                                          : AppColors.darkgray1,
                                       boxShadow: [
                                         BoxShadow(
                                           color: Colors.black.withOpacity(0.12),
@@ -758,7 +779,9 @@ class _ReviewState extends State<Review> {
                                       'Review & Rating',
                                       fontSize: 18,
                                       textAlign: TextAlign.center,
-                                      textColor: Colors.black,
+                                      textColor: themeContro.isLightMode.value
+                                          ? Colors.black
+                                          : AppColors.white,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),

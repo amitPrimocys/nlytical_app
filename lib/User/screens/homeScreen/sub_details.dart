@@ -5,6 +5,7 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/service_contro.dart';
 import 'package:nlytical_app/User/screens/homeScreen/chat_screen.dart';
 import 'package:nlytical_app/utils/assets.dart';
@@ -37,11 +38,15 @@ class _SubDetailsState extends State<SubDetails> {
   Widget build(BuildContext context) {
     return Scaffold(
         // extendBodyBehindAppBar: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: themeContro.isLightMode.value
+            ? AppColors.white
+            : AppColors.darkMainBlack,
         bottomNavigationBar: BottomAppBar(
           height: 73,
           elevation: 0,
-          color: Colors.white,
+          color: themeContro.isLightMode.value
+              ? AppColors.white
+              : AppColors.darkMainBlack,
           child: bottam(),
         ),
         // appBar: AppBar(
@@ -140,9 +145,11 @@ class _SubDetailsState extends State<SubDetails> {
                 child: Container(
                   width: Get.width,
                   height: getProportionateScreenHeight(800),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                      color: themeContro.isLightMode.value
+                          ? AppColors.white
+                          : AppColors.darkMainBlack,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
                       )),
@@ -173,7 +180,9 @@ class _SubDetailsState extends State<SubDetails> {
                                   height: Get.height * 0.28,
                                   width: Get.width,
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: themeContro.isLightMode.value
+                                          ? AppColors.white
+                                          : AppColors.darkGray,
                                       borderRadius: const BorderRadius.only(
                                         topLeft: Radius.circular(16),
                                         topRight: Radius.circular(16),
@@ -184,7 +193,9 @@ class _SubDetailsState extends State<SubDetails> {
                                         BoxShadow(
                                           blurRadius: 5,
                                           spreadRadius: 0,
-                                          color: Colors.grey.shade300,
+                                          color: themeContro.isLightMode.value
+                                              ? Colors.grey.shade300
+                                              : AppColors.darkShadowColor,
                                           offset: const Offset(0.0, 3.0),
                                         ),
                                       ],
@@ -208,9 +219,11 @@ class _SubDetailsState extends State<SubDetails> {
                                     child: Container(
                                       height: 70,
                                       width: Get.width,
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.only(
+                                      decoration: BoxDecoration(
+                                        color: themeContro.isLightMode.value
+                                            ? Colors.white
+                                            : AppColors.darkGray,
+                                        borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(16),
                                           topRight: Radius.circular(16),
                                           bottomLeft: Radius.circular(6),
@@ -235,7 +248,10 @@ class _SubDetailsState extends State<SubDetails> {
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
                                                 fontSize: 18,
-                                                textColor: AppColors.brown,
+                                                textColor: themeContro
+                                                        .isLightMode.value
+                                                    ? AppColors.brown
+                                                    : AppColors.white,
                                                 fontWeight: FontWeight.w600,
                                               ),
                                             ),
@@ -282,7 +298,10 @@ class _SubDetailsState extends State<SubDetails> {
                                                 label(
                                                   '(${servicecontro.servicemodel.value!.serviceDetail!.totalReviewCount!.toString()} Review)',
                                                   fontSize: 10,
-                                                  textColor: AppColors.black,
+                                                  textColor: themeContro
+                                                          .isLightMode.value
+                                                      ? AppColors.black
+                                                      : AppColors.white,
                                                   fontWeight: FontWeight.w400,
                                                 ),
                                               ],
@@ -321,7 +340,9 @@ class _SubDetailsState extends State<SubDetails> {
                             Container(
                               width: Get.width,
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeContro.isLightMode.value
+                                      ? Colors.white
+                                      : AppColors.darkGray,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(color: Colors.black12)),
                               child: Padding(
@@ -345,8 +366,11 @@ class _SubDetailsState extends State<SubDetails> {
                                       linkColor: AppColors.blue,
                                       linkStyle: const TextStyle(
                                           fontWeight: FontWeight.w600),
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                           fontSize: 12,
+                                          color: themeContro.isLightMode.value
+                                              ? AppColors.black
+                                              : AppColors.white,
                                           fontWeight: FontWeight.w400),
                                     ),
                                   ],
@@ -358,7 +382,9 @@ class _SubDetailsState extends State<SubDetails> {
                               height: 50,
                               width: Get.width,
                               decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: themeContro.isLightMode.value
+                                      ? Colors.white
+                                      : AppColors.darkGray,
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(color: Colors.black12)),
                               child: Row(
@@ -368,11 +394,15 @@ class _SubDetailsState extends State<SubDetails> {
                                   label(
                                     'Price',
                                     fontSize: 12,
-                                    textColor: Colors.black,
+                                    textColor: themeContro.isLightMode.value
+                                        ? Colors.black
+                                        : AppColors.white,
                                     fontWeight: FontWeight.w400,
                                   ),
                                   label(
-                                    '\$${servicecontro.servicemodel.value!.stores![widget.index!].price.toString()}',
+                                    servicecontro.servicemodel.value!
+                                        .stores![widget.index!].price
+                                        .toString(),
                                     fontSize: 12,
                                     textColor: AppColors.blue,
                                     fontWeight: FontWeight.w400,
@@ -385,7 +415,9 @@ class _SubDetailsState extends State<SubDetails> {
                               height: Get.height * 0.2,
                               width: Get.width,
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: themeContro.isLightMode.value
+                                    ? Colors.white
+                                    : AppColors.darkGray,
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(color: Colors.black12),
                               ),
@@ -397,7 +429,9 @@ class _SubDetailsState extends State<SubDetails> {
                                   label(
                                     'Attachment',
                                     fontSize: 12,
-                                    textColor: Colors.black,
+                                    textColor: themeContro.isLightMode.value
+                                        ? Colors.black
+                                        : AppColors.white,
                                     fontWeight: FontWeight.w400,
                                   ),
                                   const SizedBox(height: 15),
@@ -456,27 +490,45 @@ class _SubDetailsState extends State<SubDetails> {
                                                       }
                                                     },
                                                     child: Container(
-                                                      decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      50)),
-                                                      child: Image(
-                                                        image: isImage
-                                                            ? NetworkImage(servicecontro
+                                                        decoration: BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        50)),
+                                                        child: isImage
+                                                            ? Image.network(
+                                                                servicecontro
                                                                     .servicemodel
                                                                     .value!
                                                                     .stores![widget
                                                                         .index!]
-                                                                    .storeAttachments![
-                                                                0])
-                                                            : const AssetImage(
-                                                                'assets/images/pdf.png'),
-                                                        height: 50,
-                                                        width: 50,
-                                                        fit: BoxFit.fill,
-                                                      ),
-                                                    ),
+                                                                    .storeAttachments![0],
+                                                                height: 50,
+                                                                width: 50,
+                                                                fit:
+                                                                    BoxFit.fill,
+                                                                errorBuilder:
+                                                                    (context,
+                                                                        error,
+                                                                        stackTrace) {
+                                                                  return Icon(
+                                                                    Icons.error,
+                                                                    color: themeContro
+                                                                            .isLightMode
+                                                                            .value
+                                                                        ? AppColors
+                                                                            .black
+                                                                        : AppColors
+                                                                            .white,
+                                                                  );
+                                                                },
+                                                              )
+                                                            : Image.asset(
+                                                                'assets/images/pdf.png',
+                                                                height: 50,
+                                                                width: 50,
+                                                                fit: BoxFit
+                                                                    .fill)),
                                                   ),
                                                 ],
                                               );

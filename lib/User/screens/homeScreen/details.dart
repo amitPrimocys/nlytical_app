@@ -3,6 +3,8 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -123,7 +125,8 @@ class _DetailsState extends State<Details>
                             delegate: SliverChildListDelegate(
                               [
                                 imagelistt(),
-                                sizeBoxHeight(120),
+                                SizedBox(height: Get.height * 0.12)
+                                // sizeBoxHeight(120),
                                 // profileDetailsField(),
                                 // profileHeaderWidget(context),
                               ],
@@ -534,7 +537,7 @@ class _DetailsState extends State<Details>
                         ),
                         sizeBoxWidth(5),
                         SizedBox(
-                          width: 270,
+                          width: Get.width * 0.70,
                           child: Text(
                             servicecontro
                                 .servicemodel.value!.serviceDetail!.address!
@@ -1059,7 +1062,9 @@ class _DetailsState extends State<Details>
                               ? ListView.separated(
                                   separatorBuilder: (context, index) {
                                     return Divider(
-                                      color: Color(0xffCCCCCC),
+                                      color: themeContro.isLightMode.value
+                                          ? Color(0xffCCCCCC)
+                                          : AppColors.darkBorder,
                                       thickness: 1,
                                     );
                                   },
@@ -1942,9 +1947,22 @@ class _DetailsState extends State<Details>
             width: 90,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: NetworkImage(store.storeImages![0].toString()),
-                    fit: BoxFit.cover)),
+                border: Border.all(
+                    color: themeContro.isLightMode.value
+                        ? Colors.grey.shade200
+                        : AppColors.darkBorder)),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: store.storeImages![0].toString(),
+                  placeholder: (context, url) {
+                    return CupertinoActivityIndicator();
+                  },
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) {
+                    return Icon(Icons.error);
+                  },
+                )),
           ),
           Expanded(
             child: Column(

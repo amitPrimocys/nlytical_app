@@ -495,6 +495,9 @@ Widget globButton({
             )
           : BoxDecoration(
               borderRadius: BorderRadius.circular(radius ?? 40),
+              color: themeContro.isLightMode.value
+                  ? AppColors.white
+                  : AppColors.darkGray,
               border: Border.all(
                 color: color,
               ),
@@ -759,28 +762,28 @@ Widget globalTextField2({
             hintText: hintText,
             hintStyle: poppinsFont(12, AppColors.colorB0B0B0, FontWeight.w400),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide.none),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
                     color: themeContro.isLightMode.value
                         ? AppColors.bluee4
                         : AppColors.darkBorder)),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide(
                     color: themeContro.isLightMode.value
                         ? AppColors.colorEFEFEF
                         : AppColors.darkBorder)),
             disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide.none),
             errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: Colors.redAccent)),
             focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(4.0),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: const BorderSide(color: Colors.redAccent)),
             errorStyle: poppinsFont(12, Colors.redAccent, FontWeight.normal),
             labelText: isLabel ? hintText : null,
@@ -1276,8 +1279,10 @@ class _DropDownState extends State<DropDown> {
         border: Border.all(
             color: themeContro.isLightMode.value
                 ? AppColors.colorEFEFEF
-                : AppColors.grey1),
-        color: Colors.transparent,
+                : AppColors.darkBorder),
+        color: themeContro.isLightMode.value
+            ? Colors.transparent
+            : AppColors.darkGray,
         borderRadius: BorderRadius.circular(10.0),
       ),
       child: DropdownButton(

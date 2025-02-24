@@ -281,6 +281,12 @@ class _SettingState extends State<Setting> {
                               getprofilecontro
                                   .getprofilemodel.value!.userDetails!.image
                                   .toString(),
+                              errorBuilder: (context, error, stackTrace) {
+                                return Image.asset(
+                                  'assets/images/default_user.jpg',
+                                  fit: BoxFit.cover,
+                                );
+                              },
                               fit: BoxFit.cover,
                             ),
                           ).paddingAll(3),

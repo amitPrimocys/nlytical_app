@@ -314,8 +314,10 @@ class _HomeState extends State<Home> {
                                           errorBuilder: (BuildContext? context,
                                               Object? exception,
                                               StackTrace? stackTrace) {
-                                            return const Icon(Icons.abc,
-                                                size: 40);
+                                            return Image.asset(
+                                              'assets/images/default_user.jpg',
+                                              fit: BoxFit.cover,
+                                            );
                                           },
                                         )
                                           // : const Center(

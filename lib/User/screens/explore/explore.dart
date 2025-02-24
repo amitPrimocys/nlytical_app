@@ -262,23 +262,22 @@ class _ExploreState extends State<Explore> {
                       ),
                     ),
                     sizeBoxWidth(110),
-                    // nearcontro.isnear.value && nearcontro.nearbylist.isEmpty
-                    //     ? SizedBox.shrink()
-                    //     :
-                    GestureDetector(
-                        onTap: () {
-                          // openBottomForfilter(context);
-                          Get.to(() => Filter(
-                                catid: nearcontro.nearbymodel.value!
-                                    .nearbyService![0].categoryId
-                                    .toString(),
-                              ));
-                        },
-                        child: Image.asset(
-                          'assets/images/menu1.png',
-                          color: AppColors.white,
-                          height: 24,
-                        )),
+                    nearcontro.isnear.value || nearcontro.nearbylist.isEmpty
+                        ? SizedBox.shrink()
+                        : GestureDetector(
+                            onTap: () {
+                              // openBottomForfilter(context);
+                              Get.to(() => Filter(
+                                    catid: nearcontro.nearbymodel.value!
+                                        .nearbyService![0].categoryId
+                                        .toString(),
+                                  ));
+                            },
+                            child: Image.asset(
+                              'assets/images/menu1.png',
+                              color: AppColors.white,
+                              height: 24,
+                            )),
                   ],
                 ),
               ),
@@ -1581,7 +1580,9 @@ class _ExploreState extends State<Explore> {
           label(
             "Explore List Not Available",
             fontSize: 18,
-            textColor: AppColors.black,
+            textColor: themeContro.isLightMode.value
+                ? AppColors.black
+                : AppColors.white,
             fontWeight: FontWeight.w500,
           )
         ],

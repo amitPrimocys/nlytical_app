@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/like_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/vendor_info_contro.dart';
 import 'package:nlytical_app/utils/assets.dart';
@@ -42,7 +43,9 @@ class _VendorInfoState extends State<VendorInfo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: themeContro.isLightMode.value
+          ? Colors.white
+          : AppColors.darkMainBlack,
       body: SizedBox(
         height: Get.height,
         child: Stack(
@@ -101,8 +104,10 @@ class _VendorInfoState extends State<VendorInfo> {
                 child: Container(
                   width: Get.width,
                   height: getProportionateScreenHeight(800),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: themeContro.isLightMode.value
+                          ? Colors.white
+                          : AppColors.darkMainBlack,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
@@ -151,6 +156,10 @@ class _VendorInfoState extends State<VendorInfo> {
                                           label(
                                               "${vendorcontro.vendorlistmodel.value.vendordetails!.firstName.toString()} ${vendorcontro.vendorlistmodel.value.vendordetails!.lastName.toString()}",
                                               fontSize: 16,
+                                              textColor:
+                                                  themeContro.isLightMode.value
+                                                      ? Colors.black
+                                                      : AppColors.white,
                                               fontWeight: FontWeight.w500),
                                           sizeBoxHeight(10),
                                           Row(
@@ -194,7 +203,10 @@ class _VendorInfoState extends State<VendorInfo> {
                                                 '(${vendorcontro.vendorlistmodel.value.vendordetails!.totalReviews.toString()} Review)',
                                                 // '(${2} Review)',
                                                 fontSize: 10,
-                                                textColor: AppColors.black,
+                                                textColor: themeContro
+                                                        .isLightMode.value
+                                                    ? Colors.black
+                                                    : AppColors.white,
                                                 fontWeight: FontWeight.w400,
                                               ),
                                             ],
@@ -207,9 +219,12 @@ class _VendorInfoState extends State<VendorInfo> {
                                               Container(
                                                 height: 25,
                                                 width: 25,
-                                                decoration: const BoxDecoration(
+                                                decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
-                                                    color: Colors.black12),
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? Colors.black12
+                                                        : AppColors.white),
                                                 child: Image.asset(
                                                     'assets/images/location2.png'),
                                               ),
@@ -228,6 +243,10 @@ class _VendorInfoState extends State<VendorInfo> {
                                                       overflow:
                                                           TextOverflow.ellipsis,
                                                       fontSize: 11,
+                                                      color: themeContro
+                                                              .isLightMode.value
+                                                          ? Colors.black
+                                                          : AppColors.white,
                                                       fontWeight:
                                                           FontWeight.w400),
                                                 ),
@@ -242,9 +261,12 @@ class _VendorInfoState extends State<VendorInfo> {
                                               Container(
                                                 height: 25,
                                                 width: 25,
-                                                decoration: const BoxDecoration(
+                                                decoration: BoxDecoration(
                                                     shape: BoxShape.circle,
-                                                    color: Colors.black12),
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? Colors.black12
+                                                        : AppColors.white),
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.all(6.0),
@@ -261,6 +283,10 @@ class _VendorInfoState extends State<VendorInfo> {
                                                       .mobile
                                                       .toString(),
                                                   fontSize: 11,
+                                                  textColor: themeContro
+                                                          .isLightMode.value
+                                                      ? AppColors.black
+                                                      : AppColors.white,
                                                   fontWeight: FontWeight.w400)
                                             ],
                                           ),
@@ -292,7 +318,9 @@ class _VendorInfoState extends State<VendorInfo> {
             label(
               'Store ',
               fontSize: 14,
-              textColor: Colors.black,
+              textColor: themeContro.isLightMode.value
+                  ? Colors.black
+                  : AppColors.white,
               fontWeight: FontWeight.w600,
             ),
           ],
@@ -513,7 +541,9 @@ class _VendorInfoState extends State<VendorInfo> {
               BoxShadow(
                 blurRadius: 2,
                 spreadRadius: 0,
-                color: Colors.grey.shade300,
+                color: themeContro.isLightMode.value
+                    ? Colors.grey.shade300
+                    : AppColors.darkGray,
                 offset: const Offset(0.0, 3.0),
               ),
             ],
@@ -542,8 +572,10 @@ class _VendorInfoState extends State<VendorInfo> {
           left: 0,
           right: 0,
           child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
+            decoration: BoxDecoration(
+              color: themeContro.isLightMode.value
+                  ? Colors.white
+                  : AppColors.darkGray,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
@@ -577,7 +609,9 @@ class _VendorInfoState extends State<VendorInfo> {
                             .vendorFirstName
                             .toString(),
                         fontSize: 11,
-                        textColor: AppColors.black,
+                        textColor: themeContro.isLightMode.value
+                            ? AppColors.black
+                            : AppColors.white,
                         fontWeight: FontWeight.w400,
                       ),
                     ],
@@ -588,7 +622,9 @@ class _VendorInfoState extends State<VendorInfo> {
                         .vendorlistmodel.value.serviceDetails![0].serviceName
                         .toString(),
                     fontSize: 12,
-                    textColor: AppColors.black,
+                    textColor: themeContro.isLightMode.value
+                        ? AppColors.black
+                        : AppColors.white,
                     fontWeight: FontWeight.w600,
                   ),
                   // ignore: prefer_const_constructors
@@ -632,27 +668,37 @@ class _VendorInfoState extends State<VendorInfo> {
                       label(
                         '(${vendorcontro.vendorlistmodel.value.serviceDetails![0].totalReviews.toString()} Review)',
                         fontSize: 10,
-                        textColor: AppColors.black,
+                        textColor: themeContro.isLightMode.value
+                            ? AppColors.black
+                            : AppColors.white,
                         fontWeight: FontWeight.w400,
                       ),
                     ],
                   ),
                   SizedBox(height: 5),
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        'assets/images/location.png',
-                        height: 13,
-                        width: 13,
-                      ),
+                      Image.asset('assets/images/location.png',
+                          height: 13,
+                          width: 13,
+                          color: themeContro.isLightMode.value
+                              ? AppColors.black
+                              : AppColors.white),
                       SizedBox(width: 5),
-                      label(
-                        vendorcontro
-                            .vendorlistmodel.value.serviceDetails![0].address
-                            .toString(),
-                        fontSize: 11,
-                        textColor: AppColors.black,
-                        fontWeight: FontWeight.w400,
+                      SizedBox(
+                        width: Get.width * 0.60,
+                        child: label(
+                          vendorcontro
+                              .vendorlistmodel.value.serviceDetails![0].address
+                              .toString(),
+                          fontSize: 11,
+                          maxLines: 2,
+                          textColor: themeContro.isLightMode.value
+                              ? AppColors.black
+                              : AppColors.white,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ],
                   ),

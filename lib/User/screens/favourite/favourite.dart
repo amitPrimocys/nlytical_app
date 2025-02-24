@@ -146,7 +146,7 @@ class _FavouriteState extends State<Favourite> {
               widget.tap
                   ? GestureDetector(
                       onTap: () {
-                        Navigator.pop(context);
+                        Get.back();
                       },
                       child: Image.asset(
                         'assets/images/arrow-left1.png',
