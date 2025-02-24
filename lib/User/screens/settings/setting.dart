@@ -459,7 +459,7 @@ class _SettingState extends State<Setting> {
           },
         ),
         sizeBoxHeight(15),
-        themeContro.lightDarkModeSwitch(),
+        themeContro.lightDarkModeSwitch(isVendor: false),
         sizeBoxHeight(15),
         setting(
           imagepath: 'assets/images/language-square.png',

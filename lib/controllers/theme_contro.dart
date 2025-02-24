@@ -33,7 +33,7 @@ class ThemeContro extends GetxController {
     _isLightMode.value = value;
   }
 
-  Widget lightDarkModeSwitch() {
+  Widget lightDarkModeSwitch({required bool isVendor}) {
     return Container(
       height: 45,
       width: Get.width,
@@ -80,6 +80,6 @@ class ThemeContro extends GetxController {
           ),
         ],
       ).paddingSymmetric(horizontal: 15),
-    ).paddingSymmetric(horizontal: 0);
+    ).paddingSymmetric(horizontal: isVendor ? 10 : 0);
   }
 }

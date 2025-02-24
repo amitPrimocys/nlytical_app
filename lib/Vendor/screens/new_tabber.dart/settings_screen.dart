@@ -205,7 +205,7 @@ class _SettingScreenState extends State<SettingScreen> {
                                   height: 18,
                                 ),
                                 sizeBoxHeight(15),
-                                themeContro.lightDarkModeSwitch(),
+                                themeContro.lightDarkModeSwitch(isVendor: true),
                                 sizeBoxHeight(15),
                                 containerDesing(
                                   onTap: () {

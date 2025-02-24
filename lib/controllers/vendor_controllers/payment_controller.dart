@@ -12,6 +12,7 @@ import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/models/vendor_models/getpaymentmodel.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/vendor_new_tabbar.dart';
+import 'package:nlytical_app/utils/global.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 ApiHelper apiHelper = ApiHelper();
@@ -83,7 +84,8 @@ class PaymentController extends GetxController {
       {required String goalId, required String price}) async {
     payLoading(true); // Start showing loader
 
-    var totalAmount = double.parse("1000") * 100;
+    var totalAmount =
+        double.parse(price.replaceAll(RegExp(r'[^\d.]'), '')) * 100;
 
     var finalAmount = totalAmount.toStringAsFixed(0);
 
@@ -206,10 +208,23 @@ class PaymentController extends GetxController {
     isRazorPayLoading(true);
     selectedGoalId.value = goalId;
     selectedPrice.value = price;
+
+    String symbol = price.replaceAll(RegExp(r'[\d\s.,]'), '').trim();
+
+    // Find the matching currency code
+    String currencyCode = "USD"; // Default currency
+    for (var entry in countryCurrency.values) {
+      if (entry["symbol"] == symbol) {
+        currencyCode = entry["code"]!;
+        break;
+      }
+    }
+    print("currencyCode:$currencyCode");
+
     Razorpay razorpay = Razorpay();
     var options = {
       'key': 'rzp_test_67sD9rAjWFVFZQ',
-      'amount': int.parse(price.replaceAll("\$", "")) * 100,
+      'amount': int.parse(price.replaceAll(RegExp(r'[^\d.]'), '')) * 100,
       'name': "Nlytical app",
       'description': "",
       'retry': {'enabled': true, 'max_count': 1},
@@ -218,7 +233,8 @@ class PaymentController extends GetxController {
       'external': {
         'wallets': ['paytm']
       },
-      "currency": "USD",
+      "currency": currencyCode,
+      // "currency": "USD",
     };
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccessResponse);

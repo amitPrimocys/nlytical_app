@@ -119,8 +119,7 @@ class _SelectPaymentState extends State<SelectPayment> {
                           onTap: () {
                             paymentcontro.makeStripePayment(
                               goalId: widget.goalID.toString(),
-                              price:
-                                  widget.price!.replaceAll("\$", "").toString(),
+                              price: widget.price!.toString(),
                             );
                           },
                           img: 'assets/images/cr&deb.png',
