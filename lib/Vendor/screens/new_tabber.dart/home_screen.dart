@@ -381,7 +381,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   radius: const BorderRadius.all(Radius.circular(11)),
                   width: getProportionateScreenWidth(140),
                   height: getProportionateScreenHeight(27))
-              .paddingSymmetric(vertical: 8, horizontal: 12),
+              .paddingSymmetric(vertical: 8, horizontal: 10),
         ],
       ),
     ).paddingSymmetric(

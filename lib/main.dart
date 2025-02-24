@@ -22,7 +22,6 @@ Future<void> main() async {
   // Get.put(AuthController());
   Get.put(ThemeContro());
   Get.put(LanguageController());
-
   await SharedPreferences.getInstance().then((prefs) {
     final themeCollection = ThemeCollection(themes: {});
     runApp(DynamicTheme(

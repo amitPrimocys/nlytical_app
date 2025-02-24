@@ -1370,15 +1370,21 @@ class _ExploreState extends State<Explore> {
                                                 BorderRadius.circular(3),
                                           ),
                                           child: Center(
-                                            child: label(
-                                              nearcontro.nearbylist[index]
-                                                  .categoryName
-                                                  .toString(),
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 8,
-                                              ),
-                                            ).paddingOnly(left: 4, right: 4),
+                                            child: SizedBox(
+                                              width: 55,
+                                              child: label(
+                                                nearcontro.nearbylist[index]
+                                                    .categoryName
+                                                    .toString(),
+                                                maxLines: 1,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  fontSize: 8,
+                                                ),
+                                              ).paddingOnly(left: 4, right: 4),
+                                            ),
                                           ),
                                         ),
                                         // Container(

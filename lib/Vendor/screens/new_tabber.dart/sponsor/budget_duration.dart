@@ -115,9 +115,9 @@ class _BudgetDurationState extends State<BudgetDuration> {
 
   String getSelectedPrice() {
     if (_selectedIndex >= 0 && _selectedIndex < budgetcontro.getbudget.length) {
-      return "\$${budgetcontro.getbudget[_selectedIndex].price}";
+      return budgetcontro.getbudget[_selectedIndex].price.toString();
     }
-    return "\$0"; // Default agar kuch bhi na mile
+    return "0"; // Default if nothing is found
   }
 
   double getTotalPrice() {
@@ -144,7 +144,7 @@ class _BudgetDurationState extends State<BudgetDuration> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: themeContro.isLightMode.value
-          ? Colors.transparent
+          ? Colors.white
           : AppColors.darkMainBlack,
       bottomNavigationBar: BottomAppBar(
         color: Colors.transparent,
@@ -211,7 +211,7 @@ class _BudgetDurationState extends State<BudgetDuration> {
                   height: getProportionateScreenHeight(800),
                   decoration: BoxDecoration(
                       color: themeContro.isLightMode.value
-                          ? Colors.transparent
+                          ? Colors.white
                           : AppColors.darkMainBlack,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30),
@@ -237,8 +237,9 @@ class _BudgetDurationState extends State<BudgetDuration> {
                                   'Excludes apple service fee and applicable taxes',
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
-                                  textColor:
-                                      const Color.fromRGBO(78, 78, 78, 1)),
+                                  textColor: themeContro.isLightMode.value
+                                      ? const Color.fromRGBO(78, 78, 78, 1)
+                                      : Colors.white),
                               sizeBoxHeight(20),
                               Row(
                                 children: [

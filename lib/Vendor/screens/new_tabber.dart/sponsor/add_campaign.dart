@@ -419,7 +419,7 @@ class _AddCampaignState extends State<AddCampaign> {
                                   ),
                                   sizeBoxHeight(10),
                                   label(
-                                      'Yo don’t have any campaigns \n start creating one',
+                                      'You don’t have any campaigns \n start creating one',
                                       textAlign: TextAlign.center,
                                       fontSize: 15,
                                       fontWeight: FontWeight.w400),

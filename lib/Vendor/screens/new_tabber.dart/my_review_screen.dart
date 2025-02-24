@@ -12,6 +12,8 @@ import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/size_config.dart';
 import 'package:nlytical_app/utils/global_fonts.dart';
 
+import '../../../auth/splash.dart';
+
 class MyReviewScreen extends StatefulWidget {
   const MyReviewScreen({super.key});
 
@@ -95,9 +97,11 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                   child: Container(
                     width: Get.width,
                     height: getProportionateScreenHeight(800),
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
+                    decoration: BoxDecoration(
+                        color: themeContro.isLightMode.value
+                            ? Colors.white
+                            : AppColors.darkMainBlack,
+                        borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(30),
                           topRight: Radius.circular(30),
                         )),
@@ -122,7 +126,11 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                                           .paddingOnly(top: 30),
                                       Text(
                                         "User Review",
-                                        style: poppinsFont(15, AppColors.black,
+                                        style: poppinsFont(
+                                            15,
+                                            themeContro.isLightMode.value
+                                                ? AppColors.darkMainBlack
+                                                : Colors.white,
                                             FontWeight.w600),
                                       ).paddingSymmetric(horizontal: 25),
                                       sizeBoxHeight(20),
@@ -156,7 +164,12 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                 children: [
                   Text(
                     "${businessreviewcontro.businessriviewmodel.value!.userReviews![index].firstName}  ${businessreviewcontro.businessriviewmodel.value!.userReviews![index].lastName}",
-                    style: poppinsFont(11, AppColors.black, FontWeight.w600),
+                    style: poppinsFont(
+                        11,
+                        themeContro.isLightMode.value
+                            ? AppColors.darkMainBlack
+                            : Colors.white,
+                        FontWeight.w600),
                   ).paddingSymmetric(horizontal: 85, vertical: 5),
                   Stack(
                     clipBehavior: Clip.none,
@@ -166,8 +179,14 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                         width: Get.width,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade200),
-                          color: Colors.white,
+                          // border: Border.all(
+                          //   color: themeContro.isLightMode.value
+                          //       ? AppColors.darkMainBlack
+                          //       : Colors.white,
+                          // ),
+                          color: themeContro.isLightMode.value
+                              ? Colors.white
+                              : AppColors.darkGray,
                           boxShadow: const [
                             BoxShadow(
                               blurRadius: 14.4,
@@ -221,7 +240,11 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                                   .userReviews![index].reviewMessage
                                   .toString(),
                               style: poppinsFont(
-                                  11, AppColors.black, FontWeight.w500),
+                                  11,
+                                  themeContro.isLightMode.value
+                                      ? AppColors.darkMainBlack
+                                      : Colors.white,
+                                  FontWeight.w500),
                             ),
                             sizeBoxHeight(20),
                           ],
@@ -263,14 +286,22 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: Colors.grey.shade200),
-                color: Colors.white,
-                boxShadow: const [
+                border: Border.all(
+                  color: themeContro.isLightMode.value
+                      ? Colors.white
+                      : AppColors.darkMainBlack,
+                ),
+                color: themeContro.isLightMode.value
+                    ? Colors.white
+                    : AppColors.darkGray,
+                boxShadow: [
                   BoxShadow(
                     blurRadius: 14.4,
                     spreadRadius: 0,
-                    color: Colors.black12,
-                    offset: Offset(2.0, 4.0),
+                    color: themeContro.isLightMode.value
+                        ? const Color.fromARGB(33, 33, 33, 1)
+                        : Colors.black12,
+                    offset: const Offset(2.0, 4.0),
                   ),
                 ],
               ),
@@ -282,7 +313,12 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                     businessreviewcontro
                         .businessriviewmodel.value!.serviceDetails!.serviceName!
                         .toString(),
-                    style: poppinsFont(13, AppColors.black, FontWeight.w600),
+                    style: poppinsFont(
+                        13,
+                        themeContro.isLightMode.value
+                            ? AppColors.darkMainBlack
+                            : Colors.white,
+                        FontWeight.w600),
                   ),
                   sizeBoxHeight(13),
                   Row(
@@ -324,7 +360,9 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
                       label(
                         '(${businessreviewcontro.businessriviewmodel.value!.serviceDetails!.totalReviewCount!.toString()} Review)',
                         fontSize: 8,
-                        textColor: AppColors.black,
+                        textColor: themeContro.isLightMode.value
+                            ? AppColors.darkMainBlack
+                            : Colors.white,
                         fontWeight: FontWeight.w400,
                       ),
                     ],
@@ -371,7 +409,9 @@ class _MyReviewScreenState extends State<MyReviewScreen> {
           sizeBoxHeight(10),
           label("User Review Not Found",
               fontSize: 17,
-              textColor: AppColors.black,
+              textColor: themeContro.isLightMode.value
+                  ? AppColors.darkMainBlack
+                  : Colors.white,
               fontWeight: FontWeight.w500)
         ],
       ),

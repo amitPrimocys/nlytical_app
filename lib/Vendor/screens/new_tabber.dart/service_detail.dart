@@ -373,16 +373,21 @@ class _DetailsState extends State<Details>
                                     color: AppColors.blue,
                                   ),
                                   sizeBoxWidth(5),
-                                  label(
-                                    serviceController.servicemodel.value!
-                                        .serviceDetail!.distance!
-                                        .toString(),
-                                    // ${avrageReview} Years in Business,
-                                    fontSize: 10,
-                                    textColor: themeContro.isLightMode.value
-                                        ? AppColors.color5C5C5C
-                                        : AppColors.white,
-                                    fontWeight: FontWeight.w400,
+                                  SizedBox(
+                                    width: 190,
+                                    child: label(
+                                      serviceController.servicemodel.value!
+                                          .serviceDetail!.address!
+                                          .toString(),
+                                      // ${avrageReview} Years in Business,
+                                      fontSize: 10,
+                                      textColor: themeContro.isLightMode.value
+                                          ? AppColors.color5C5C5C
+                                          : AppColors.white,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      fontWeight: FontWeight.w400,
+                                    ),
                                   ),
                                 ],
                               ),
