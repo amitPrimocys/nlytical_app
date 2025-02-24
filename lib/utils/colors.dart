@@ -16,6 +16,7 @@ class AppColors {
   static const Color colorC5C5C5 = Color(0xffC5C5C5);
   static const Color colorDFDFDF = Color(0xffDFDFDF);
   static const Color color909091 = Color(0xff909091);
+  static const Color c0046AE = Color(0xff0046AE);
   static const Color color909092 = Color(0xffECECEC);
   static const Color bluee = Color(0xff1E457E);
   static const Color bluee1 = Color(0xff2E6CC8);
@@ -128,6 +129,9 @@ class AppColors {
   static const Color darkMainBlack = Color(0xff181818);
   static const Color darkGray = Color(0xff212121);
   static const Color darkBorder = Color(0xff373737);
+  static const Color darkgray1 = Color.fromARGB(255, 41, 41, 41);
+  static const Color darkgray2 = Color.fromARGB(255, 68, 67, 67);
+  static const Color darkgray3 = Color.fromARGB(255, 152, 152, 152);
   static const Color darkblue = Color.fromRGBO(28, 45, 107, 0.13);
   static const Color darkShadowColor = Color(0xff0000000f);
 }

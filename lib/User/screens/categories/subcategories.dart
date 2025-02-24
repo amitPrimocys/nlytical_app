@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/categories_contro.dart';
 import 'package:nlytical_app/User/screens/categories/categories_details.dart';
 import 'package:nlytical_app/User/screens/shimmer_loader/subcat_loader.dart';
@@ -31,33 +32,9 @@ class _SubCategoriesState extends State<SubCategories> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.white,
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.white,
-        //   automaticallyImplyLeading: false,
-        //   scrolledUnderElevation: 0,
-        //   shadowColor: Colors.white70,
-        //   elevation: 5,
-        //   title: Row(
-        //     children: [
-        //       GestureDetector(
-        //           onTap: () {
-        //             Navigator.pop(context);
-        //           },
-        //           child: Image.asset(
-        //             'assets/images/arrow-left1.png',
-        //             height: 24,
-        //           )),
-        //       sizeBoxWidth(10),
-        //       label(
-        //         'Sub Categories',
-        //         fontSize: 20,
-        //         textColor: Colors.black,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ],
-        //   ),
-        // ),
+        backgroundColor: themeContro.isLightMode.value
+            ? AppColors.white
+            : AppColors.darkMainBlack,
         body: SizedBox(
           height: Get.height,
           child: Stack(
@@ -101,13 +78,6 @@ class _SubCategoriesState extends State<SubCategories> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      // Uncomment and use if required
-                      // sizeBoxWidth(240),
-                      // Image.asset(
-                      //   AppAsstes.search,
-                      //   scale: 3.5,
-                      //   color: Colors.white,
-                      // ),
                     ],
                   ).paddingSymmetric(horizontal: 20),
                 ),
@@ -117,48 +87,24 @@ class _SubCategoriesState extends State<SubCategories> {
                 child: Container(
                   width: Get.width,
                   height: getProportionateScreenHeight(800),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
+                  decoration: BoxDecoration(
+                      color: themeContro.isLightMode.value
+                          ? AppColors.white
+                          : AppColors.darkMainBlack,
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
                       )),
                   child: Column(
                     children: [
                       sizeBoxHeight(10),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     color: Color.fromRGBO(0, 0, 0, 0.12),
-                      //     boxShadow: [
-                      //       BoxShadow(
-                      //         color: Colors.black54,
-                      //         blurRadius: 10,
-                      //         spreadRadius: 0,
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-
                       Expanded(
                         child: Obx(() {
                           return subcatecontro.issubcat.value
                               ? SubcatLoader(context)
                               : SingleChildScrollView(
                                   child: Column(
-                                    children: [
-                                      // sizeBoxHeight(10),
-                                      // Align(
-                                      //   alignment: Alignment.bottomRight,
-                                      //   child: label(
-                                      //     'Total Service : ${subcatecontro.subcatemodel.value!.totalSubCategoryCount!.toString()} ',
-                                      //     fontSize: 12,
-                                      //     textColor: AppColors.black,
-                                      //     fontWeight: FontWeight.w400,
-                                      //   ),
-                                      // ).paddingOnly(right: 20),
-                                      sizeBoxHeight(10),
-                                      detail()
-                                    ],
+                                    children: [sizeBoxHeight(10), detail()],
                                   ),
                                 );
                         }),
@@ -232,10 +178,14 @@ class _SubCategoriesState extends State<SubCategories> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         // border: Border.all(color: Colors.white),
-                        color: Colors.white,
+                        color: themeContro.isLightMode.value
+                            ? AppColors.white
+                            : AppColors.darkGray,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.grey.shade200,
+                            color: themeContro.isLightMode.value
+                                ? Colors.grey.shade200
+                                : AppColors.darkShadowColor,
                             blurRadius: 14.0,
                             spreadRadius: 0.0,
                             offset: const Offset(
@@ -263,7 +213,9 @@ class _SubCategoriesState extends State<SubCategories> {
                               subcatecontro.subcatelist[index].subcategoryName
                                   .toString(),
                               fontSize: 12,
-                              textColor: Colors.black,
+                              textColor: themeContro.isLightMode.value
+                                  ? Colors.black
+                                  : AppColors.white,
                               fontWeight: FontWeight.w500,
                             ),
                           ],
@@ -274,13 +226,17 @@ class _SubCategoriesState extends State<SubCategories> {
                               subcatecontro.subcatelist[index].servicesCount
                                   .toString(),
                               fontSize: 12,
-                              textColor: AppColors.blue,
+                              textColor: themeContro.isLightMode.value
+                                  ? AppColors.blue
+                                  : AppColors.white,
                               fontWeight: FontWeight.w500,
                             ),
                             sizeBoxWidth(10),
                             Image.asset(
                               'assets/images/arrow-left (1).png',
-                              color: AppColors.black,
+                              color: themeContro.isLightMode.value
+                                  ? AppColors.black
+                                  : AppColors.white,
                               height: 16,
                               width: 16,
                             ),
@@ -313,7 +269,9 @@ class _SubCategoriesState extends State<SubCategories> {
           label(
             "Sub Categories Not Found",
             fontSize: 18,
-            textColor: AppColors.black,
+            textColor: themeContro.isLightMode.value
+                ? AppColors.black
+                : AppColors.white,
             fontWeight: FontWeight.w500,
           )
         ],

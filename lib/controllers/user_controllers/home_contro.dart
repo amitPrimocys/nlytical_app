@@ -1,10 +1,16 @@
-// ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, unused_local_variable
+// ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, unused_local_variable, deprecated_member_use
 
 import 'dart:convert';
+import 'dart:developer';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nlytical_app/models/user_models/home_model.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
+import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/utils/global.dart';
 
 final ApiHelper apiHelper = ApiHelper();
@@ -63,6 +69,53 @@ class HomeContro extends GetxController {
       }
     } catch (e) {
       ishome.value = false;
+    }
+  }
+
+  //========================= location fetch method =========================================
+  Future<void> checkLocationPermission() async {
+    log("start");
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.deniedForever) {
+      snackBar(
+          "Nlytical app need location Permmision otherwise You are not able to see nearby stores, Please Allow location");
+    } else if (permission == LocationPermission.denied) {
+      LocationPermission newPermission = await Geolocator.requestPermission();
+      if (newPermission == LocationPermission.denied) {
+        snackBar("Please Allow location");
+      } else if (newPermission == LocationPermission.whileInUse ||
+          newPermission == LocationPermission.always) {
+        await _getCurrentLocation();
+      }
+    } else {
+      await _getCurrentLocation();
+    }
+  }
+
+  Future<void> _getCurrentLocation() async {
+    try {
+      // Fetch the current position (latitude and longitude)
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      Latitude = position.latitude.toString();
+      Longitude = position.longitude.toString();
+
+      log("☺☺☺☺☺☺☺☺☺LAT :$Latitude");
+      log("☺☺☺☺☺☺☺☺☺LONG : $Longitude");
+      SharedPrefs.setString(SharedPreferencesKey.LATTITUDE, Latitude);
+      SharedPrefs.setString(SharedPreferencesKey.LONGITUDE, Longitude);
+      homeApi(
+        latitudee: Latitude,
+        longitudee: Longitude,
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+      homeApi(
+        latitudee: '',
+        longitudee: '',
+      );
     }
   }
 }

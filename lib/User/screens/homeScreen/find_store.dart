@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/like_contro.dart';
 import 'package:nlytical_app/User/screens/homeScreen/details.dart';
@@ -35,31 +36,9 @@ class _FindStoreState extends State<FindStore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.appbar,
-        //   automaticallyImplyLeading: false,
-        //   title: Row(
-        //     children: [
-        //       GestureDetector(
-        //           onTap: () {
-        //             Navigator.pop(context);
-        //           },
-        //           child: Image.asset(
-        //             'assets/images/arrow-left1.png',
-        //             height: 24,
-        //           )),
-        //       sizeBoxWidth(10),
-        //       label(
-        //         'Find Your Perfect Store',
-        //         fontSize: 20,
-        //         textColor: Colors.black,
-        //         fontWeight: FontWeight.w500,
-        //       ),
-        //     ],
-        //   ),
-        // ),
-
+        backgroundColor: themeContro.isLightMode.value
+            ? Colors.white
+            : AppColors.darkMainBlack,
         body: SizedBox(
           height: Get.height,
           child: Stack(
@@ -103,13 +82,6 @@ class _FindStoreState extends State<FindStore> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      // Uncomment and use if required
-                      // sizeBoxWidth(240),
-                      // Image.asset(
-                      //   AppAsstes.search,
-                      //   scale: 3.5,
-                      //   color: Colors.white,
-                      // ),
                     ],
                   ).paddingSymmetric(horizontal: 20),
                 ),
@@ -119,8 +91,10 @@ class _FindStoreState extends State<FindStore> {
                 child: Container(
                   width: Get.width,
                   height: getProportionateScreenHeight(800),
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
+                  decoration: BoxDecoration(
+                      color: themeContro.isLightMode.value
+                          ? Colors.white
+                          : AppColors.darkMainBlack,
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                         topRight: Radius.circular(30),
@@ -128,19 +102,6 @@ class _FindStoreState extends State<FindStore> {
                   child: Column(
                     children: [
                       sizeBoxHeight(10),
-                      // Container(
-                      //   decoration: BoxDecoration(
-                      //     color: Color.fromRGBO(0, 0, 0, 0.12),
-                      //     boxShadow: [
-                      //       BoxShadow(
-                      //         color: Colors.black54,
-                      //         blurRadius: 10,
-                      //         spreadRadius: 0,
-                      //       ),
-                      //     ],
-                      //   ),
-                      // ),
-
                       Expanded(
                           child: SingleChildScrollView(
                         child: Column(
@@ -192,12 +153,6 @@ class _FindStoreState extends State<FindStore> {
             physics: NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
             shrinkWrap: true,
-            // gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-            //   maxCrossAxisExtent: maxCrossAxisExtent,
-            //   childAspectRatio: (itemWidth / itemHeight * 1.6),
-            //   mainAxisSpacing: 14,
-            //   crossAxisSpacing: 14,
-            // ),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // 2 items in a row
               childAspectRatio: 0.58, // Adjust for image and text ratio
@@ -331,7 +286,7 @@ class _FindStoreState extends State<FindStore> {
                 label(
                   "No Perfect Store Found",
                   fontSize: 18,
-                  textColor: AppColors.black,
+                  textColor: AppColors.brown,
                   fontWeight: FontWeight.w500,
                 )
               ],

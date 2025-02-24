@@ -1,11 +1,14 @@
-// ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously
+// ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously, avoid_print, use_full_hex_values_for_flutter_colors
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/categories_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/filter_contro.dart';
+import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/global.dart';
+import 'package:nlytical_app/utils/global_fonts.dart';
 import 'package:nlytical_app/utils/size_config.dart';
 
 class Filter extends StatefulWidget {
@@ -29,7 +32,7 @@ class _FilterState extends State<Filter> {
   void initState() {
     scrollController.addListener(_scrollListener);
     // Load initial data
-    fetchRestaurants();
+    // fetchRestaurants();
     catecontro.cateApi();
     super.initState();
   }
@@ -55,7 +58,7 @@ class _FilterState extends State<Filter> {
         filtercontro.selectedRating.value = ratingValue;
         await filtercontro.filterApi(
           catId: widget.catid,
-          rivstar: ratingValue.toString(),
+          rivstar: ratingValue,
           selectedService: selectedServices,
           page: page.toString(),
         );
@@ -84,82 +87,1264 @@ class _FilterState extends State<Filter> {
   @override
   void dispose() {
     scrollController.dispose();
-
+    if (catecontro.subcatemodel.value!.subCategoryData != null) {
+      catecontro.subcatemodel.value!.subCategoryData!.clear();
+    }
     super.dispose();
   }
 
+  TextEditingController searchLocationCtrl = TextEditingController();
+
+  bool isvisible1 = true;
+  bool isvisible2 = false;
+  bool isvisible3 = false;
+  int? selectedIndexType;
+  int? selectedIndexRating;
+
+  String? selectedType;
+  List<String> itemListType = [
+    "Featured",
+  ];
+
+  List<String> itemListRating = [
+    "1 Star",
+    "2 Star",
+    "3 Star",
+    "4 Star",
+    "5 Star"
+  ];
+
+  // double minPrice = 1000;
+  // double maxPrice = 6000;
+  // RangeValues rangeValues = const RangeValues(1000, 6000);
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-        length: 2,
-        initialIndex: 0,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Container(
-                  height: Get.height * 0.45,
-                  width: Get.width,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Column(
+    return Scaffold(
+        backgroundColor: themeContro.isLightMode.value
+            ? AppColors.white
+            : AppColors.darkMainBlack,
+        body: SizedBox(
+          height: Get.height,
+          child: Stack(
+            clipBehavior: Clip.antiAlias,
+            children: [
+              Container(
+                width: Get.width,
+                height: getProportionateScreenHeight(150),
+                decoration: const BoxDecoration(
+                    image: DecorationImage(
+                        image: AssetImage(AppAsstes.line_design)),
+                    color: AppColors.blue),
+              ),
+              Positioned(
+                top: getProportionateScreenHeight(60),
+                left:
+                    0, // Ensures alignment is calculated across the entire width
+                right: 0,
+                child: Container(
+                  // Aligns content to the center
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [sizeBoxHeight(45), profiletab()],
+                    children: [
+                      GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Image.asset(
+                            'assets/images/arrow-left1.png',
+                            color: AppColors.white,
+                            height: 24,
+                          )),
+                      sizeBoxWidth(120),
+                      Align(
+                        alignment: Alignment.center,
+                        child: label(
+                          "Filter",
+                          textAlign: TextAlign.center,
+                          fontSize: 20,
+                          textColor: AppColors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ).paddingSymmetric(horizontal: 20),
+                ),
+              ),
+              Positioned(
+                top: 100,
+                child: Container(
+                  width: Get.width,
+                  height: getProportionateScreenHeight(800),
+                  decoration: BoxDecoration(
+                      color: themeContro.isLightMode.value
+                          ? AppColors.white
+                          : AppColors.darkMainBlack,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30),
+                      )),
+                  child: Column(
+                    children: [
+                      sizeBoxHeight(10),
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              AnimatedContainer(
+                                curve: Curves.easeInOut,
+                                duration: const Duration(seconds: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: themeContro.isLightMode.value
+                                        ? Colors.white
+                                        : AppColors.darkGray,
+                                    boxShadow: [
+                                      BoxShadow(
+                                          blurRadius: 14.4,
+                                          offset: const Offset(2, 4),
+                                          spreadRadius: 0,
+                                          color: themeContro.isLightMode.value
+                                              ? Colors.grey.shade300
+                                              : AppColors.darkShadowColor)
+                                    ]),
+                                child: !isvisible1
+                                    ? Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                isvisible1 = !isvisible1;
+                                                print(isvisible1);
+                                              });
+                                            },
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Icon(
+                                                  isvisible1
+                                                      ? Icons
+                                                          .keyboard_arrow_down
+                                                      : Icons
+                                                          .keyboard_arrow_up_outlined,
+                                                  size: 30,
+                                                  color: themeContro
+                                                          .isLightMode.value
+                                                      ? AppColors.black
+                                                      : AppColors.white),
+                                            ).paddingSymmetric(horizontal: 10),
+                                          ),
+                                          Container(
+                                            height: 45,
+                                            width: Get.width,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                border: Border.all(
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? Colors.grey.shade300
+                                                        : AppColors.grey1)),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  AppAsstes.location1,
+                                                  height: 15,
+                                                  color: themeContro
+                                                          .isLightMode.value
+                                                      ? AppColors.black
+                                                      : AppColors.white,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                label("Location",
+                                                    fontSize: 12,
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.black
+                                                        : AppColors.white,
+                                                    fontWeight: FontWeight.w600)
+                                              ],
+                                            ).paddingSymmetric(horizontal: 10),
+                                          ).paddingSymmetric(horizontal: 10),
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            height: 45,
+                                            width: Get.width,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                border: Border.all(
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? Colors.grey.shade300
+                                                        : AppColors.grey1)),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  AppAsstes.category2,
+                                                  height: 15,
+                                                  color: themeContro
+                                                          .isLightMode.value
+                                                      ? AppColors.black
+                                                      : AppColors.white,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                label("Categories",
+                                                    fontSize: 12,
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.black
+                                                        : AppColors.white,
+                                                    fontWeight: FontWeight.w600)
+                                              ],
+                                            ).paddingSymmetric(horizontal: 10),
+                                          ).paddingSymmetric(horizontal: 10),
+                                          const SizedBox(height: 10),
+                                          Container(
+                                            height: 45,
+                                            width: Get.width,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(15),
+                                                border: Border.all(
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? Colors.grey.shade300
+                                                        : AppColors.grey1)),
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Image.asset(
+                                                  AppAsstes.subcategory,
+                                                  height: 15,
+                                                  color: themeContro
+                                                          .isLightMode.value
+                                                      ? AppColors.black
+                                                      : AppColors.white,
+                                                ),
+                                                const SizedBox(width: 5),
+                                                label("Subcategories",
+                                                    fontSize: 12,
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.black
+                                                        : AppColors.white,
+                                                    fontWeight: FontWeight.w600)
+                                              ],
+                                            ).paddingSymmetric(horizontal: 10),
+                                          ).paddingSymmetric(horizontal: 10),
+                                          const SizedBox(height: 10),
+                                        ],
+                                      )
+                                    : Column(
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                isvisible1 = !isvisible1;
+                                                print(isvisible1);
+                                              });
+                                            },
+                                            child: Align(
+                                              alignment: Alignment.centerRight,
+                                              child: Icon(
+                                                  isvisible1
+                                                      ? Icons
+                                                          .keyboard_arrow_down
+                                                      : Icons
+                                                          .keyboard_arrow_up_outlined,
+                                                  size: 30,
+                                                  color: themeContro
+                                                          .isLightMode.value
+                                                      ? AppColors.black
+                                                      : AppColors.white),
+                                            ).paddingSymmetric(horizontal: 10),
+                                          ),
+                                          //============================================ Location
+                                          containerDesign(
+                                            image: AppAsstes.location1,
+                                            title: "Location",
+                                            searchCtrl: searchLocationCtrl,
+                                            onChanged: (p0) async {
+                                              setState(() {});
+                                              await filtercontro.getLonLat(p0);
+                                              await filtercontro
+                                                  .getsuggestion(p0);
+                                              setState(() {});
+                                            },
+                                            child:
+                                                searchLocationCtrl.text.isEmpty
+                                                    ? Text(
+                                                        "Location not found",
+                                                        style: poppinsFont(
+                                                            12,
+                                                            AppColors.brown,
+                                                            FontWeight.w500),
+                                                      ).paddingSymmetric(
+                                                        vertical: 40)
+                                                    : filtercontro
+                                                            .mapresult.isEmpty
+                                                        ? Text(
+                                                            "Location not found",
+                                                            style: poppinsFont(
+                                                                12,
+                                                                AppColors.brown,
+                                                                FontWeight
+                                                                    .w500),
+                                                          ).paddingSymmetric(
+                                                            vertical: 40)
+                                                        : ListView.builder(
+                                                            itemCount:
+                                                                filtercontro
+                                                                    .mapresult
+                                                                    .length,
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(0),
+                                                            shrinkWrap: true,
+                                                            scrollDirection:
+                                                                Axis.vertical,
+                                                            itemBuilder:
+                                                                (context,
+                                                                    index) {
+                                                              return InkWell(
+                                                                onTap: () {
+                                                                  setState(() {
+                                                                    searchLocationCtrl
+                                                                        .text = filtercontro
+                                                                            .mapresult[index]
+                                                                        [
+                                                                        'description'];
+                                                                    filtercontro
+                                                                        .mapresult
+                                                                        .clear();
+                                                                    filtercontro
+                                                                        .getLonLat(
+                                                                            searchLocationCtrl.text);
+                                                                  });
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  height: 36,
+                                                                  width:
+                                                                      Get.width,
+                                                                  decoration: BoxDecoration(
+                                                                      border: Border(
+                                                                          bottom:
+                                                                              BorderSide(color: themeContro.isLightMode.value ? Colors.grey.shade200 : AppColors.darkgray2))),
+                                                                  child: Align(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .centerLeft,
+                                                                    child: Text(
+                                                                      filtercontro
+                                                                              .mapresult[index]
+                                                                          [
+                                                                          'description'],
+                                                                      style: poppinsFont(
+                                                                          12,
+                                                                          themeContro.isLightMode.value
+                                                                              ? AppColors.black
+                                                                              : AppColors.white,
+                                                                          FontWeight.w500),
+                                                                    ),
+                                                                  ).paddingSymmetric(
+                                                                      horizontal:
+                                                                          15),
+                                                                ).paddingSymmetric(
+                                                                        horizontal:
+                                                                            20),
+                                                              );
+                                                            },
+                                                          ),
+                                          ),
+                                          const SizedBox(height: 30),
+                                          //============================================ CATEGORIES
+                                          Obx(
+                                            () => containerDesign(
+                                              image: AppAsstes.category2,
+                                              title: "Categories",
+                                              searchCtrl: catecontro
+                                                  .searchCategoriesCtrl,
+                                              onChanged: (p0) {
+                                                setState(() {
+                                                  catecontro
+                                                      .filterSearchPeople();
+                                                });
+                                              },
+                                              child: catecontro.catemodel.value!
+                                                      .data!.isNotEmpty
+                                                  ? ListView.builder(
+                                                      itemCount: catecontro
+                                                          .catemodel
+                                                          .value!
+                                                          .data!
+                                                          .length,
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              0),
+                                                      shrinkWrap: true,
+                                                      // physics:
+                                                      //     const NeverScrollableScrollPhysics(),
+                                                      scrollDirection:
+                                                          Axis.vertical,
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        final categoryName =
+                                                            catecontro
+                                                                .catemodel
+                                                                .value!
+                                                                .data![index]
+                                                                .categoryName!;
+                                                        final categoryId =
+                                                            catecontro
+                                                                .catemodel
+                                                                .value!
+                                                                .data![index]
+                                                                .id!
+                                                                .toString();
+                                                        final isSelected =
+                                                            selectedServicesName
+                                                                    .isNotEmpty &&
+                                                                selectedServicesName
+                                                                        .first ==
+                                                                    categoryName;
+                                                        return InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              selectedServicesName
+                                                                  .clear();
+                                                              selectedServices
+                                                                  .clear();
+
+                                                              selectedServicesName
+                                                                  .add(
+                                                                      categoryName);
+                                                              selectedServices
+                                                                  .add(
+                                                                      categoryId);
+                                                              print(
+                                                                  "selectedServicesName:$selectedServicesName");
+                                                              print(
+                                                                  "selectedServices:$selectedServices");
+                                                              catecontro.subcateApi(
+                                                                  catId:
+                                                                      selectedServices
+                                                                          .first);
+                                                            });
+                                                          },
+                                                          child: Container(
+                                                            height: 45,
+                                                            width: Get.width,
+                                                            decoration: BoxDecoration(
+                                                                borderRadius: BorderRadius.circular(isSelected ? 5 : 0),
+                                                                color: isSelected
+                                                                    ? themeContro.isLightMode.value
+                                                                        ? Colors.grey.shade200
+                                                                        : AppColors.darkgray2
+                                                                    : themeContro.isLightMode.value
+                                                                        ? Colors.white
+                                                                        : Colors.transparent,
+                                                                border: Border(
+                                                                    bottom: BorderSide(
+                                                                        color: (index != catecontro.catemodel.value!.data!.length - 1)
+                                                                            ? themeContro.isLightMode.value
+                                                                                ? Colors.grey.shade200
+                                                                                : AppColors.darkgray2
+                                                                            : Colors.transparent))),
+                                                            child: Align(
+                                                              alignment: Alignment
+                                                                  .centerLeft,
+                                                              child: Text(
+                                                                catecontro
+                                                                    .catemodel
+                                                                    .value!
+                                                                    .data![
+                                                                        index]
+                                                                    .categoryName!,
+                                                                style: poppinsFont(
+                                                                    12,
+                                                                    themeContro
+                                                                            .isLightMode
+                                                                            .value
+                                                                        ? AppColors
+                                                                            .black
+                                                                        : AppColors
+                                                                            .colorFFFFFF,
+                                                                    isSelected
+                                                                        ? FontWeight
+                                                                            .w600
+                                                                        : FontWeight
+                                                                            .w500),
+                                                              ),
+                                                            ).paddingSymmetric(
+                                                                horizontal: 15),
+                                                          ).paddingSymmetric(
+                                                              horizontal:
+                                                                  isSelected
+                                                                      ? 15
+                                                                      : 20),
+                                                        );
+                                                      },
+                                                    ).paddingSymmetric(
+                                                      vertical: 5)
+                                                  : Center(
+                                                      child: Text(
+                                                        "Category Not found",
+                                                        style: poppinsFont(
+                                                            12,
+                                                            AppColors.brown,
+                                                            FontWeight.w500),
+                                                      ),
+                                                    ),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 30),
+                                          //============================================ SUB Categories
+                                          Obx(
+                                            () => containerDesign(
+                                              image: AppAsstes.subcategory,
+                                              title: "Subcategories",
+                                              searchCtrl: catecontro
+                                                  .searchSubCategoriesCtrl,
+                                              onChanged: (p0) {
+                                                setState(() {
+                                                  catecontro
+                                                      .filterSearchSubCate();
+                                                });
+                                              },
+                                              child: catecontro
+                                                          .issubcat.value ||
+                                                      catecontro
+                                                              .subcatemodel
+                                                              .value!
+                                                              .subCategoryData ==
+                                                          null
+                                                  ? Text(
+                                                      "Subcategory Not found",
+                                                      style: poppinsFont(
+                                                          12,
+                                                          AppColors.brown,
+                                                          FontWeight.w500),
+                                                    ).paddingSymmetric(
+                                                      vertical: 40)
+                                                  : catecontro
+                                                          .subcatemodel
+                                                          .value!
+                                                          .subCategoryData!
+                                                          .isEmpty
+                                                      ? Text(
+                                                          "Subcategory Not found",
+                                                          style: poppinsFont(
+                                                              12,
+                                                              AppColors.brown,
+                                                              FontWeight.w500),
+                                                        ).paddingSymmetric(
+                                                          vertical: 40)
+                                                      : ListView.builder(
+                                                          itemCount: catecontro
+                                                              .subcatemodel
+                                                              .value!
+                                                              .subCategoryData!
+                                                              .length,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(0),
+                                                          shrinkWrap: true,
+                                                          physics:
+                                                              const NeverScrollableScrollPhysics(),
+                                                          scrollDirection:
+                                                              Axis.vertical,
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            final categorySubName =
+                                                                catecontro
+                                                                    .subcatemodel
+                                                                    .value!
+                                                                    .subCategoryData![
+                                                                        index]
+                                                                    .subcategoryName!;
+                                                            final categorySubId =
+                                                                catecontro
+                                                                    .subcatemodel
+                                                                    .value!
+                                                                    .subCategoryData![
+                                                                        index]
+                                                                    .id!
+                                                                    .toString();
+                                                            final isSelected = selectedSubServicesName
+                                                                    .isNotEmpty &&
+                                                                selectedSubServicesName
+                                                                        .first ==
+                                                                    categorySubName;
+                                                            return InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  selectedSubServicesName
+                                                                      .clear();
+                                                                  selectedSubServices
+                                                                      .clear();
+
+                                                                  selectedSubServicesName
+                                                                      .add(
+                                                                          categorySubName);
+                                                                  selectedSubServices
+                                                                      .add(
+                                                                          categorySubId);
+
+                                                                  print(
+                                                                      "SubName:$selectedSubServicesName");
+                                                                  print(
+                                                                      "SubID:$selectedSubServices");
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: 45,
+                                                                width:
+                                                                    Get.width,
+                                                                decoration: BoxDecoration(
+                                                                    borderRadius: BorderRadius.circular(isSelected ? 5 : 0),
+                                                                    color: isSelected
+                                                                        ? themeContro.isLightMode.value
+                                                                            ? Colors.grey.shade200
+                                                                            : AppColors.darkgray2
+                                                                        : themeContro.isLightMode.value
+                                                                            ? Colors.white
+                                                                            : Colors.transparent,
+                                                                    border: Border(
+                                                                        bottom: BorderSide(
+                                                                            color: (index != catecontro.subcatemodel.value!.subCategoryData!.length - 1)
+                                                                                ? themeContro.isLightMode.value
+                                                                                    ? Colors.grey.shade200
+                                                                                    : AppColors.darkgray2
+                                                                                : Colors.transparent))),
+                                                                child: Align(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .centerLeft,
+                                                                  child: Text(
+                                                                    catecontro
+                                                                        .subcatemodel
+                                                                        .value!
+                                                                        .subCategoryData![
+                                                                            index]
+                                                                        .subcategoryName!,
+                                                                    style: poppinsFont(
+                                                                        12,
+                                                                        themeContro.isLightMode.value
+                                                                            ? AppColors
+                                                                                .black
+                                                                            : AppColors
+                                                                                .colorFFFFFF,
+                                                                        isSelected
+                                                                            ? FontWeight.w600
+                                                                            : FontWeight.w500),
+                                                                  ),
+                                                                ).paddingSymmetric(
+                                                                    horizontal:
+                                                                        15),
+                                                              ).paddingSymmetric(
+                                                                  horizontal:
+                                                                      isSelected
+                                                                          ? 15
+                                                                          : 20),
+                                                            );
+                                                          },
+                                                        ).paddingSymmetric(
+                                                          vertical: 5),
+                                            ),
+                                          ),
+                                          const SizedBox(height: 20),
+                                        ],
+                                      ),
+                              ).paddingSymmetric(horizontal: 10),
+                              const SizedBox(height: 20),
+                              priceIndicator(),
+                              const SizedBox(height: 20),
+                              starDesign(
+                                title: "Type",
+                                isonOffArrow: isvisible2,
+                                onTap: () {
+                                  setState(() {
+                                    isvisible2 = !isvisible2;
+                                  });
+                                },
+                                child: ListView.builder(
+                                  itemCount: itemListType.length,
+                                  // physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.all(0),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (context, index) {
+                                    // bool isSelected =
+                                    //     selectedIndexType == index;
+                                    bool isSelected =
+                                        selectedType == itemListType[index];
+                                    return Container(
+                                      width: Get.width,
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: isSelected
+                                              ? themeContro.isLightMode.value
+                                                  ? Colors.grey.shade200
+                                                  : AppColors.darkgray2
+                                              : themeContro.isLightMode.value
+                                                  ? Colors.white
+                                                  : Colors.transparent,
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: isSelected
+                                                      ? (index !=
+                                                              itemListType
+                                                                      .length -
+                                                                  1)
+                                                          ? themeContro
+                                                                  .isLightMode
+                                                                  .value
+                                                              ? Colors
+                                                                  .grey.shade200
+                                                              : AppColors
+                                                                  .darkgray2
+                                                          : Colors.transparent
+                                                      : Colors.grey.shade300))),
+                                      child: RadioListTile<String>(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 0),
+                                        dense: true,
+                                        title: Text(
+                                          itemListType[index],
+                                          style: poppinsFont(
+                                              12,
+                                              themeContro.isLightMode.value
+                                                  ? AppColors.black
+                                                  : AppColors.colorFFFFFF,
+                                              isSelected
+                                                  ? FontWeight.w600
+                                                  : FontWeight.w500),
+                                        ),
+                                        value: itemListType[index],
+                                        groupValue:
+                                            selectedType, // This controls selection
+                                        onChanged: (String? value) {
+                                          setState(() {
+                                            selectedType = value;
+                                            print(
+                                                "Selected Type: $selectedType");
+                                          });
+                                        },
+                                        activeColor: AppColors
+                                            .blue, // Change color if needed
+                                      ),
+                                    ).paddingSymmetric(
+                                        horizontal: isSelected ? 15 : 20);
+                                  },
+                                ).paddingSymmetric(vertical: 10),
+                              ),
+                              const SizedBox(height: 20),
+                              starDesign(
+                                title: "Rating",
+                                isonOffArrow: isvisible3,
+                                onTap: () {
+                                  setState(() {
+                                    isvisible3 = !isvisible3;
+                                  });
+                                },
+                                child: ListView.builder(
+                                  itemCount: itemListRating.length,
+                                  // physics: const NeverScrollableScrollPhysics(),
+                                  padding: const EdgeInsets.all(0),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemBuilder: (context, index) {
+                                    bool isSelected =
+                                        selectedIndexRating == index + 1;
+                                    return Container(
+                                      width: Get.width,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              isSelected ? 5 : 0),
+                                          color: isSelected
+                                              ? themeContro.isLightMode.value
+                                                  ? Colors.grey.shade200
+                                                  : AppColors.darkgray2
+                                              : themeContro.isLightMode.value
+                                                  ? Colors.white
+                                                  : Colors.transparent,
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: (index !=
+                                                          itemListRating
+                                                                  .length -
+                                                              1)
+                                                      ? themeContro
+                                                              .isLightMode.value
+                                                          ? Colors.grey.shade200
+                                                          : AppColors.darkgray2
+                                                      : Colors.transparent))),
+                                      child: RadioListTile<int>(
+                                        contentPadding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 0),
+                                        dense: true,
+                                        title: Text(
+                                          itemListRating[index],
+                                          style: poppinsFont(
+                                              12,
+                                              themeContro.isLightMode.value
+                                                  ? AppColors.black
+                                                  : AppColors.colorFFFFFF,
+                                              isSelected
+                                                  ? FontWeight.w500
+                                                  : FontWeight.w600),
+                                        ),
+                                        value: index + 1,
+                                        groupValue: selectedIndexRating,
+                                        onChanged: (int? value) {
+                                          setState(() {
+                                            selectedIndexRating = value;
+                                            print(
+                                                "RatingStar:$selectedIndexRating");
+                                          });
+                                        },
+                                        activeColor: AppColors
+                                            .blue, // Change color if needed
+                                      ),
+                                    ).paddingSymmetric(
+                                        horizontal: isSelected ? 15 : 20);
+                                  },
+                                ).paddingSymmetric(vertical: 10),
+                              )
+                            ],
+                          ).paddingOnly(bottom: 25),
+                        ),
+                      ),
+                      // const SizedBox(height: 25)
+                      Obx(() {
+                        return filtercontro.isfilter.value
+                            ? loader()
+                            : CustomButtom(
+                                    title: "Apply",
+                                    onPressed: () {
+                                      print("catId:$selectedServices");
+                                      print("subCatId:$selectedSubServices");
+                                      print("type:$selectedType");
+                                      print("rivstar:$selectedIndexRating");
+                                      print(
+                                          "selectedService:$selectedServices");
+
+                                      filtercontro.isnavfilter.value = false;
+                                      filtercontro.filterApi(
+                                        catId: selectedServices.isNotEmpty
+                                            ? selectedServices.first
+                                            : "", // Empty string if not selected
+                                        catName: selectedServicesName.isNotEmpty
+                                            ? selectedServicesName.first
+                                            : "",
+                                        subCatId: selectedSubServices.isNotEmpty
+                                            ? selectedSubServices.first
+                                            : "",
+                                        subCatName:
+                                            selectedSubServicesName.isNotEmpty
+                                                ? selectedSubServicesName.first
+                                                : "",
+                                        type: selectedType ?? "",
+                                        price: filtercontro.circleRadius
+                                            .round()
+                                            .toString(),
+                                        rivstar: selectedIndexRating,
+                                        selectedService: selectedServices,
+                                        page: page.toString(),
+                                      );
+                                    },
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    height: 45,
+                                    width: Get.width)
+                                .paddingSymmetric(horizontal: 30);
+                      }),
+                      const SizedBox(height: 27)
+                    ],
                   ),
                 ),
-                Positioned(
-                    top: -30,
-                    child: Container(
-                      height: 58,
-                      width: Get.width,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.12),
-                              blurRadius: 10.0,
-                              spreadRadius: 0.0,
-                              offset: const Offset(
-                                  0.0, 2.0), // shadow direction: bottom right
-                            )
-                          ],
-                          borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(22),
-                              topLeft: Radius.circular(22),
-                              bottomRight: Radius.circular(22),
-                              topRight: Radius.circular(22))),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          label(
-                            'Filter',
-                            fontSize: 18,
-                            textAlign: TextAlign.center,
-                            textColor: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Get.back();
-                            },
-                            child: const Icon(
-                              Icons.close,
-                              color: AppColors.brown,
-                              size: 25,
-                            ),
-                          ),
-                        ],
-                      ).paddingOnly(left: 150, right: 20),
-                    ))
+              ),
+            ],
+          ),
+        )
+        // DefaultTabController(
+        //     length: 2,
+        //     initialIndex: 0,
+        //     child: Stack(
+        //       clipBehavior: Clip.none,
+        //       children: [
+        //         Container(
+        //           height: Get.height * 0.45,
+        //           width: Get.width,
+        //           decoration: const BoxDecoration(
+        //             color: Colors.white,
+        //           ),
+        //           child: Column(
+        //             mainAxisAlignment: MainAxisAlignment.start,
+        //             crossAxisAlignment: CrossAxisAlignment.start,
+        //             children: [sizeBoxHeight(45), profiletab()],
+        //           ),
+        //         ),
+        //       ],
+        //     )),
+        );
+  }
+
+  containerDesign({
+    required String image,
+    required String title,
+    required TextEditingController searchCtrl,
+    required Function(String) onChanged,
+    required Widget child,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: themeContro.isLightMode.value
+              ? Colors.white
+              : AppColors.darkgray1,
+          border: Border.all(
+              color: themeContro.isLightMode.value
+                  ? Colors.grey.shade300
+                  : const Color(0xff0000001a))),
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Container(
+            height: 45,
+            width: Get.width,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                color: themeContro.isLightMode.value
+                    ? Colors.white
+                    : AppColors.darkgray2,
+                border: Border.all(
+                    color: themeContro.isLightMode.value
+                        ? Colors.grey.shade300
+                        : AppColors.darkGray)),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  image,
+                  height: 16,
+                  color: themeContro.isLightMode.value
+                      ? AppColors.black
+                      : AppColors.darkgray3,
+                ),
+                const SizedBox(width: 5),
+                label(
+                  title,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  textColor: themeContro.isLightMode.value
+                      ? AppColors.black
+                      : AppColors.darkgray3,
+                )
               ],
+            ).paddingSymmetric(horizontal: 10),
+          ).paddingSymmetric(horizontal: 10),
+          const SizedBox(height: 10),
+          searchBar(searchCtrl: searchCtrl, onChanged: onChanged)
+              .paddingSymmetric(horizontal: 15),
+          const SizedBox(height: 4),
+          ConstrainedBox(
+              constraints: const BoxConstraints(maxHeight: 300), child: child)
+        ],
+      ),
+    ).paddingSymmetric(horizontal: 20);
+  }
+
+  Widget searchBar(
+      {required TextEditingController searchCtrl,
+      required Function(String) onChanged}) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width - 20,
+      height: 40,
+      child: TextField(
+        controller: searchCtrl,
+        onChanged: onChanged,
+        style: poppinsFont(
+            13,
+            themeContro.isLightMode.value ? Colors.black : AppColors.white,
+            FontWeight.w500),
+        cursorColor:
+            themeContro.isLightMode.value ? AppColors.blue : AppColors.white,
+        readOnly: false,
+        decoration: InputDecoration(
+            fillColor: themeContro.isLightMode.value
+                ? Colors.white
+                : AppColors.darkGray,
+            filled: true,
+            contentPadding: const EdgeInsets.symmetric(vertical: 8),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none),
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                    color: themeContro.isLightMode.value
+                        ? AppColors.bluee4
+                        : AppColors.darkGray,
+                    width: 1.5)),
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide(
+                    color: themeContro.isLightMode.value
+                        ? AppColors.bluee4
+                        : AppColors.darkGray,
+                    width: 1.5)),
+            disabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide:
+                    const BorderSide(color: AppColors.greyColor, width: 5)),
+            hintText: "Search...",
+            hintStyle: poppinsFont(
+                13,
+                themeContro.isLightMode.value
+                    ? Colors.black
+                    : AppColors.colorFFFFFF,
+                FontWeight.w500),
+            prefixIcon: Padding(
+              padding: const EdgeInsets.only(left: 0, bottom: 11, top: 11),
+              child: Image.asset(
+                AppAsstes.search,
+                color: AppColors.blue,
+                height: 10,
+              ),
+            )),
+      ).paddingSymmetric(horizontal: 10),
+    );
+  }
+
+  priceIndicator() {
+    return Container(
+      height: Get.height / 6,
+      width: Get.width,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color:
+              themeContro.isLightMode.value ? Colors.white : AppColors.darkGray,
+          boxShadow: [
+            BoxShadow(
+                blurRadius: 14.4,
+                offset: const Offset(2, 4),
+                spreadRadius: 0,
+                color: themeContro.isLightMode.value
+                    ? Colors.grey.shade300
+                    : AppColors.darkShadowColor)
+          ]),
+      child: Obx(() {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+                text: TextSpan(children: [
+              WidgetSpan(
+                  alignment: PlaceholderAlignment.middle,
+                  child: Image.asset(
+                    AppAsstes.doller,
+                    height: 20,
+                    color: themeContro.isLightMode.value
+                        ? AppColors.black
+                        : AppColors.colorFFFFFF,
+                  )),
+              TextSpan(
+                  text: "  Pricing Filter",
+                  style: poppinsFont(
+                      13,
+                      themeContro.isLightMode.value
+                          ? AppColors.black
+                          : AppColors.colorFFFFFF,
+                      FontWeight.w600))
+            ])),
+            SliderTheme(
+              data: SliderTheme.of(context).copyWith(
+                activeTrackColor: AppColors.blue,
+                inactiveTrackColor: const Color.fromRGBO(155, 155, 155, 1),
+                thumbColor: AppColors.blue,
+                overlayColor: AppColors.blue.withOpacity(0.2),
+                valueIndicatorColor: AppColors.blue,
+              ),
+              child: Slider(
+                value: filtercontro.circleRadius.toDouble(),
+                min: filtercontro.minPrice.value,
+                max: filtercontro.maxPrice.value,
+                divisions: (filtercontro.maxPrice.value -
+                        filtercontro.minPrice.value) ~/
+                    100,
+                onChanged: (double value) {
+                  setState(() {
+                    filtercontro.circleRadius.value = value;
+                    print("Price:${filtercontro.circleRadius.value}");
+                  });
+                },
+              ),
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                label('\$100',
+                    style: const TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 10)),
+                label(
+                  "\$${filtercontro.circleRadius.round()}",
+                  style: const TextStyle(
+                      color: AppColors.blue,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 10),
+                ),
+                label("\$10000",
+                    style: const TextStyle(
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 10)),
+              ],
+            ).paddingSymmetric(horizontal: 10),
+            // SliderTheme(
+            //   data: SliderTheme.of(context).copyWith(
+            //       activeTrackColor: AppColors.blue,
+            //       inactiveTrackColor: const Color.fromRGBO(155, 155, 155, 1),
+            //       thumbColor: AppColors.blue,
+            //       overlayColor: AppColors.blue.withOpacity(0.2),
+            //       valueIndicatorColor: AppColors.blue,
+            //       showValueIndicator: ShowValueIndicator.never),
+            //   child: RangeSlider(
+            //     values: rangeValues,
+            //     min: minPrice,
+            //     max: maxPrice,
+            //     divisions: ((maxPrice - minPrice) / 100)
+            //         .round(), // Creates step divisions
+            //     labels: RangeLabels(
+            //       '\$${rangeValues.start.round()}',
+            //       '\$${rangeValues.end.round()}',
+            //     ),
+            //     onChanged: (RangeValues values) {
+            //       setState(() {
+            //         rangeValues = values;
+            //         print("rangeValues:$rangeValues");
+            //       });
+            //     },
+            //   ),
+            // ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     label('\$${rangeValues.start.round()}',
+            //         style: const TextStyle(
+            //             color: Colors.grey,
+            //             fontWeight: FontWeight.w600,
+            //             fontSize: 10)),
+            //     label("\$${rangeValues.end.round()}",
+            //         style: const TextStyle(
+            //             color: Colors.grey,
+            //             fontWeight: FontWeight.w600,
+            //             fontSize: 10)),
+            //   ],
+            // ).paddingSymmetric(horizontal: 10),
           ],
-        ));
+        ).paddingAll(20);
+      }),
+    ).paddingSymmetric(horizontal: 10);
+  }
+
+  starDesign({
+    required String title,
+    required bool isonOffArrow,
+    required Function() onTap,
+    required Widget child,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        width: Get.width,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: themeContro.isLightMode.value
+                ? AppColors.white
+                : AppColors.darkGray,
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 14.4,
+                  offset: const Offset(2, 4),
+                  spreadRadius: 0,
+                  color: themeContro.isLightMode.value
+                      ? Colors.grey.shade300
+                      : AppColors.darkShadowColor)
+            ]),
+        child: Column(
+          children: [
+            Container(
+              height: 45,
+              width: Get.width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  color: themeContro.isLightMode.value
+                      ? Colors.white
+                      : AppColors.darkgray2,
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 14.4,
+                        offset: const Offset(2, 4),
+                        spreadRadius: 0,
+                        color: themeContro.isLightMode.value
+                            ? Colors.grey.shade300
+                            : AppColors.darkShadowColor)
+                  ]),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Image.asset(AppAsstes.Star_border,
+                          height: 20,
+                          color: themeContro.isLightMode.value
+                              ? Colors.black
+                              : AppColors.colorFFFFFF),
+                      const SizedBox(width: 5),
+                      Text(
+                        title,
+                        style: poppinsFont(
+                            13.5,
+                            themeContro.isLightMode.value
+                                ? Colors.black
+                                : AppColors.colorFFFFFF,
+                            FontWeight.w600),
+                      )
+                    ],
+                  ),
+                  Icon(
+                    isonOffArrow
+                        ? Icons.keyboard_arrow_down
+                        : Icons.keyboard_arrow_up_outlined,
+                    color: themeContro.isLightMode.value
+                        ? Colors.black
+                        : AppColors.colorFFFFFF,
+                  )
+                ],
+              ).paddingSymmetric(horizontal: 20),
+            ),
+            isonOffArrow
+                ? ConstrainedBox(
+                    constraints: const BoxConstraints(maxHeight: 300),
+                    child: child)
+                : const SizedBox.shrink()
+          ],
+        ),
+      ).paddingSymmetric(horizontal: 10),
+    );
   }
 
   Widget profiletab() {
@@ -230,156 +1415,11 @@ class _FilterState extends State<Filter> {
     );
   }
 
-  // Widget categories() {
-  //   return Column(
-  //     children: [
-  //       sizeBoxHeight(10),
-  //       Container(
-  //         height: getProportionateScreenHeight(35),
-  //         width: getProportionateScreenWidth(90),
-  //         decoration: BoxDecoration(
-  //             border: Border.all(
-  //               color: AppColors.blue,
-  //             ),
-  //             borderRadius: BorderRadius.circular(6)),
-  //         child: Center(
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             children: [
-  //               label('5 Star',
-  //                   fontSize: 12,
-  //                   fontWeight: FontWeight.w400,
-  //                   textColor: Colors.black),
-  //               sizeBoxWidth(8),
-  //               const Icon(
-  //                 Icons.close,
-  //                 color: Colors.grey,
-  //                 size: 10,
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //       Spacer(),
-  //       Row(
-  //         mainAxisAlignment: MainAxisAlignment.center,
-  //         crossAxisAlignment: CrossAxisAlignment.start,
-  //         children: [
-  //           GestureDetector(
-  //             onTap: () {
-  //               Get.back();
-  //             },
-  //             child: Container(
-  //               height: getProportionateScreenHeight(50),
-  //               width: getProportionateScreenWidth(150),
-  //               decoration: BoxDecoration(
-  //                   color: AppColors.white,
-  //                   border: Border.all(color: AppColors.blue),
-  //                   borderRadius: BorderRadius.circular(12)),
-  //               child: Center(
-  //                 child: label(
-  //                   'Cancel',
-  //                   fontSize: 14,
-  //                   textColor: Colors.black,
-  //                   fontWeight: FontWeight.w400,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //           sizeBoxWidth(30),
-  //           GestureDetector(
-  //             onTap: () {
-  //               Get.back();
-  //             },
-  //             child: Container(
-  //               height: getProportionateScreenHeight(50),
-  //               width: getProportionateScreenWidth(150),
-  //               decoration: BoxDecoration(
-  //                   color: AppColors.blue,
-  //                   borderRadius: BorderRadius.circular(12)),
-  //               child: Center(
-  //                 child: label(
-  //                   'Send',
-  //                   fontSize: 14,
-  //                   textColor: Colors.white,
-  //                   fontWeight: FontWeight.w400,
-  //                 ),
-  //               ),
-  //             ),
-  //           )
-  //         ],
-  //       )
-  //     ],
-  //   );
-  // }
-
-  // String? selectedService;
-
-  // Widget categories_list() {
-  //   return Column(
-  //     children: [
-  //       Wrap(
-  //         spacing: 11.0,
-  //         runSpacing: 3.0,
-  //         children: catecontro.catelist.map((category) {
-  //           return ChoiceChip(
-  //             showCheckmark: false,
-  //             label: Row(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 Text(category.categoryName
-  //                     .toString()), // Displaying category name
-  //                 if (selectedService == category.categoryName)
-  //                   const Padding(
-  //                     padding: EdgeInsets.only(left: 8.0),
-  //                     child: Icon(
-  //                       Icons.close,
-  //                       color: AppColors.black,
-  //                       size: 14,
-  //                     ),
-  //                   ),
-  //               ],
-  //             ),
-  //             selected: selectedService == category.categoryName,
-  //             onSelected: (bool selected) {
-  //               widget.catid = category.id!.toString();
-  //               setState(() {
-  //                 selectedService = selected ? category.categoryName : null;
-  //                 filtercontro.selectedCategory.value = selectedService ??
-  //                     ''; // Update the controller's category value
-  //               });
-  //             },
-  //             selectedColor: Colors.white,
-  //             labelStyle: TextStyle(
-  //               color: selectedService == category.categoryName
-  //                   ? AppColors.black
-  //                   : Colors.black,
-  //               fontWeight: FontWeight.w400,
-  //               fontFamily: "Poppins",
-  //               fontSize: 12,
-  //             ),
-  //             side: BorderSide(
-  //               color: selectedService == category.categoryName
-  //                   ? AppColors.blue
-  //                   : Colors.grey.shade200,
-  //             ),
-  //             backgroundColor: Colors.white,
-  //             shape: RoundedRectangleBorder(
-  //               borderRadius: BorderRadius.circular(8.0),
-  //             ),
-  //           );
-  //         }).toList(),
-  //       ),
-  //       sizeBoxHeight(10),
-  //       button(), // The button for sending the filter
-  //       sizeBoxHeight(10),
-  //     ],
-  //   ).paddingSymmetric(horizontal: 20);
-  // }
-
   Set<String> selectedServices = {};
   Set<String> selectedServicesName = {};
+
+  Set<String> selectedSubServices = {};
+  Set<String> selectedSubServicesName = {};
 
   Widget categories_list() {
     return Obx(() {
@@ -665,8 +1705,7 @@ class _FilterState extends State<Filter> {
                     await filtercontro.filterApi(
                       catId:
                           selectedCategories, // Pass selected categories as a comma-separated string
-                      rivstar: ratingValue?.toString() ??
-                          '', // Pass empty string if no rating
+                      rivstar: ratingValue, // Pass empty string if no rating
                       selectedService:
                           selectedServices, // Pass the original Set if needed
                       page: page.toString(),

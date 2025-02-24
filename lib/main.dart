@@ -2,7 +2,9 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/User/screens/controller/user_tab_controller.dart';
 import 'package:nlytical_app/auth/splash.dart';
+import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/lang_controller.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/custome_data_empty.dart';
@@ -22,6 +24,8 @@ Future<void> main() async {
   // Get.put(AuthController());
   Get.put(ThemeContro());
   Get.put(LanguageController());
+  Get.put(UserTabController());
+  Get.put(HomeContro());
 
   await SharedPreferences.getInstance().then((prefs) {
     final themeCollection = ThemeCollection(themes: {});

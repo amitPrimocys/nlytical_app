@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, unused_local_variable
+// ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, unused_local_variable, deprecated_member_use
 
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
@@ -18,6 +18,7 @@ class FilterContro extends GetxController {
   Rx<FilterModel?> filtermodel = FilterModel().obs;
   // RxList<ServiceFilter> filterlist = <ServiceFilter>[].obs;
   var selectedCategories = <String>[].obs; // Store selected category
+  var selectedSubCate = <String>[].obs; // Store selected category
   var selectedRating = 0.obs; // Store selected rating
 
   RxList<Marker> filtermarkerList = <Marker>[].obs;
@@ -65,11 +66,23 @@ class FilterContro extends GetxController {
 
   ScrollController scrollControllerlocation = ScrollController();
 
-  Future<void> filterApi(
-      {required String page,
-      required catId,
-      required rivstar,
-      required selectedService}) async {
+  RxBool isvisible1 = true.obs;
+  RxBool isvisible2 = false.obs;
+  RxBool isvisible3 = false.obs;
+  RxInt? selectedIndexType;
+  RxInt? selectedIndexRating;
+
+  Future<void> filterApi({
+    required String page,
+    String? catId,
+    String? catName,
+    String? subCatId,
+    String? subCatName,
+    String? price,
+    String? type,
+    int? rivstar,
+    required selectedService,
+  }) async {
     try {
       isfilter.value = true;
       var uri = Uri.parse(apiHelper.filter);
@@ -83,8 +96,15 @@ class FilterContro extends GetxController {
       request.headers.addAll(headers);
 
       request.fields['user_id'] = userID;
-      request.fields['category_id'] = '$catId';
-      request.fields['review_star'] = '$rivstar';
+      if (catId != null) {
+        request.fields['category_id'] = catId;
+      }
+      request.fields['subcategory_id'] = '$subCatId';
+      request.fields['price'] = '$price';
+      request.fields['type'] = '$type';
+      if (rivstar != null) {
+        request.fields['review_star'] = '$rivstar';
+      }
       request.fields['page_no'] = page.isEmpty ? '1' : page;
 
       var response = await request.send();
@@ -109,9 +129,24 @@ class FilterContro extends GetxController {
 
         // print("allcatelist ${filterlist.length}");
         isfilter.value = false;
+        isnavfilter.value = true;
+        if (rivstar != null) {
+          selectedRating.value = rivstar;
+        } else {
+          selectedRating.value = 0;
+        }
+        if (catId != null) {
+          selectedCategories.value = [catName.toString()];
+        }
+        if (subCatId != null) {
+          selectedSubCate.value = [subCatName.toString()];
+          print("selectedSubCate:${selectedSubCate}");
+        }
+        filtermarkerList.clear();
+        addMarker1();
 
-        snackBar(filtermodel.value!.message!);
         Get.back();
+        snackBar(filtermodel.value!.message!);
       } else {
         isfilter.value = false;
         print(filtermodel.value!.message);
@@ -122,4 +157,61 @@ class FilterContro extends GetxController {
       isfilter.value = false;
     }
   }
+
+  RxDouble searchLatitude = 0.0.obs;
+  RxDouble searchLongitude = 0.0.obs;
+  GoogleMapController? mapController;
+
+  getLonLat(String input) async {
+    String kPlaceApiKey = "AIzaSyAo178gm6y82PrD-BBC5s4UST_leL_I1Ns";
+    String baseURL =
+        'https://maps.googleapis.com/maps/api/geocode/json?address=$input&key=$kPlaceApiKey';
+
+    var response = await http.get(Uri.parse(baseURL));
+    var data = response.body.toString();
+    print(data);
+    print(response.body.toString());
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final location = data['results'][0]['geometry']['location'];
+
+      searchLatitude.value = location['lat'];
+      searchLongitude.value = location['lng'];
+
+      mapController?.animateCamera(
+        CameraUpdate.newLatLng(LatLng(
+          searchLatitude.value,
+          searchLongitude.value,
+        )),
+      );
+      print('Latitude: $searchLatitude');
+      print('Longitude: $searchLongitude');
+      print('ADDRESSS: ${mapController.toString()}');
+    } else {
+      print('Error getting location data: ${response.statusCode}');
+    }
+  }
+
+  List<dynamic> mapresult = [];
+
+  getsuggestion(String input) async {
+    String kPlaceApiKey = "AIzaSyAo178gm6y82PrD-BBC5s4UST_leL_I1Ns";
+    String baseURL =
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String request = '$baseURL?input=$input&key=$kPlaceApiKey';
+
+    var response = await http.get(Uri.parse(request));
+    var data = response.body.toString();
+    print(data);
+    print(response.body.toString());
+    if (response.statusCode == 200) {
+      mapresult = jsonDecode(response.body)['predictions'];
+    } else {
+      snackBar("Problem while getting Location");
+    }
+  }
+
+  RxDouble circleRadius = 100.0.obs; // Start from $100
+  final RxDouble minPrice = 100.0.obs;
+  final RxDouble maxPrice = 10000.0.obs;
 }

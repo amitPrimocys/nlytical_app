@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_element, non_constant_identifier_names
+// ignore_for_file: prefer_const_constructors, unused_element, non_constant_identifier_names, avoid_print
 
 import 'dart:io';
 import 'dart:ui';
@@ -479,7 +479,7 @@ class _SettingState extends State<Setting> {
           name: 'App Feedback',
           buttonOnTap: () {
             bottomSheetGobal(
-                bottomsheetHeight: 470,
+                bottomsheetHeight: Get.height * 0.7,
                 title: "Nlytical App Feedback",
                 child: appFeedback());
           },
@@ -857,6 +857,9 @@ class _SettingState extends State<Setting> {
                                 label(
                                   appfeedbackContro.emojiLabels[index],
                                   fontSize: 10,
+                                  textColor: themeContro.isLightMode.value
+                                      ? AppColors.black
+                                      : AppColors.white,
                                   fontWeight: FontWeight.w500,
                                 ), // Show label for the selected emoji
                             ],

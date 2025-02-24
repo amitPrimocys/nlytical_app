@@ -7,37 +7,10 @@ import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/size_config.dart';
 import 'package:nlytical_app/utils/theame_switch.dart';
 import 'package:nlytical_app/utils/colors.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeContro extends GetxController {
   RxBool isLightTheme = false.obs; // Default to light theme
-  late SharedPreferences _prefs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    _loadThemeStatus(); // Load theme status during initialization
-  }
-
-  void _loadThemeStatus() async {
-    _prefs = await SharedPreferences.getInstance();
-    bool? storedTheme = _prefs.getBool('theme');
-    isLightTheme.value =
-        storedTheme ?? true; // Default to light if no value saved
-    Get.changeThemeMode(isLightTheme.value ? ThemeMode.light : ThemeMode.dark);
-  }
-
-  void saveThemeStatus() {
-    _prefs.setBool('theme', isLightTheme.value);
-  }
-
-  void toggleTheme() {
-    isLightTheme.value = !isLightTheme.value;
-    Get.changeThemeMode(isLightTheme.value ? ThemeMode.light : ThemeMode.dark);
-    saveThemeStatus();
-  }
-
-  //===============================================================================================
   final RxBool _isLightMode = true.obs;
 
   // Getter for the current theme mode

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/auth/welcome.dart';
 import 'package:nlytical_app/User/screens/bottamBar/newtabbar.dart';
+import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
@@ -127,7 +128,7 @@ class SplashScreenState extends State<SplashScreen>
     } else if (userid != null) {
       userID = prefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
       print("ROLE: ${prefs.getString(SharedPreferencesKey.ROlE)}");
-
+      Get.find<HomeContro>().checkLocationPermission();
       return TabbarScreen(currentIndex: 0);
     } else if (vendorid != null) {
       if (prefs.getString(SharedPreferencesKey.SUBSCRIBE)?.isEmpty ?? true) {
