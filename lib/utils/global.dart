@@ -2230,3 +2230,10 @@ Map<String, Map<String, String>> countryCurrency = {
     "countryCode": "ZM",
   }
 };
+
+Widget gogleLoading() {
+  return CircularProgressIndicator(
+    strokeWidth: 1.5,
+    color: themeContro.isLightMode.value ? AppColors.blue : AppColors.white,
+  );
+}

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/controllers/user_controllers/login_contro.dart';
@@ -215,8 +216,31 @@ class _LoginState extends State<Login> {
                     sizeBoxHeight(25),
                     orTextField(),
                     sizeBoxHeight(25),
+                    // Obx(() => logincontro.isSocial.value
+                    //     ? const CupertinoActivityIndicator()
+                    //     :
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        // try {
+                        //   // Set the button state to loading
+                        //   setState(() {
+                        //     // Update state as needed
+                        //     logincontro.isSocial(true);
+                        //   });
+
+                        //   // Perform the asynchronous operation, e.g., sign in with Google
+                        //   await signInWithGoogle(context);
+
+                        //   // If successful, set the button state to success
+                        //   logincontro.isSocial(false);
+                        // } catch (error) {
+                        //   // If there's an error, set the button state to fail
+                        //   logincontro.isSocial(false);
+                        // } finally {
+                        //   // Regardless of success or failure, set the button state back to idle
+                        //   logincontro.isSocial(false);
+                        // }
+                      },
                       child: Container(
                         height: 50,
                         width: Get.width * 0.7,
@@ -248,6 +272,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
+                    // ),
                     sizeBoxHeight(25),
                     GestureDetector(
                       onTap: () {

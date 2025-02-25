@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_element, must_be_immutable, unnecessary_string_interpolations, prefer_interpolation_to_compose_strings, deprecated_member_use, unused_field, curly_braces_in_flow_control_structures
+// ignore_for_file: prefer_const_constructors, unused_element, must_be_immutable, unnecessary_string_interpolations, prefer_interpolation_to_compose_strings, deprecated_member_use, unused_field, curly_braces_in_flow_control_structures, avoid_print
 
 import 'dart:async';
 import 'dart:io';
@@ -342,7 +342,7 @@ class _DetailsState extends State<Details>
     );
   }
 
-  Widget _poster_dialog2(BuildContext context) {
+  Widget posterDialog2(BuildContext context) {
     Widget carousel =
         servicecontro.servicemodel.value!.serviceDetail!.serviceImages!.isEmpty
             ? Center(
@@ -1206,7 +1206,7 @@ class _DetailsState extends State<Details>
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           30)),
-                                              child: _poster_dialog2(context)),
+                                              child: posterDialog2(context)),
                                         ),
                                       );
                                     },
@@ -1737,7 +1737,7 @@ class _DetailsState extends State<Details>
                                           decoration: BoxDecoration(
                                               borderRadius:
                                                   BorderRadius.circular(30)),
-                                          child: _poster_dialog2(context)),
+                                          child: posterDialog2(context)),
                                     ),
                                   );
                                 },
@@ -2764,7 +2764,7 @@ class _DetailsState extends State<Details>
               )),
         ),
         Positioned(
-          bottom: -100,
+          bottom: -90,
           // right: 20,
           // left: 20,
           child: Stack(
@@ -2775,7 +2775,7 @@ class _DetailsState extends State<Details>
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
-                    height: Get.height * 0.15,
+                    height: Get.height * 0.16,
                     width: Get.width,
                     decoration: BoxDecoration(
                       color: themeContro.isLightMode.value

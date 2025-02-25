@@ -16,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginContro extends GetxController {
   final ApiHelper apiHelper = ApiHelper();
+  RxBool isSocial = false.obs;
   RxBool isLoading = false.obs;
   var isObscureForSignUp = true.obs;
   Rx<LoginModel?> loginModel = LoginModel().obs;

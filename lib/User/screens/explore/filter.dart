@@ -842,8 +842,7 @@ class _FilterState extends State<Filter> {
                                         activeColor: AppColors
                                             .blue, // Change color if needed
                                       ),
-                                    ).paddingSymmetric(
-                                        horizontal: isSelected ? 15 : 20);
+                                    ).paddingSymmetric(horizontal: 20);
                                   },
                                 ).paddingSymmetric(vertical: 10),
                               ),
@@ -916,8 +915,7 @@ class _FilterState extends State<Filter> {
                                         activeColor: AppColors
                                             .blue, // Change color if needed
                                       ),
-                                    ).paddingSymmetric(
-                                        horizontal: isSelected ? 15 : 20);
+                                    ).paddingSymmetric(horizontal: 20);
                                   },
                                 ).paddingSymmetric(vertical: 10),
                               )
