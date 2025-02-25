@@ -41,7 +41,9 @@ class PaymentController extends GetxController {
           SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_VENDORID);
       request.fields['goal_id'] = goalId;
       request.fields['payment_mode'] = paymentType;
-      request.fields['price'] = price;
+      request.fields['service_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.STORE_ID);
+      request.fields['price'] = price.replaceAll(RegExp(r'[^\d.]'), '');
 
       var response = await request.send();
       String responsData = await response.stream.transform(utf8.decoder).join();
@@ -55,10 +57,11 @@ class PaymentController extends GetxController {
       if (paymentmodel.value!.status == true) {
         isloading.value = false;
 
-        snackBar("Payment successful");
+        // snackBar("Payment successful");
 
         if (paymentType == "paypal" &&
             paymentType == "stripe" &&
+            paymentType == "gpay" &&
             paymentType == "razorpay") {
           Get.offAll(() => const VendorNewTabar(currentIndex: 0));
         }
@@ -68,9 +71,11 @@ class PaymentController extends GetxController {
       }
     } catch (e) {
       isloading.value = false;
-    } finally {
-      isloading.value = false;
+      snackBar("Something went wrong try again");
     }
+    // finally {
+    //   isloading.value = false;
+    // }
   }
 
   //================================================================
@@ -83,6 +88,18 @@ class PaymentController extends GetxController {
   Future<void> makeStripePayment(
       {required String goalId, required String price}) async {
     payLoading(true); // Start showing loader
+
+    String symbol = price.replaceAll(RegExp(r'[\d\s.,]'), '').trim();
+
+    // Find the matching currency code
+    String currencyCode = "USD"; // Default currency
+    for (var entry in countryCurrency.values) {
+      if (entry["symbol"] == symbol) {
+        currencyCode = entry["code"]!;
+        break;
+      }
+    }
+    print("currencyCode:$currencyCode");
 
     var totalAmount =
         double.parse(price.replaceAll(RegExp(r'[^\d.]'), '')) * 100;
@@ -99,16 +116,16 @@ class PaymentController extends GetxController {
         String customerId = customer!['id'];
 
         paymentIntent =
-            await createPaymentIntent(finalAmount, "usd", customerId);
+            await createPaymentIntent(finalAmount, currencyCode, customerId);
 
-        var gpay = const PaymentSheetGooglePay(
+        var gpay = PaymentSheetGooglePay(
           merchantCountryCode: 'US',
-          currencyCode: 'USD',
+          currencyCode: currencyCode,
           testEnv: true,
         );
 
         // var applePay = PaymentSheetApplePay(
-        //   merchantCountryCode: "US".tr,
+        //   merchantCountryCode: "US",
         //   cartItems: [],
         // );
 
@@ -267,5 +284,25 @@ class PaymentController extends GetxController {
       name: "External Wallet Selected",
     );
     isRazorPayLoading(false);
+  }
+
+  Future<double> convertUSDtoOTHER(double amount, String currencyCode) async {
+    try {
+      // Fetch live exchange rate (Replace with your API Key)
+      final response = await http.get(
+        Uri.parse('https://api.exchangerate-api.com/v4/latest/$currencyCode'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        double exchangeRate = data["rates"]["USD"]; // Get CNY to USD rate
+        return amount * exchangeRate;
+      } else {
+        throw Exception("Failed to load exchange rate");
+      }
+    } catch (e) {
+      print("Exchange Rate Error: $e");
+      return amount * 0.138; // Default fallback conversion rate
+    }
   }
 }

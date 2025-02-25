@@ -678,6 +678,31 @@ class LoginContro1 extends GetxController {
   }
 
 //============================================= SUBSCRIPTION PLAN =======================================================
+  final RxString selectedPayment = "Credit or Debit Card".obs;
+
+  RxList<Map<String, String>> paymentOptions = [
+    {
+      "title": "Credit or Debit Card",
+      "value": "credit_debit",
+      "image": "assets/images/cr&deb.png",
+    },
+    {
+      "title": "PayPal",
+      "value": "paypal",
+      "image": "assets/images/paypal_image.png",
+    },
+    {
+      "title": "Gpay",
+      "value": "gpay",
+      "image": "assets/images/gpay.png",
+    },
+    {
+      "title": "Razorpay",
+      "value": "razorpay",
+      "image": "assets/images/razorpay.png",
+    },
+  ].obs;
+
   RxBool isSubscriptionDetailLoading = false.obs;
   RxBool isPaymentSuccessLoading = false.obs;
 
@@ -708,7 +733,7 @@ class LoginContro1 extends GetxController {
   }
 
   Rx<UserPlanModel> userPlanData = UserPlanModel().obs;
-  paymentSuccess() async {
+  paymentSuccess({required String paymentType}) async {
     print('VENDOR ID: ${SharedPrefs.getString(
       SharedPreferencesKey.LOGGED_IN_VENDORID,
     )}');
@@ -727,7 +752,7 @@ class LoginContro1 extends GetxController {
           "price": subscriptionDetailsData[selectedPlanIndex.value]
               .price!
               .replaceAll(RegExp(r'[^\d.]'), ''),
-          "payment_mode": "Razorpay",
+          "payment_mode": paymentType,
         },
         files: [],
       );

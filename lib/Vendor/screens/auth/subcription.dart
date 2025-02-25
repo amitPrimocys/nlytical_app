@@ -1,17 +1,26 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/Vendor/payment/payment_google_pay.dart';
+import 'package:nlytical_app/Vendor/payment/paypal_payment.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/get_profile_contro.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/login_controller.dart';
 import 'package:nlytical_app/utils/colors.dart';
+import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/size_config.dart';
+import 'package:pay/pay.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:nlytical_app/utils/global_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class SubscriptionSceen extends StatefulWidget {
   const SubscriptionSceen({super.key});
@@ -22,9 +31,23 @@ class SubscriptionSceen extends StatefulWidget {
 
 class _SubscriptionSceenState extends State<SubscriptionSceen> {
   LoginContro1 loginContro = Get.put(LoginContro1());
+  GetprofileContro getprofilecontro = Get.put(GetprofileContro());
+
+  Pay payClient = Pay({
+    PayProvider.google_pay:
+        PaymentConfiguration.fromJsonString(defaultGooglePay),
+    PayProvider.apple_pay: PaymentConfiguration.fromJsonString(defaultApplePay),
+  });
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      payClient.userCanPay(PayProvider.google_pay).then((value) {
+        debugPrint("USER CAN GOOGLE PAY : $value");
+
+        return value;
+      });
+    });
     super.initState();
   }
 
@@ -365,7 +388,8 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
                                                                   loginContro
                                                                       .selectedPlanIndex
                                                                       .value = index;
-                                                                  rezorPay();
+                                                                  // rezorPay();
+                                                                  paymentDialog();
                                                                 },
                                                                 child:
                                                                     Container(
@@ -414,12 +438,259 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
             ])));
   }
 
-  GetprofileContro getprofilecontro = Get.put(GetprofileContro());
+  paymentDialog() {
+    return Get.dialog(
+      barrierColor: const Color.fromRGBO(0, 0, 0, 0.57),
+      Dialog(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(
+            sigmaX: 3.8,
+            sigmaY: 3.8,
+          ),
+          child: Obx(() => Container(
+                height: Get.height * 0.40,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: themeContro.isLightMode.value
+                      ? Colors.white
+                      : AppColors.darkGray,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: loginContro.paymentOptions.map((option) {
+                        return RadioListTile<String>(
+                          dense: true,
+                          activeColor: AppColors.blue,
+                          value: option["value"]!,
+                          groupValue: loginContro.selectedPayment.value,
+                          onChanged: (String? value) {
+                            loginContro.selectedPayment.value = value!;
+                          },
+                          title: Row(
+                            children: [
+                              Image.asset(
+                                option["image"]!,
+                                width: 25, // Adjust size as needed
+                                height: 25,
+                              ),
+                              const SizedBox(width: 5),
+                              Text(
+                                option["title"]!,
+                                style: poppinsFont(
+                                    12,
+                                    themeContro.isLightMode.value
+                                        ? AppColors.black
+                                        : AppColors.white,
+                                    FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    sizeBoxHeight(10),
+                    CustomButtom(
+                            title: "Apply",
+                            onPressed: () async {
+                              print(loginContro.selectedPayment.value);
+                              //======================================================= stripe payment call
+                              if (loginContro.selectedPayment.value ==
+                                  "credit_debit") {
+                                makeStripePayment();
+                                //===================================================== Paypal payment call
+                              } else if (loginContro.selectedPayment.value ==
+                                  "paypal") {
+                                String symbol = loginContro
+                                    .subscriptionDetailsData[
+                                        loginContro.selectedPlanIndex.value]
+                                    .price!
+                                    .replaceAll(RegExp(r'[\d\s.,]'), '')
+                                    .trim();
+
+                                // Find the matching currency code
+                                String currencyCode = "USD"; // Default currency
+                                for (var entry in countryCurrency.values) {
+                                  if (entry["symbol"] == symbol) {
+                                    currencyCode = entry["code"]!;
+                                    break;
+                                  }
+                                }
+
+                                double amount = double.parse(
+                                  loginContro
+                                      .subscriptionDetailsData[
+                                          loginContro.selectedPlanIndex.value]
+                                      .price!
+                                      .replaceAll(RegExp(r'[^\d.]'), ''),
+                                );
+
+                                amount = await convertUSDtoOTHER(
+                                    amount, currencyCode);
+
+                                print("Final Amount in USD: $amount");
+
+                                print("currencyCode:$currencyCode");
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => PaypalPayment(
+                                              totalPrice:
+                                                  amount.toStringAsFixed(2),
+                                              // loginContro
+                                              //     .subscriptionDetailsData[
+                                              //         loginContro
+                                              //             .selectedPlanIndex
+                                              //             .value]
+                                              //     .price!
+                                              //     .replaceAll(
+                                              //         RegExp(r'[^\d.]'), ''),
+                                              onFinish: (number) async {
+                                                debugPrint('order id: $number');
+                                                await getprofilecontro
+                                                    .updateApi(
+                                                  isUpdateProfile: false,
+                                                );
+                                                loginContro.paymentSuccess(
+                                                    paymentType: "paypal");
+                                                Get.back();
+                                              },
+                                              publickKey:
+                                                  'AVzMVWctLyouPgmfv9Nh6E5KakydG4JHiFGm-fgg6HRqFYUW-gHVKS1ebRfPgDOr2uYABGGcnU_3RaSL',
+                                              secretKey:
+                                                  'EGWCyNAp9oTXjlmckT8DO9lepyKFrWQy2KvPPmrUsard4K98fuArUYbFQl7CaHdhk4Ehdg_hPkToods4',
+                                            )));
+                                //====================================================== Gpay payment call
+                              } else if (loginContro.selectedPayment.value ==
+                                  "gpay") {
+                                String symbol = loginContro
+                                    .subscriptionDetailsData[
+                                        loginContro.selectedPlanIndex.value]
+                                    .price!
+                                    .replaceAll(RegExp(r'[\d\s.,]'), '')
+                                    .trim();
+
+                                // Find the matching currency code
+                                String currencyCode = "USD"; // Default currency
+                                for (var entry in countryCurrency.values) {
+                                  if (entry["symbol"] == symbol) {
+                                    currencyCode = entry["code"]!;
+                                    break;
+                                  }
+                                }
+
+                                double amount = double.parse(
+                                  loginContro
+                                      .subscriptionDetailsData[
+                                          loginContro.selectedPlanIndex.value]
+                                      .price!
+                                      .replaceAll(RegExp(r'[^\d.]'), ''),
+                                );
+
+                                amount = await convertUSDtoOTHER(
+                                    amount, currencyCode);
+
+                                print("Final Amount in USD: $amount");
+                                if (Platform.isIOS) {
+                                  final result =
+                                      await payClient.showPaymentSelector(
+                                    PayProvider.apple_pay,
+                                    [
+                                      PaymentItem(
+                                          amount: amount.toStringAsFixed(2),
+                                          // loginContro
+                                          //     .subscriptionDetailsData[
+                                          //         loginContro
+                                          //             .selectedPlanIndex.value]
+                                          //     .price!
+                                          //     .replaceAll(
+                                          //         RegExp(r'[^\d.]'), ''),
+                                          status: PaymentItemStatus.final_price,
+                                          label: "Nlytical app")
+                                    ],
+                                  ).then((value) async {
+                                    setState(() async {
+                                      await getprofilecontro.updateApi(
+                                        isUpdateProfile: false,
+                                      );
+                                      loginContro.paymentSuccess(
+                                          paymentType: "gpay");
+                                    });
+                                  });
+                                } else {
+                                  final result =
+                                      await payClient.showPaymentSelector(
+                                    PayProvider.google_pay,
+                                    [
+                                      PaymentItem(
+                                          amount: amount.toStringAsFixed(2),
+                                          status: PaymentItemStatus.final_price,
+                                          label: "Nlytical app")
+                                    ],
+                                  ).then((value) async {
+                                    // _successPayment();
+                                    setState(() async {
+                                      await getprofilecontro.updateApi(
+                                        isUpdateProfile: false,
+                                      );
+                                      loginContro.paymentSuccess(
+                                          paymentType: "gpay");
+                                      // Get.back();
+                                    });
+                                  });
+                                }
+                                //================================================= Razorpay payment call
+                              } else if (loginContro.selectedPayment.value ==
+                                  "razorpay") {
+                                rezorPay();
+                                Navigator.pop(context);
+                              } else {
+                                snackBar("Please select method");
+                              }
+                            },
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            height: 40,
+                            width: Get.width)
+                        .paddingSymmetric(horizontal: 30)
+                  ],
+                ),
+              )),
+        ),
+      ),
+    );
+  }
+
+//=================================================================== RAZRPAY ====================================
+//=================================================================== RAZRPAY ====================================
 
   void rezorPay() {
     print(
         "Priceee ${loginContro.subscriptionDetailsData[loginContro.selectedPlanIndex.value].price!.substring(1)}");
     loginContro.isPaymentSuccessLoading.value = true;
+
+    String symbol = loginContro
+        .subscriptionDetailsData[loginContro.selectedPlanIndex.value].price!
+        .replaceAll(RegExp(r'[\d\s.,]'), '')
+        .trim();
+
+    // Find the matching currency code
+    String currencyCode = "USD"; // Default currency
+    for (var entry in countryCurrency.values) {
+      if (entry["symbol"] == symbol) {
+        currencyCode = entry["code"]!;
+        break;
+      }
+    }
+    print("currencyCode:$currencyCode");
+
     Razorpay razorpay = Razorpay();
     var options = {
       'key': 'rzp_test_67sD9rAjWFVFZQ',
@@ -440,9 +711,7 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
       'external': {
         'wallets': ['paytm']
       },
-      "currency": loginContro
-          .subscriptionDetailsData[loginContro.selectedPlanIndex.value]
-          .currencyValue!,
+      "currency": currencyCode,
     };
     razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, handlePaymentErrorResponse);
     razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, handlePaymentSuccessResponse);
@@ -466,7 +735,7 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
     await getprofilecontro.updateApi(
       isUpdateProfile: false,
     );
-    loginContro.paymentSuccess();
+    loginContro.paymentSuccess(paymentType: "razorpay");
   }
 
   void handleExternalWalletSelected(ExternalWalletResponse response) {
@@ -477,38 +746,167 @@ class _SubscriptionSceenState extends State<SubscriptionSceen> {
     loginContro.isPaymentSuccessLoading.value = false;
   }
 
-  Widget appBarWidget() {
-    return Container(
-      height: getProportionateScreenHeight(100),
-      width: Get.width,
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-            spreadRadius: 0,
-            color: Colors.grey.shade300)
-      ], color: Colors.white),
-      child: Align(
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Image.asset(
-                    'assets/images/arrow-left1.png',
-                    height: 24,
-                  )),
-              sizeBoxWidth(10),
-              label(
-                "subscription",
-                fontSize: 20,
-                textColor: AppColors.black,
-                fontWeight: FontWeight.w500,
-              ),
-            ],
-          )).paddingOnly(left: 15, right: 20, top: 25),
-    );
+//========================================================================== STRIPE ======================
+//========================================================================== STRIPE ======================
+  bool payLoading = false;
+  Map<String, dynamic>? customer;
+  Map<String, dynamic>? paymentIntent;
+  final String key =
+      "sk_test_51OP303SJayPbST1lMDr6nn6WieehdLmIpiG2pgVil38DVNPjDqKcFG87d1GMOk10WWtoqZIxvSx2WLAP7G1GMkWu00SJWzq7cn";
+
+  Future<void> makeStripePayment() async {
+    payLoading = true; // Start showing loader
+
+    String symbol = loginContro
+        .subscriptionDetailsData[loginContro.selectedPlanIndex.value].price!
+        .replaceAll(RegExp(r'[\d\s.,]'), '')
+        .trim();
+
+    // Find the matching currency code
+    String currencyCode = "USD"; // Default currency
+    for (var entry in countryCurrency.values) {
+      if (entry["symbol"] == symbol) {
+        currencyCode = entry["code"]!;
+        break;
+      }
+    }
+    print("currencyCode:$currencyCode");
+
+    var totalAmount = int.parse(loginContro
+            .subscriptionDetailsData[loginContro.selectedPlanIndex.value].price!
+            .replaceAll(RegExp(r'[^\d.]'), '')) *
+        100;
+
+    var finalAmount = totalAmount.toStringAsFixed(0);
+
+    try {
+      // Call createCustomer API
+      customer = await createCustomer();
+
+      // Check if the customer creation was successful
+      if (customer != null && customer!.containsKey('id')) {
+        // Get the customer ID
+        String customerId = customer!['id'];
+
+        paymentIntent =
+            await createPaymentIntent(finalAmount, currencyCode, customerId);
+
+        var gpay = PaymentSheetGooglePay(
+          merchantCountryCode: 'US',
+          currencyCode: currencyCode,
+          testEnv: true,
+        );
+
+        // var applePay = PaymentSheetApplePay(
+        //   merchantCountryCode: "US".tr,
+        //   cartItems: [],
+        // );
+
+        // STEP 2: Initialize Payment Sheet
+        await Stripe.instance.initPaymentSheet(
+          paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret: paymentIntent!['client_secret'],
+            merchantDisplayName: 'Merchant Name',
+            style: ThemeMode.light,
+            googlePay: gpay,
+            allowsDelayedPaymentMethods: true,
+            // applePay: applePay
+            // //googlePay: gpay,
+            //applePay: applePay
+          ),
+        );
+
+        // STEP 3: Display Payment sheet
+        displayPaymentSheet();
+
+        payLoading = false; // Stop showing loader
+      } else {
+        print('Customer creation failed.');
+      }
+    } catch (err) {
+      print(err);
+    }
+  }
+
+  Future<void> displayPaymentSheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet().then((value) async {
+        print("Payment Successfully");
+        await getprofilecontro.updateApi(
+          isUpdateProfile: false,
+        );
+        loginContro.paymentSuccess(paymentType: "stripe");
+        // paymentApi(goalId: goalId, price: price, paymentType: "stripe");
+      });
+    } catch (e) {
+      print('$e');
+    }
+  }
+
+  createPaymentIntent(String amount, String currency, String customerId) async {
+    try {
+      Map<String, dynamic> body = {
+        'amount': amount,
+        'currency': currency,
+        'customer': customerId,
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/payment_intents'),
+        headers: {
+          'Authorization':
+              'Bearer sk_test_51OP303SJayPbST1lMDr6nn6WieehdLmIpiG2pgVil38DVNPjDqKcFG87d1GMOk10WWtoqZIxvSx2WLAP7G1GMkWu00SJWzq7cn',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: body,
+      );
+
+      print(json.decode(response.body));
+      return json.decode(response.body);
+    } catch (err) {
+      throw Exception(err.toString());
+    }
+  }
+
+  createCustomer() async {
+    try {
+      Map<String, dynamic> body = {
+        'email': "demo2@gmail.com",
+      };
+
+      var response = await http.post(
+        Uri.parse('https://api.stripe.com/v1/customers'),
+        headers: {
+          'Authorization':
+              'Bearer sk_test_51OP303SJayPbST1lMDr6nn6WieehdLmIpiG2pgVil38DVNPjDqKcFG87d1GMOk10WWtoqZIxvSx2WLAP7G1GMkWu00SJWzq7cn',
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: json.encode(body),
+      );
+      return json.decode(response.body);
+    } catch (err) {
+      print(err.toString());
+      throw Exception(err.toString());
+    }
+  }
+
+  Future<double> convertUSDtoOTHER(double amount, String currencyCode) async {
+    try {
+      // Fetch live exchange rate (Replace with your API Key)
+      final response = await http.get(
+        Uri.parse('https://api.exchangerate-api.com/v4/latest/$currencyCode'),
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        double exchangeRate = data["rates"]["USD"]; // Get CNY to USD rate
+        return amount * exchangeRate;
+      } else {
+        throw Exception("Failed to load exchange rate");
+      }
+    } catch (e) {
+      print("Exchange Rate Error: $e");
+      return amount * 0.138; // Default fallback conversion rate
+    }
   }
 }

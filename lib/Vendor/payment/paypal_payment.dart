@@ -41,14 +41,6 @@ class PaypalPaymentState extends State<PaypalPayment> {
   // CartController cartController = Get.put(CartController());
   PaymentController paymentController = Get.put(PaymentController());
 
-  // you can change default currency according to your need
-  Map<dynamic, dynamic> defaultCurrency = {
-    "symbol": "USD ",
-    "decimalDigits": 2,
-    "symbolBeforeTheNumber": true,
-    "currency": "USD"
-  };
-
   bool isEnableShipping = false;
   bool isEnableAddress = false;
 

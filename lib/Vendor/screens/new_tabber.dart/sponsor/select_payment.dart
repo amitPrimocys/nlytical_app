@@ -127,14 +127,34 @@ class _SelectPaymentState extends State<SelectPayment> {
                       sizeBoxHeight(10),
                       // paypal payment button
                       containerDesign(
-                          onTap: () {
+                          onTap: () async {
                             print("PRICE ::: ${widget.price}");
+                            String symbol = widget.price!
+                                .replaceAll(RegExp(r'[\d\s.,]'), '')
+                                .trim();
+
+                            // Find the matching currency code
+                            String currencyCode = "USD"; // Default currency
+                            for (var entry in countryCurrency.values) {
+                              if (entry["symbol"] == symbol) {
+                                currencyCode = entry["code"]!;
+                                break;
+                              }
+                            }
+
+                            double amount = double.parse(
+                              widget.price!.replaceAll(RegExp(r'[^\d.]'), ''),
+                            );
+
+                            amount = await paymentcontro.convertUSDtoOTHER(
+                                amount, currencyCode);
+
+                            print("Final Amount in USD: $amount");
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => PaypalPayment(
-                                          totalPrice:
-                                              widget.price!.substring(1),
+                                          totalPrice: amount.toString(),
                                           onFinish: (number) async {
                                             debugPrint('order id: ' + number);
                                             await paymentcontro.paymentApi(
@@ -157,6 +177,27 @@ class _SelectPaymentState extends State<SelectPayment> {
                       // gpay payment button
                       containerDesign(
                           onTap: () async {
+                            String symbol = widget.price!
+                                .replaceAll(RegExp(r'[\d\s.,]'), '')
+                                .trim();
+
+                            // Find the matching currency code
+                            String currencyCode = "USD"; // Default currency
+                            for (var entry in countryCurrency.values) {
+                              if (entry["symbol"] == symbol) {
+                                currencyCode = entry["code"]!;
+                                break;
+                              }
+                            }
+
+                            double amount = double.parse(
+                              widget.price!.replaceAll(RegExp(r'[^\d.]'), ''),
+                            );
+
+                            amount = await paymentcontro.convertUSDtoOTHER(
+                                amount, currencyCode);
+
+                            print("Final Amount in USD: $amount");
                             print("object");
                             if (Platform.isIOS) {
                               final result =
@@ -164,9 +205,7 @@ class _SelectPaymentState extends State<SelectPayment> {
                                 PayProvider.apple_pay,
                                 [
                                   PaymentItem(
-                                      amount: widget.price!
-                                          .replaceAll("\$", "")
-                                          .toString(),
+                                      amount: amount.toStringAsFixed(2),
                                       status: PaymentItemStatus.final_price,
                                       label: "Nlytical app")
                                 ],
@@ -175,7 +214,7 @@ class _SelectPaymentState extends State<SelectPayment> {
                                   await paymentcontro.paymentApi(
                                       goalId: widget.goalID.toString(),
                                       price: widget.price.toString(),
-                                      paymentType: "googlepay");
+                                      paymentType: "gpay");
                                   if (paymentcontro
                                           .paymentmodel.value!.status ==
                                       true) {
@@ -189,9 +228,7 @@ class _SelectPaymentState extends State<SelectPayment> {
                                 PayProvider.google_pay,
                                 [
                                   PaymentItem(
-                                      amount: widget.price!
-                                          .replaceAll("\$", "")
-                                          .toString(),
+                                      amount: amount.toStringAsFixed(2),
                                       status: PaymentItemStatus.final_price,
                                       label: "Nlytical app")
                                 ],
