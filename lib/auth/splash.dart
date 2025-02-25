@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unnecessary_new, no_leading_underscores_for_local_identifiers
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unnecessary_new, no_leading_underscores_for_local_identifiers, avoid_print
 
 import 'dart:async';
 import 'dart:developer';
@@ -120,6 +120,7 @@ class SplashScreenState extends State<SplashScreen>
     // Debug prints for verification
     print("USERID 😍 :- $userid");
     print("VENDORID 😍 :- $vendorid");
+    print("STORE_ID 😍 :- ${prefs.getString(SharedPreferencesKey.STORE_ID)}");
 
     // Logic to decide the screen to navigate to
     if (userid == null && vendorid == null) {
@@ -131,11 +132,11 @@ class SplashScreenState extends State<SplashScreen>
       Get.find<HomeContro>().checkLocationPermission();
       return TabbarScreen(currentIndex: 0);
     } else if (vendorid != null) {
+      String? storeId = prefs.getString(SharedPreferencesKey.STORE_ID);
       if (prefs.getString(SharedPreferencesKey.SUBSCRIBE)?.isEmpty ?? true) {
         print("Navigate to subscription screen");
         return const SubscriptionSceen();
-      } else if (prefs.getString(SharedPreferencesKey.STORE_ID)?.isEmpty ??
-          true) {
+      } else if (storeId == null || storeId.isEmpty || storeId == '0') {
         print("Navigate to add store screen");
         return const AddStore();
       } else {

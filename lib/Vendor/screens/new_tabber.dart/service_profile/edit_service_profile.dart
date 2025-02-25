@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/store_controller.dart';
-import 'package:nlytical_app/models/vendor_models/get_store_model.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/service_profile/address.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/service_profile/business_category.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/service_profile/business_images.dart';
@@ -30,15 +29,17 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
 
   @override
   void initState() {
-    storeController.caategoryName.value =
-        storeController.categoryData.value.data?.firstWhere(
-              (element) {
-                return element.id.toString() ==
-                    storeController.storeList[0].businessDetails!.categoryId!
-                        .toString();
-              },
-            ).categoryName ??
-            '';
+    if (storeController.storeList.isNotEmpty) {
+      storeController.caategoryName.value =
+          storeController.categoryData.value.data?.firstWhere(
+                (element) {
+                  return element.id.toString() ==
+                      storeController.storeList[0].businessDetails!.categoryId!
+                          .toString();
+                },
+              ).categoryName ??
+              '';
+    }
     super.initState();
   }
 
@@ -63,10 +64,12 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
 
   @override
   Widget build(BuildContext context) {
-    String publishedYearString =
-        storeController.storeList[0].businessTime!.publishedYear ?? '';
-    String publishedMonthString =
-        storeController.storeList[0].businessTime!.publishedMonth ?? '';
+    String publishedYearString = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].businessTime!.publishedYear ?? ''
+        : '';
+    String publishedMonthString = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].businessTime!.publishedMonth ?? ''
+        : '';
 
     // Parse the year
     int publishedYear = int.tryParse(publishedYearString) ?? 0;
@@ -155,18 +158,18 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
                             img: AppAsstes.handshake,
                             imgheight: 20,
                             title: "Business Name",
-                            subTitle: storeController.storeList[0]
-                                    .businessDetails!.serviceName ??
-                                "",
+                            subTitle: storeController.storeList.isNotEmpty
+                                ? storeController.storeList[0].businessDetails!
+                                        .serviceName ??
+                                    ""
+                                : "No any business added",
                           ).paddingSymmetric(horizontal: 17),
                           sizeBoxHeight(20),
                           //============= contact detail =====================
-                          contacContainer(storeController.storeList[0])
-                              .paddingSymmetric(horizontal: 17),
+                          contacContainer().paddingSymmetric(horizontal: 17),
                           sizeBoxHeight(20),
                           //============= address detail =====================
-                          addressContainer(storeController.storeList[0])
-                              .paddingSymmetric(horizontal: 17),
+                          addressContainer().paddingSymmetric(horizontal: 17),
                           sizeBoxHeight(20),
                           businessContainer(
                             onTap: () {
@@ -225,13 +228,13 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
                             img: AppAsstes.emp1,
                             imgheight: 20,
                             title: "Number of Employees",
-                            subTitle:
-                                "${storeController.storeList[0].businessTime!.employeeStrength ?? ''} Employees",
+                            subTitle: storeController.storeList.isNotEmpty
+                                ? "${storeController.storeList[0].businessTime!.employeeStrength ?? ''} Employees"
+                                : "0 Employees",
                           ).paddingSymmetric(horizontal: 17),
                           sizeBoxHeight(20),
                           // business service images
-                          businessImage(storeController.storeList[0])
-                              .paddingSymmetric(horizontal: 17),
+                          businessImage().paddingSymmetric(horizontal: 17),
                           sizeBoxHeight(20),
                           businessContainer(
                             onTap: () {
@@ -245,13 +248,14 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
                             img: AppAsstes.worldwide,
                             imgheight: 20,
                             title: "Business Website",
-                            subTitle: storeController
-                                .storeList[0].contactDetails!.serviceWebsite
-                                .toString(),
+                            subTitle: storeController.storeList.isNotEmpty
+                                ? storeController
+                                    .storeList[0].contactDetails!.serviceWebsite
+                                    .toString()
+                                : '',
                           ).paddingSymmetric(horizontal: 17),
                           sizeBoxHeight(20),
-                          businessFollowSocialMedia(
-                                  storeController.storeList[0])
+                          businessFollowSocialMedia()
                               .paddingSymmetric(horizontal: 17),
                           sizeBoxHeight(100),
                         ],
@@ -337,7 +341,7 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
 //==================================================== BUSINESS IMAGE ===========================================================================
 //==================================================== BUSINESS IMAGE ===========================================================================
 //==================================================== BUSINESS IMAGE ===========================================================================
-  Widget businessFollowSocialMedia(ServiceDetails storeDetail) {
+  Widget businessFollowSocialMedia() {
     return GestureDetector(
       onTap: () {
         Get.to(() => const BusinessSocialLink());
@@ -440,7 +444,7 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
   }
 
   //======================================================= IMAGES ==============================================================
-  Widget businessImage(ServiceDetails storeDetail) {
+  Widget businessImage() {
     return GestureDetector(
       onTap: () {
         Get.to(() => const BusinessImages())!.then((_) {
@@ -491,33 +495,38 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
                       SizedBox(
                         height: getProportionateScreenHeight(50),
                         width: getProportionateScreenWidth(270),
-                        child: ListView.builder(
-                            itemCount: storeDetail
-                                .businessDetails!.serviceImages!.length,
-                            scrollDirection: Axis.horizontal,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return Container(
-                                height: getProportionateScreenHeight(48),
-                                width: getProportionateScreenWidth(48),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color: Colors.grey.shade300)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Image.network(
-                                    storeDetail.businessDetails!
-                                        .serviceImages![index].url
-                                        .toString(),
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
+                        child: storeController.storeList.isNotEmpty
+                            ? ListView.builder(
+                                itemCount: storeController.storeList[0]
+                                    .businessDetails!.serviceImages!.length,
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    height: getProportionateScreenHeight(48),
+                                    width: getProportionateScreenWidth(48),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: Colors.grey.shade300)),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: Image.network(
+                                        storeController
+                                            .storeList[0]
+                                            .businessDetails!
+                                            .serviceImages![index]
+                                            .url
+                                            .toString(),
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (context, error,
+                                                stackTrace) =>
                                             const Icon(Icons.error, size: 20),
-                                  ),
-                                ),
-                              ).paddingOnly(right: 10);
-                            }),
+                                      ),
+                                    ),
+                                  ).paddingOnly(right: 10);
+                                })
+                            : const SizedBox.shrink(),
                       )
                     ],
                   ),
@@ -534,7 +543,7 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
   }
 
 //================================================ CONTACT DETAILS ====================================================================
-  Widget contacContainer(ServiceDetails storeDetail) {
+  Widget contacContainer() {
     return GestureDetector(
       onTap: () {
         Get.to(() => const ContactDetail())!.then((_) {
@@ -583,7 +592,11 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
                       ),
                       sizeBoxHeight(10),
                       Text(
-                        storeDetail.contactDetails!.servicePhone ?? '',
+                        storeController.storeList.isNotEmpty
+                            ? storeController.storeList[0].contactDetails!
+                                    .servicePhone ??
+                                ''
+                            : 'No any business contact added',
                         style:
                             poppinsFont(12, AppColors.grey1, FontWeight.w400),
                       ),
@@ -591,7 +604,11 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
                       SizedBox(
                         width: getProportionateScreenWidth(260),
                         child: Text(
-                          storeDetail.contactDetails!.serviceEmail ?? '',
+                          storeController.storeList.isNotEmpty
+                              ? storeController.storeList[0].contactDetails!
+                                      .serviceEmail ??
+                                  ''
+                              : '',
                           maxLines: 2,
                           style:
                               poppinsFont(12, AppColors.grey1, FontWeight.w400),
@@ -611,7 +628,7 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
     );
   }
 
-  Widget addressContainer(ServiceDetails storeDetail) {
+  Widget addressContainer() {
     return GestureDetector(
       onTap: () {
         Get.to(() => const AddressScreen())!.then((_) {
@@ -662,7 +679,11 @@ class _EditServiceProfileState extends State<EditServiceProfile> {
                       SizedBox(
                         width: getProportionateScreenWidth(270),
                         child: Text(
-                          storeDetail.contactDetails!.address ?? '',
+                          storeController.storeList.isNotEmpty
+                              ? storeController
+                                      .storeList[0].contactDetails!.address ??
+                                  ''
+                              : 'No any business added',
                           maxLines: 2,
                           style:
                               poppinsFont(12, AppColors.grey1, FontWeight.w400),

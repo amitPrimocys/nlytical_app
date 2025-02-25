@@ -32,19 +32,22 @@ class _StoreTimeScreenState extends State<StoreTimeScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      storeController.openDaysList.value = storeController
-          .storeList[0].businessTime!.openDays!
-          .split(', ')
-          .toList();
+      storeController.openDaysList.value = storeController.storeList.isNotEmpty
+          ? storeController.storeList[0].businessTime!.openDays!
+              .split(', ')
+              .toList()
+          : [];
 
       storeController.openingAndClosingDays
           .addAll(storeController.openDaysList);
 
-      startTimeController.text =
-          storeController.storeList[0].businessTime!.openTime!;
+      startTimeController.text = storeController.storeList.isNotEmpty
+          ? storeController.storeList[0].businessTime!.openTime!
+          : "";
 
-      endTimeController.text =
-          storeController.storeList[0].businessTime!.closeTime!;
+      endTimeController.text = storeController.storeList.isNotEmpty
+          ? storeController.storeList[0].businessTime!.closeTime!
+          : "";
     });
 
     super.initState();

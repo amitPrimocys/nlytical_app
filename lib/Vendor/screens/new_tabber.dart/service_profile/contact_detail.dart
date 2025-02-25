@@ -33,12 +33,16 @@ class _ContactDetailState extends State<ContactDetail> {
 
   @override
   void initState() {
-    contrycode =
-        storeController.storeList[0].contactDetails!.serviceCountryCode ?? '';
+    contrycode = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].contactDetails!.serviceCountryCode ?? ''
+        : "+91";
     businessPhoneController.text = getMobile(
-        storeController.storeList[0].contactDetails!.servicePhone ?? '');
-    businessEmailController.text =
-        storeController.storeList[0].contactDetails!.serviceEmail ?? '';
+        storeController.storeList.isNotEmpty
+            ? storeController.storeList[0].contactDetails!.servicePhone ?? ''
+            : '');
+    businessEmailController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].contactDetails!.serviceEmail ?? ''
+        : '';
     super.initState();
   }
 

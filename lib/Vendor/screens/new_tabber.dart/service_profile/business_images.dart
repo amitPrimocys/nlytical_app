@@ -23,7 +23,32 @@ class BusinessImages extends StatefulWidget {
 class _BusinessImagesState extends State<BusinessImages> {
   StoreController storeController = Get.find();
 
-  // mutiple image select
+  // // mutiple image select
+  // FilePickerResult? pickedFileImage;
+  // List<File?> files = [];
+  // List<String> filePaths = [];
+
+  // Future<void> openImagePicker() async {
+  //   pickedFileImage = await FilePicker.platform.pickFiles(
+  //     type: FileType.custom,
+  //     allowedExtensions: [
+  //       'jpg',
+  //       'jpeg',
+  //       'png',
+  //       'webp',
+  //     ],
+  //     allowCompression: true,
+  //     allowMultiple: true,
+  //   );
+  //   if (pickedFileImage != null) {
+  //     files = pickedFileImage!.paths.map((path) => File(path!)).toList();
+  //     filePaths = pickedFileImage!.paths.map((path) => (path!)).toList();
+  //     setState(() {});
+  //     print("files $files");
+  //     print("files Paths $filePaths");
+  //   }
+  // }
+
   FilePickerResult? pickedFileImage;
   List<File?> files = [];
   List<String> filePaths = [];
@@ -41,22 +66,51 @@ class _BusinessImagesState extends State<BusinessImages> {
       allowMultiple: true,
     );
     if (pickedFileImage != null) {
+      // Update the files and filePaths
       files = pickedFileImage!.paths.map((path) => File(path!)).toList();
       filePaths = pickedFileImage!.paths.map((path) => (path!)).toList();
-      setState(() {});
+
+      // Update combinedImages to include both the existing service images and the newly picked images
+      setState(() {
+        combinedImages = [
+          if (storeController.storeList.isNotEmpty)
+            ...storeController.storeList[0].businessDetails!.serviceImages!,
+          ...files, // Newly added files
+        ];
+      });
+
       print("files $files");
       print("files Paths $filePaths");
+      print("combinedImages $combinedImages");
     }
   }
+
+  List<dynamic> combinedImages = [];
 
   @override
   Widget build(BuildContext context) {
     double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    List<dynamic> combinedImages = [
-      if (storeController.storeList[0].businessDetails?.serviceImages != null)
+
+    // Check if storeController.storeList is not empty before accessing the first item
+    // List<dynamic> combinedImages = [];
+
+    if (storeController.storeList.isNotEmpty &&
+        storeController.storeList[0].businessDetails?.serviceImages != null) {
+      combinedImages = [
         ...storeController.storeList[0].businessDetails!.serviceImages!,
-      ...files
-    ];
+        ...files
+      ];
+    } else {
+      // Handle the case where storeList is empty or serviceImages is null
+      combinedImages = [...files];
+    }
+
+    // double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+    // List<dynamic> combinedImages = [
+    //   if (storeController.storeList[0].businessDetails?.serviceImages != null)
+    //     ...storeController.storeList[0].businessDetails!.serviceImages!,
+    //   ...files
+    // ];
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -183,7 +237,9 @@ class _BusinessImagesState extends State<BusinessImages> {
                           ? const SizedBox.shrink()
                           : sizeBoxHeight(12),
                       combinedImages.isEmpty
-                          ? const SizedBox.shrink()
+                          ? (storeController.storeList.isEmpty
+                              ? const Center(child: Text('No images available'))
+                              : const SizedBox.shrink())
                           : SizedBox(
                               height: getProportionateScreenHeight(58),
                               child: ListView.separated(
@@ -197,12 +253,15 @@ class _BusinessImagesState extends State<BusinessImages> {
                                   return sizeBoxWidth(15);
                                 },
                                 itemBuilder: (BuildContext context, int index) {
-                                  bool isEventImage = index <
-                                      storeController
-                                          .storeList[0]
-                                          .businessDetails!
-                                          .serviceImages!
-                                          .length;
+                                  bool isEventImage =
+                                      storeController.storeList.isEmpty
+                                          ? false
+                                          : index <
+                                              storeController
+                                                  .storeList[0]
+                                                  .businessDetails!
+                                                  .serviceImages!
+                                                  .length;
                                   return Stack(
                                     clipBehavior: Clip.none,
                                     alignment: Alignment.topRight,

@@ -26,8 +26,9 @@ class _AddressScreenState extends State<AddressScreen> {
 
   @override
   void initState() {
-    addressController.text =
-        storeController.storeList[0].contactDetails!.address ?? '';
+    addressController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].contactDetails!.address ?? ''
+        : '';
     super.initState();
   }
 

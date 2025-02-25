@@ -305,12 +305,14 @@ class StoreController extends GetxController {
         print(storeList);
         isLoading(false);
       } else {
+        storeList.clear();
         isLoading(false);
         print("STORE_DETAIL_RESPONSE:${storeDetailModel.value.message}");
       }
     } catch (e) {
+      storeList.clear();
       isLoading(false);
-      print(e.toString());
+      print("EditStoreProfile:${e.toString()}");
       snackBar("Something went wrong, try again");
     }
   }

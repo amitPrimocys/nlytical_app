@@ -24,8 +24,9 @@ class _BusinessWebsiteState extends State<BusinessWebsite> {
 
   @override
   void initState() {
-    websiteController.text =
-        storeController.storeList[0].contactDetails!.serviceWebsite.toString();
+    websiteController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].contactDetails!.serviceWebsite.toString()
+        : '';
     super.initState();
   }
 
@@ -125,7 +126,7 @@ class _BusinessWebsiteState extends State<BusinessWebsite> {
                     : customBtn(
                         onTap: () {
                           if (websiteController.text.trim().isEmpty) {
-                            snackBar("Please add you business name");
+                            snackBar("Please add you business website");
                           } else {
                             storeController.storeWebSiteUpdateApi(
                                 storeWebSite: websiteController.text);

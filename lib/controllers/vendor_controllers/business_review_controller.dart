@@ -7,6 +7,7 @@ import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/models/vendor_models/business_review_model.dart';
+import 'package:nlytical_app/utils/common_widgets.dart';
 // import 'package:nlytical_vendor/models/business_review_model.dart';
 // import 'package:nlytical_vendor/shared_preferences/prefrences_key.dart';
 // import 'package:nlytical_vendor/shared_preferences/shared_prefkey.dart';
@@ -18,10 +19,9 @@ class BusinessReviewController extends GetxController {
   RxBool isLoading = false.obs;
   Rx<BusinessReviewModel?> businessriviewmodel = BusinessReviewModel().obs;
 
-  Future<void> businessReviewApi() async {
-    isLoading.value = true;
-
+  businessReviewApi() async {
     try {
+      isLoading.value = true;
       var uri = Uri.parse(apiHelper.businessreviewlist);
       var request = http.MultipartRequest('Post', uri);
 
@@ -51,12 +51,11 @@ class BusinessReviewController extends GetxController {
         isLoading.value = false;
       } else {
         isLoading.value = false;
-        print(businessriviewmodel.value!.message);
+        snackBar(businessriviewmodel.value!.message.toString());
       }
     } catch (e) {
       isLoading.value = false;
-    } finally {
-      isLoading.value = false;
+      snackBar(e.toString());
     }
   }
 }

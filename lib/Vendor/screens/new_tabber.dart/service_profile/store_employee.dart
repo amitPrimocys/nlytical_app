@@ -30,8 +30,9 @@ class _StoreEmployeeState extends State<StoreEmployee> {
 
   @override
   void initState() {
-    selectedVtypes =
-        storeController.storeList[0].businessTime!.employeeStrength;
+    selectedVtypes = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].businessTime!.employeeStrength
+        : '';
     super.initState();
   }
 

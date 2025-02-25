@@ -43,10 +43,12 @@ class _BusinessYearsState extends State<BusinessYears> {
 
   @override
   void initState() {
-    selectedMonthValue =
-        storeController.storeList[0].businessTime!.publishedMonth ?? '';
-    selectedYearValue =
-        storeController.storeList[0].businessTime!.publishedYear ?? '';
+    selectedMonthValue = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].businessTime!.publishedMonth ?? ''
+        : null;
+    selectedYearValue = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].businessTime!.publishedYear ?? ''
+        : null;
     super.initState();
   }
 

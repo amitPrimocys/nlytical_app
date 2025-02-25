@@ -28,10 +28,12 @@ class _BusinessNameScreenState extends State<BusinessNameScreen> {
 
   @override
   void initState() {
-    businessnameController.text =
-        storeController.storeList[0].businessDetails!.serviceName ?? "";
-    businessdescController.text =
-        storeController.storeList[0].businessDetails!.serviceDescription ?? "";
+    businessnameController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].businessDetails!.serviceName ?? ""
+        : "";
+    businessdescController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].businessDetails!.serviceDescription ?? ""
+        : "";
     super.initState();
   }
 

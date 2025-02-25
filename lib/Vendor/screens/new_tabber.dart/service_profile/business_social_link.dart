@@ -45,14 +45,18 @@ class _BusinessSocialLinkState extends State<BusinessSocialLink> {
 
   @override
   void initState() {
-    whpLinkController.text =
-        storeController.storeList[0].contactDetails!.whatsappLink ?? '';
-    faceBookLinkController.text =
-        storeController.storeList[0].contactDetails!.facebookLink ?? '';
-    instaLinkController.text =
-        storeController.storeList[0].contactDetails!.instagramLink ?? '';
-    twitterLinkController.text =
-        storeController.storeList[0].contactDetails!.twitterLink ?? '';
+    whpLinkController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].contactDetails!.whatsappLink ?? ''
+        : '';
+    faceBookLinkController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].contactDetails!.facebookLink ?? ''
+        : '';
+    instaLinkController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].contactDetails!.instagramLink ?? ''
+        : '';
+    twitterLinkController.text = storeController.storeList.isNotEmpty
+        ? storeController.storeList[0].contactDetails!.twitterLink ?? ''
+        : '';
 
     boolData();
     super.initState();

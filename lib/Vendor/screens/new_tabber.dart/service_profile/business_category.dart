@@ -22,40 +22,81 @@ class _BusinessCategoryState extends State<BusinessCategory> {
   @override
   void initState() {
     storeController.filteredSubCategoryNames.clear();
-    storeController.caategoryName.value =
-        storeController.categoryData.value.data!.firstWhere(
-      (element) {
-        return element.id.toString() ==
-            storeController.storeList[0].businessDetails!.categoryId!
-                .toString();
-      },
-    ).categoryName!;
-    storeController.subCategories = storeController.categoryData.value.data!
-        .firstWhere((element) =>
-            element.categoryName == storeController.caategoryName.value)
-        .subCategoryData!
-        .map((e) => e.subcategoryName!)
-        .toList();
-    String subcategoryIdsString =
-        storeController.storeList[0].businessDetails!.subcategoryId.toString();
-    List<String> subcategoryIds =
-        subcategoryIdsString.split(',').map((id) => id.trim()).toList();
-    storeController.subCategoryNames.value = storeController
-        .categoryData.value.data!
-        .firstWhere(
-          (element) {
-            return element.id.toString() ==
-                storeController.storeList[0].businessDetails!.categoryId!
-                    .toString();
-          },
-        )
-        .subCategoryData!
-        .where(
-            (subCategory) => subcategoryIds.contains(subCategory.id.toString()))
-        .map((subCategory) => subCategory
-            .subcategoryName!) // Assuming each subcategory has a `name` property
-        .toList();
+
+    if (storeController.storeList.isNotEmpty) {
+      var businessDetails = storeController.storeList[0].businessDetails;
+
+      if (businessDetails != null) {
+        var categoryId = businessDetails.categoryId?.toString();
+
+        // Ensure category data is available
+        if (storeController.categoryData.value.data != null &&
+            storeController.categoryData.value.data!.isNotEmpty) {
+          var categoryList = storeController.categoryData.value.data!
+              .where((element) => element.id.toString() == categoryId)
+              .toList();
+
+          if (categoryList.isNotEmpty) {
+            var selectedCategory = categoryList.first;
+
+            storeController.caategoryName.value =
+                selectedCategory.categoryName!;
+            storeController.subCategories = selectedCategory.subCategoryData!
+                .map((e) => e.subcategoryName!)
+                .toList();
+
+            String subcategoryIdsString =
+                businessDetails.subcategoryId.toString();
+            List<String> subcategoryIds =
+                subcategoryIdsString.split(',').map((id) => id.trim()).toList();
+
+            storeController.subCategoryNames.value = selectedCategory
+                .subCategoryData!
+                .where((subCategory) =>
+                    subcategoryIds.contains(subCategory.id.toString()))
+                .map((subCategory) => subCategory.subcategoryName!)
+                .toList();
+          }
+        }
+      }
+    }
+
     setState(() {});
+    // storeController.filteredSubCategoryNames.clear();
+    // storeController.caategoryName.value =
+    //     storeController.categoryData.value.data!.firstWhere(
+    //   (element) {
+    //     return element.id.toString() ==
+    //         storeController.storeList[0].businessDetails!.categoryId!
+    //             .toString();
+    //   },
+    // ).categoryName!;
+    // storeController.subCategories = storeController.categoryData.value.data!
+    //     .firstWhere((element) =>
+    //         element.categoryName == storeController.caategoryName.value)
+    //     .subCategoryData!
+    //     .map((e) => e.subcategoryName!)
+    //     .toList();
+    // String subcategoryIdsString =
+    //     storeController.storeList[0].businessDetails!.subcategoryId.toString();
+    // List<String> subcategoryIds =
+    //     subcategoryIdsString.split(',').map((id) => id.trim()).toList();
+    // storeController.subCategoryNames.value = storeController
+    //     .categoryData.value.data!
+    //     .firstWhere(
+    //       (element) {
+    //         return element.id.toString() ==
+    //             storeController.storeList[0].businessDetails!.categoryId!
+    //                 .toString();
+    //       },
+    //     )
+    //     .subCategoryData!
+    //     .where(
+    //         (subCategory) => subcategoryIds.contains(subCategory.id.toString()))
+    //     .map((subCategory) => subCategory
+    //         .subcategoryName!) // Assuming each subcategory has a `name` property
+    //     .toList();
+    // setState(() {});
     super.initState();
   }
 
