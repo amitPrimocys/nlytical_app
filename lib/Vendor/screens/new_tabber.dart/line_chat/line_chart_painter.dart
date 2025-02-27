@@ -2,6 +2,8 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' hide TextDirection;
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/line_chat/my_weight.dart';
+import 'package:nlytical_app/auth/splash.dart';
+import 'package:nlytical_app/utils/colors.dart';
 import 'package:touchable/touchable.dart';
 
 class LineChartPainter extends CustomPainter {
@@ -21,8 +23,9 @@ class LineChartPainter extends CustomPainter {
     required this.onPointClick,
   });
 
-  final _mainColor = const Color(0xff4259A4);
-  final _backgroundColor = Colors.white;
+  final _mainColor = const Color(0xffB1B9F8);
+  final _backgroundColor =
+      themeContro.isLightMode.value ? Colors.white : Colors.transparent;
 
   // range max min for Y axis
   late final ceilMax = maxWeight.ceil() + 1.0;
@@ -42,7 +45,7 @@ class LineChartPainter extends CustomPainter {
       const TextStyle(color: Color(0xffAAA8B1), fontSize: 10);
 
   late final pointInnerPaint = Paint()
-    ..color = _mainColor
+    ..color = const Color(0xff344BFD)
     ..style = PaintingStyle.fill;
 
   final pointFocusingOuterPaint = Paint()
@@ -50,7 +53,7 @@ class LineChartPainter extends CustomPainter {
     ..style = PaintingStyle.fill;
 
   final pointOuterPaint = Paint()
-    ..color = Colors.white
+    ..color = themeContro.isLightMode.value ? Colors.white : AppColors.darkGray
     ..style = PaintingStyle.fill;
 
   late final tooltipPaint = Paint()
@@ -58,7 +61,7 @@ class LineChartPainter extends CustomPainter {
     ..style = PaintingStyle.fill;
 
   late final connectPathPaint = Paint()
-    ..color = _mainColor
+    ..color = Colors.transparent
     ..style = PaintingStyle.stroke
     ..strokeWidth = 2;
 
@@ -68,7 +71,7 @@ class LineChartPainter extends CustomPainter {
       Offset.zero,
       Offset(0, heightView),
       [
-        _mainColor.withOpacity(0.32),
+        _mainColor,
         _mainColor.withOpacity(0),
       ],
     );
@@ -82,9 +85,11 @@ class LineChartPainter extends CustomPainter {
     ..color = Colors.transparent;
 
   final outlinePaint = Paint()
-    ..strokeWidth = 1
+    ..strokeWidth = 0.5
     ..style = PaintingStyle.stroke
-    ..color = const Color(0xffF4F4F4);
+    ..color = themeContro.isLightMode.value
+        ? const Color(0xffF4F4F4)
+        : AppColors.darkgray2;
 
   final dottedLinePaint = Paint()
     ..color = const Color(0xff83808C)

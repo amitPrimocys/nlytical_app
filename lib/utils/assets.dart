@@ -16,6 +16,7 @@ class AppAsstes {
   static const String notify = 'assets/images/notification.png';
   static const String notifyfill = 'assets/images/notification-bing.png';
   static const String heart = 'assets/images/heart.png';
+  static const String lock2 = 'assets/images/lock2.png';
   static const String heart1 = 'assets/images/heart1.png';
   static const String fill_heart = 'assets/images/fill_heart.png';
   static const String setting_fill = 'assets/images/setting (1).png';

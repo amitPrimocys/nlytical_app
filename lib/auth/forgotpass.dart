@@ -146,7 +146,7 @@ class _ForgotpassState extends State<Forgotpass> {
                     sizeBoxHeight(25),
                     Obx(() {
                       return forgotcontro.isLoading.value
-                          ? loader()
+                          ? commonLoading()
                           : GestureDetector(
                               onTap: () {
                                 // forgotcontro.forgotApi(

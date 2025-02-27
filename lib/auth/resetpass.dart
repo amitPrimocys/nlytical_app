@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/password_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/reset_contro.dart';
 import 'package:nlytical_app/utils/assets.dart';
@@ -63,7 +64,6 @@ class _ResetpassState extends State<Resetpass> {
     conformcontroller.addListener(fieldcheck);
     passcontroller.addListener(fieldcheck);
 
-    // TODO: implement initState
     super.initState();
   }
 
@@ -72,9 +72,11 @@ class _ResetpassState extends State<Resetpass> {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
-        decoration: const BoxDecoration(
-            color: Colors.white,
-            image: DecorationImage(
+        decoration: BoxDecoration(
+            color: themeContro.isLightMode.value
+                ? Colors.white
+                : AppColors.darkMainBlack,
+            image: const DecorationImage(
               image: AssetImage(AppAsstes.appbackground),
               fit: BoxFit.fitWidth,
             )),
@@ -172,7 +174,9 @@ class _ResetpassState extends State<Resetpass> {
                         label(
                           'New Password',
                           fontSize: 10,
-                          textColor: AppColors.black,
+                          textColor: themeContro.isLightMode.value
+                              ? AppColors.black
+                              : AppColors.white,
                           fontWeight: FontWeight.w500,
                         ),
                         sizeBoxWidth(3),
@@ -193,7 +197,9 @@ class _ResetpassState extends State<Resetpass> {
                         label(
                           'Confirm Password',
                           fontSize: 10,
-                          textColor: AppColors.black,
+                          textColor: themeContro.isLightMode.value
+                              ? AppColors.black
+                              : AppColors.white,
                           fontWeight: FontWeight.w500,
                         ),
                         sizeBoxWidth(3),
@@ -250,7 +256,7 @@ class _ResetpassState extends State<Resetpass> {
                   sizeBoxHeight(25),
                   Obx(() {
                     return resetcontro.isLoading.value
-                        ? loader()
+                        ? commonLoading()
                         : GestureDetector(
                             onTap: () {
                               // Get.to(resetcontro.resetApi(
@@ -294,15 +300,12 @@ class _ResetpassState extends State<Resetpass> {
 
   Widget confirm() {
     return TextFormField(
-      cursorColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.white
-          : AppColors.blue,
+      cursorColor:
+          themeContro.isLightMode.value ? AppColors.blue : Colors.white,
       autofocus: false,
       style: poppinsFont(
           14,
-          Theme.of(context).brightness == Brightness.dark
-              ? Colors.white
-              : AppColors.black,
+          themeContro.isLightMode.value ? Colors.black : AppColors.white,
           FontWeight.w400),
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: conformcontroller,
@@ -320,7 +323,10 @@ class _ResetpassState extends State<Resetpass> {
             borderSide: const BorderSide(color: AppColors.blue)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(color: AppColors.colorEFEFEF)),
+            borderSide: BorderSide(
+                color: themeContro.isLightMode.value
+                    ? AppColors.colorEFEFEF
+                    : AppColors.darkBorder)),
         disabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide.none),
@@ -387,7 +393,12 @@ class _ResetpassState extends State<Resetpass> {
                 FocusScope.of(context).requestFocus(passwordFocusNode);
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
-              style: poppinsFont(14, AppColors.black, FontWeight.normal),
+              style: poppinsFont(
+                  14,
+                  themeContro.isLightMode.value
+                      ? AppColors.black
+                      : AppColors.white,
+                  FontWeight.normal),
               // focusNode: focusNode,
               onFieldSubmitted: (value) {
                 FocusScope.of(context).unfocus();
@@ -485,7 +496,10 @@ class _ResetpassState extends State<Resetpass> {
                     borderSide: const BorderSide(color: AppColors.blue)),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: AppColors.colorEFEFEF)),
+                    borderSide: BorderSide(
+                        color: themeContro.isLightMode.value
+                            ? AppColors.colorEFEFEF
+                            : AppColors.darkBorder)),
                 disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none),
@@ -500,17 +514,6 @@ class _ResetpassState extends State<Resetpass> {
                     poppinsFont(12, Colors.redAccent, FontWeight.normal),
                 labelStyle: poppinsFont(12, AppColors.black, FontWeight.w400),
               ),
-              // validator: (value) {
-              //   if (!passCheckCtrl.moreThan8Char.value ||
-              //       !passCheckCtrl.oneNumberChar.value ||
-              //       !passCheckCtrl.oneUpperCaseChar.value ||
-              //       !passCheckCtrl.oneLowerCaseChar.value ||
-              //       !passCheckCtrl.oneSpecialCaseChar.value) {
-              //     return '';
-              //   }
-
-              //   return null;
-              // },
 
               validator: (value) {
                 if (value == null || value.isEmpty) {

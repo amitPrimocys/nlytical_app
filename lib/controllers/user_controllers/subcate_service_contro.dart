@@ -1,11 +1,14 @@
 // // ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, unused_local_variable
 
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nlytical_app/models/user_models/subcate_service_model.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
-import 'package:nlytical_app/utils/global.dart';
 
 final ApiHelper apiHelper = ApiHelper();
 
@@ -88,7 +91,8 @@ class SubcateserviceContro extends GetxController {
       request.fields['category_id'] = '$catId';
       request.fields['subcategory_id'] = '$subcatId';
       request.fields['page_no'] = page.isEmpty ? '1' : page;
-      request.fields['user_id'] = userID;
+      request.fields['user_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
       var response = await request.send();
       String responsData = await response.stream.transform(utf8.decoder).join();

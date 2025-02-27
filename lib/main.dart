@@ -1,11 +1,16 @@
+// ignore_for_file: avoid_print
+
 import 'dart:ui';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/User/screens/controller/user_tab_controller.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
+import 'package:nlytical_app/controllers/user_controllers/login_contro.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/lang_controller.dart';
+import 'package:nlytical_app/controllers/vendor_controllers/profile_cotroller.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/custome_data_empty.dart';
 import 'package:nlytical_app/controllers/theme_contro.dart';
@@ -15,6 +20,7 @@ import 'package:dynamic_themes/dynamic_themes.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   SharedPrefs.init();
   Stripe.publishableKey =
       "pk_test_51OP303SJayPbST1licbf3gkBs6pS2Bg886xDS0hhh7Y9NydxCm0ezpqTCNpPGPiBmmX4mly6uXtAXMzxO1KwjRso00YmA0KNUB";
@@ -25,8 +31,10 @@ Future<void> main() async {
   // Get.put(AuthController());
   Get.put(ThemeContro());
   Get.put(LanguageController());
+  Get.put(LoginContro());
   Get.put(UserTabController());
   Get.put(HomeContro());
+  Get.put(ProfileCotroller());
 
   await SharedPreferences.getInstance().then((prefs) {
     final themeCollection = ThemeCollection(themes: {});

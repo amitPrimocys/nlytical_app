@@ -1,13 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/models/vendor_models/otp_model.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/vendor_new_tabbar.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
-import 'package:nlytical_app/utils/global.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpController extends GetxController {
   final ApiHelper apiHelper = ApiHelper();
@@ -58,14 +59,11 @@ class OtpController extends GetxController {
 
         if (otpmodel.value.status == true) {
           // Save user ID in shared preferences
-          SharedPreferences preferencesToken =
-              await SharedPreferences.getInstance();
-          preferencesToken.setString(
+          SharedPrefs.setString(
             SharedPreferencesKey.LOGGED_IN_USERID,
             otpmodel.value.userId.toString(),
           );
-          userID = preferencesToken
-              .getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
           snackBar("Login Successfully".tr);
 

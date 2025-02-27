@@ -22,15 +22,14 @@ class VendorInfoModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (vendordetails != null) {
       data['Vendordetails'] = vendordetails!.toJson();
     }
     if (serviceDetails != null) {
-      data['serviceDetails'] =
-          serviceDetails!.map((v) => v.toJson()).toList();
+      data['serviceDetails'] = serviceDetails!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -77,7 +76,7 @@ class Vendordetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['first_name'] = firstName;
     data['last_name'] = lastName;
@@ -164,7 +163,7 @@ class ServiceDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['vendor_id'] = vendorId;
     data['category_id'] = categoryId;

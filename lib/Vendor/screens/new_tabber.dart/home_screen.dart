@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/Vendor/screens/new_tabber.dart/line_chat/chart.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
@@ -10,7 +11,6 @@ import 'package:nlytical_app/controllers/vendor_controllers/profile_cotroller.da
 import 'package:nlytical_app/controllers/vendor_controllers/store_controller.dart';
 import 'package:nlytical_app/Vendor/screens/auth/payment_history.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/all_service.dart';
-import 'package:nlytical_app/Vendor/screens/new_tabber.dart/line_chat/main_page.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/my_review_screen.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/profile.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/service_profile/business_images.dart';
@@ -266,7 +266,7 @@ class _HomeScreenState extends State<HomeScreen> {
         GestureDetector(
           onTap: () {
             // Get.to(const BudgetDuration());
-            Get.to(() => const MainPage());
+            Get.to(() => const Chart());
           },
           child: Container(
             height: getProportionateScreenHeight(80),

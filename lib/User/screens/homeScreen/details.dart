@@ -21,6 +21,8 @@ import 'package:nlytical_app/models/user_models/service_detail_model.dart';
 import 'package:nlytical_app/User/screens/homeScreen/chat_screen.dart';
 import 'package:nlytical_app/User/screens/homeScreen/sub_details.dart';
 import 'package:nlytical_app/User/screens/shimmer_loader/details_loader.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/comman_widgets.dart';
@@ -61,7 +63,8 @@ class _DetailsState extends State<Details>
   @override
   void initState() {
     super.initState();
-    print("😀😀😀😀USER_ID:$userID");
+    print(
+        "😀😀😀😀USER_ID:${SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)}");
     servicecontro.servicedetailApi(
       serviceID: widget.serviceid!,
     );
@@ -125,7 +128,7 @@ class _DetailsState extends State<Details>
                             delegate: SliverChildListDelegate(
                               [
                                 imagelistt(),
-                                SizedBox(height: Get.height * 0.12)
+                                SizedBox(height: Get.height * 0.14)
                                 // sizeBoxHeight(120),
                                 // profileDetailsField(),
                                 // profileHeaderWidget(context),
@@ -790,10 +793,15 @@ class _DetailsState extends State<Details>
                                           ""
                                       ? GestureDetector(
                                           onTap: () async {
-                                            if (userID.isEmpty) {
+                                            if (SharedPrefs.getString(
+                                                    SharedPreferencesKey
+                                                        .LOGGED_IN_USERID)
+                                                .isEmpty) {
                                               snackBar(
                                                   "Contact on Whatsapp kidly login in");
                                             } else {
+                                              print(
+                                                  "WHPLINK:${servicecontro.servicemodel.value!.serviceDetail!.whatsappLink}");
                                               _launchWhatsapp(servicecontro
                                                   .servicemodel
                                                   .value!
@@ -841,7 +849,10 @@ class _DetailsState extends State<Details>
                                           ""
                                       ? GestureDetector(
                                           onTap: () {
-                                            if (userID.isEmpty) {
+                                            if (SharedPrefs.getString(
+                                                    SharedPreferencesKey
+                                                        .LOGGED_IN_USERID)
+                                                .isEmpty) {
                                               snackBar(
                                                   "Contact on Facebook kidly login in");
                                             } else {
@@ -892,7 +903,10 @@ class _DetailsState extends State<Details>
                                           ""
                                       ? GestureDetector(
                                           onTap: () {
-                                            if (userID.isEmpty) {
+                                            if (SharedPrefs.getString(
+                                                    SharedPreferencesKey
+                                                        .LOGGED_IN_USERID)
+                                                .isEmpty) {
                                               snackBar(
                                                   "Contact on instagram kidly login in");
                                             } else {
@@ -948,7 +962,10 @@ class _DetailsState extends State<Details>
                                           ""
                                       ? InkWell(
                                           onTap: () {
-                                            if (userID.isEmpty) {
+                                            if (SharedPrefs.getString(
+                                                    SharedPreferencesKey
+                                                        .LOGGED_IN_USERID)
+                                                .isEmpty) {
                                               snackBar(
                                                   "Contact on Twitter kidly login in");
                                             } else {
@@ -1353,7 +1370,10 @@ class _DetailsState extends State<Details>
                                       child: GestureDetector(
                                         onTap: () {
                                           // Call the API to like/unlike the service
-                                          if (userID.isEmpty) {
+                                          if (SharedPrefs.getString(
+                                                  SharedPreferencesKey
+                                                      .LOGGED_IN_USERID)
+                                              .isEmpty) {
                                             snackBar(
                                                 'Please login to review this service');
                                           } else {
@@ -1512,7 +1532,11 @@ class _DetailsState extends State<Details>
                     : AppColors.white,
               ),
             ),
-            const Divider(color: Color(0xffCCCCCC), thickness: 1),
+            Divider(
+                color: themeContro.isLightMode.value
+                    ? Color(0xffCCCCCC)
+                    : AppColors.grey1,
+                thickness: 1),
             SizedBox(height: 4),
             label(
               'Start Your Review',
@@ -1537,7 +1561,9 @@ class _DetailsState extends State<Details>
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: GestureDetector(
                             onTap: () {
-                              if (userID.isEmpty) {
+                              if (SharedPrefs.getString(
+                                      SharedPreferencesKey.LOGGED_IN_USERID)
+                                  .isEmpty) {
                                 snackBar('Please login to review this service');
                               } else {
                                 _confirmReview();
@@ -1654,7 +1680,9 @@ class _DetailsState extends State<Details>
                             sizeBoxHeight(10),
                             label("No Reviews found",
                                 fontSize: 16,
-                                textColor: AppColors.black,
+                                textColor: themeContro.isLightMode.value
+                                    ? AppColors.black
+                                    : AppColors.white,
                                 fontWeight: FontWeight.w500)
                           ],
                         ),
@@ -1839,7 +1867,9 @@ class _DetailsState extends State<Details>
                     ? ListView.separated(
                         separatorBuilder: (context, index) {
                           return Divider(
-                            color: Color(0xffCCCCCC),
+                            color: themeContro.isLightMode.value
+                                ? Color(0xffCCCCCC)
+                                : AppColors.darkBorder,
                             thickness: 1,
                           ).paddingSymmetric(horizontal: 20);
                         },
@@ -1871,7 +1901,7 @@ class _DetailsState extends State<Details>
                                     label("No Service found",
                                         fontSize: 16,
                                         textColor: themeContro.isLightMode.value
-                                            ? AppColors.black
+                                            ? AppColors.white
                                             : AppColors.brown,
                                         fontWeight: FontWeight.w500)
                                   ],
@@ -1882,7 +1912,9 @@ class _DetailsState extends State<Details>
                         : ListView.separated(
                             separatorBuilder: (context, index) {
                               return Divider(
-                                color: Color(0xffCCCCCC),
+                                color: themeContro.isLightMode.value
+                                    ? Color(0xffCCCCCC)
+                                    : AppColors.darkBorder,
                                 thickness: 1,
                               ).paddingSymmetric(horizontal: 20);
                             },
@@ -1917,7 +1949,7 @@ class _DetailsState extends State<Details>
                             sizeBoxHeight(10),
                             label("No Service found",
                                 fontSize: 16,
-                                textColor: AppColors.black,
+                                textColor: AppColors.white,
                                 fontWeight: FontWeight.w500)
                           ],
                         ),
@@ -2036,9 +2068,23 @@ class _DetailsState extends State<Details>
             width: 90,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                    image: NetworkImage(store.storeImages![0].toString()),
-                    fit: BoxFit.cover)),
+                border: Border.all(
+                    color: themeContro.isLightMode.value
+                        ? Color(0xffCCCCCC)
+                        : AppColors.darkBorder)),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: CachedNetworkImage(
+                  imageUrl: store.storeImages![0].toString(),
+                  fit: BoxFit.cover,
+                  errorWidget: (context, url, error) {
+                    return Icon(Icons.error,
+                        size: 20,
+                        color: themeContro.isLightMode.value
+                            ? AppColors.black
+                            : AppColors.darkGray);
+                  },
+                )),
           ),
           Expanded(
             child: Column(
@@ -2074,7 +2120,7 @@ class _DetailsState extends State<Details>
                 ),
                 sizeBoxHeight(5),
                 SizedBox(
-                  width: 195,
+                  width: Get.width * 0.60,
                   child: Text(
                     store.storeDescription.toString(),
                     style: poppinsFont(
@@ -2150,7 +2196,8 @@ class _DetailsState extends State<Details>
         child: GestureDetector(
           // onTap: onTapcall,
           onTap: () async {
-            if (userID.isEmpty) {
+            if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                .isEmpty) {
               snackBar("Login must need for see mobile number");
             } else {
               String phoneNum = Uri.encodeComponent(servicecontro
@@ -2195,7 +2242,8 @@ class _DetailsState extends State<Details>
       Expanded(
         child: GestureDetector(
           onTap: () {
-            if (userID.isEmpty) {
+            if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                .isEmpty) {
               snackBar("Login must need for chat with vendor");
             } else {
               Get.to(
@@ -2247,7 +2295,8 @@ class _DetailsState extends State<Details>
       Expanded(
         child: GestureDetector(
           onTap: () async {
-            if (userID.isEmpty) {
+            if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                .isEmpty) {
               snackBar("Login must need for see whatsapp number");
             } else {
               whatsapp();
@@ -2313,7 +2362,9 @@ class _DetailsState extends State<Details>
               alignment: Alignment.bottomCenter,
               insetPadding: EdgeInsets.only(top: 5),
               contentPadding: EdgeInsets.zero,
-              backgroundColor: Colors.white,
+              backgroundColor: themeContro.isLightMode.value
+                  ? Colors.white
+                  : AppColors.darkMainBlack,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               content: StatefulBuilder(builder: (context, kk) {
@@ -2323,8 +2374,10 @@ class _DetailsState extends State<Details>
                     Container(
                       height: getProportionateScreenHeight(350),
                       width: Get.width,
-                      decoration: const BoxDecoration(
-                          color: Colors.white,
+                      decoration: BoxDecoration(
+                          color: themeContro.isLightMode.value
+                              ? Colors.white
+                              : AppColors.darkMainBlack,
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10))),
@@ -2337,7 +2390,9 @@ class _DetailsState extends State<Details>
                                 'Business Hours',
                                 fontSize: 17,
                                 fontWeight: FontWeight.w600,
-                                textColor: AppColors.black,
+                                textColor: themeContro.isLightMode.value
+                                    ? AppColors.black
+                                    : AppColors.white,
                               ),
                               GestureDetector(
                                   onTap: () {
@@ -2346,7 +2401,9 @@ class _DetailsState extends State<Details>
                                   child: Icon(
                                     Icons.close,
                                     size: 18,
-                                    color: Colors.black,
+                                    color: themeContro.isLightMode.value
+                                        ? AppColors.black
+                                        : AppColors.white,
                                   ))
                             ],
                           )
@@ -2355,7 +2412,11 @@ class _DetailsState extends State<Details>
                               )
                               .paddingOnly(top: 10),
                           sizeBoxHeight(6),
-                          Divider(color: Color(0xffCCCCCC), thickness: 1),
+                          Divider(
+                              color: themeContro.isLightMode.value
+                                  ? Color(0xffCCCCCC)
+                                  : AppColors.darkgray2,
+                              thickness: 1),
                           sizeBoxHeight(5),
                           ListView.builder(
                               itemCount: 7,
@@ -2382,7 +2443,10 @@ class _DetailsState extends State<Details>
                                           label(
                                             days[index],
                                             fontSize: 13,
-                                            textColor: Colors.black,
+                                            textColor:
+                                                themeContro.isLightMode.value
+                                                    ? AppColors.black
+                                                    : AppColors.white,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ],
@@ -2443,8 +2507,10 @@ class _DetailsState extends State<Details>
                           Container(
                             height: getProportionateScreenHeight(380),
                             width: Get.width,
-                            decoration:
-                                const BoxDecoration(color: Colors.white),
+                            decoration: BoxDecoration(
+                                color: themeContro.isLightMode.value
+                                    ? Colors.white
+                                    : AppColors.darkMainBlack),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -2452,7 +2518,9 @@ class _DetailsState extends State<Details>
                                 label(
                                   'Feel Free to share your review and ratings',
                                   fontSize: 14,
-                                  textColor: Colors.black,
+                                  textColor: themeContro.isLightMode.value
+                                      ? Colors.black
+                                      : AppColors.white,
                                   fontWeight: FontWeight.w500,
                                 ).paddingSymmetric(horizontal: 25),
                                 sizeBoxHeight(12),
@@ -2493,18 +2561,16 @@ class _DetailsState extends State<Details>
                                 ).paddingSymmetric(horizontal: 25),
                                 sizeBoxHeight(22),
                                 TextFormField(
-                                  cursorColor: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : AppColors.black,
+                                  cursorColor: themeContro.isLightMode.value
+                                      ? Colors.black
+                                      : AppColors.white,
                                   autofocus: false,
                                   controller: msgController,
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color: Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.white
-                                          : AppColors.black,
+                                      color: themeContro.isLightMode.value
+                                          ? Colors.black
+                                          : AppColors.white,
                                       fontWeight: FontWeight.w400),
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
@@ -2512,10 +2578,6 @@ class _DetailsState extends State<Details>
                                   keyboardType: TextInputType.text,
                                   maxLines: 4,
                                   decoration: InputDecoration(
-                                    // filled: true,
-                                    // fillColor: Theme.of(context).brightness == Brightness.dark
-                                    //     ? AppColors.appColorBlack
-                                    //     : AppColors.scaffoldColor,
                                     contentPadding: const EdgeInsets.symmetric(
                                         vertical: 15, horizontal: 20),
                                     focusedBorder: OutlineInputBorder(
@@ -2535,7 +2597,6 @@ class _DetailsState extends State<Details>
                                         fontSize: 12,
                                         color: Colors.grey,
                                         fontWeight: FontWeight.w400),
-
                                     errorBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(13),
                                         borderSide:
@@ -2551,7 +2612,7 @@ class _DetailsState extends State<Details>
                                 sizeBoxHeight(20),
                                 Obx(() {
                                   return addreviewcontro.isaddreview.value
-                                      ? loader()
+                                      ? commonLoading()
                                       : Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
@@ -2571,7 +2632,11 @@ class _DetailsState extends State<Details>
                                                         140),
                                                 decoration: BoxDecoration(
                                                     border: Border.all(
-                                                        color: AppColors.blue),
+                                                        color: themeContro
+                                                                .isLightMode
+                                                                .value
+                                                            ? AppColors.blue
+                                                            : Colors.grey),
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             12)),
@@ -2579,7 +2644,10 @@ class _DetailsState extends State<Details>
                                                   child: label(
                                                     'Cancel',
                                                     fontSize: 14,
-                                                    textColor: Colors.black,
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? Colors.black
+                                                        : AppColors.white,
                                                     fontWeight: FontWeight.w400,
                                                   ),
                                                 ),
@@ -2634,7 +2702,9 @@ class _DetailsState extends State<Details>
                                 height: 58,
                                 width: Get.width,
                                 decoration: BoxDecoration(
-                                    color: Colors.white,
+                                    color: themeContro.isLightMode.value
+                                        ? Colors.white
+                                        : AppColors.darkGray,
                                     boxShadow: [
                                       BoxShadow(
                                         color: Colors.black.withOpacity(0.12),
@@ -2654,7 +2724,9 @@ class _DetailsState extends State<Details>
                                     'Review & Rating',
                                     fontSize: 18,
                                     textAlign: TextAlign.center,
-                                    textColor: Colors.black,
+                                    textColor: themeContro.isLightMode.value
+                                        ? Colors.black
+                                        : AppColors.white,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
@@ -2692,7 +2764,8 @@ class _DetailsState extends State<Details>
           right: 20,
           child: GestureDetector(
             onTap: () {
-              if (userID.isEmpty) {
+              if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                  .isEmpty) {
                 snackBar('Please login to like this service');
               } else {
                 likecontro.likeApi(servicecontro
@@ -2758,13 +2831,19 @@ class _DetailsState extends State<Details>
               onTap: () {
                 Navigator.pop(context);
               },
-              child: Image.asset(
-                'assets/images/arrow-left1.png',
-                height: 24,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Image.asset(
+                    'assets/images/arrow-left1.png',
+                    height: 24,
+                  ).paddingAll(5),
+                ),
               )),
         ),
         Positioned(
-          bottom: -90,
+          bottom: -100,
           // right: 20,
           // left: 20,
           child: Stack(
@@ -3047,12 +3126,16 @@ class _DetailsState extends State<Details>
                   avrageReview: servicecontro
                       .servicemodel.value!.serviceDetail!.totalReviewCount!
                       .toString(),
-                  isLike: userID.isEmpty
+                  isLike: SharedPrefs.getString(
+                              SharedPreferencesKey.LOGGED_IN_USERID)
+                          .isEmpty
                       ? 0
                       : servicecontro
                           .servicemodel.value!.serviceDetail!.isLike!,
                   onTaplike: () {
-                    if (userID.isEmpty) {
+                    if (SharedPrefs.getString(
+                            SharedPreferencesKey.LOGGED_IN_USERID)
+                        .isEmpty) {
                       snackBar('Please login to like this service');
                     } else {
                       likecontro.likeApi(servicecontro

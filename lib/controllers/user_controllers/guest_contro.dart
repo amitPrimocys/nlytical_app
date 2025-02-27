@@ -5,11 +5,10 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nlytical_app/models/user_models/guest_model.dart';
 import 'package:nlytical_app/User/screens/bottamBar/newtabbar.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
-import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 final ApiHelper apiHelper = ApiHelper();
 
@@ -21,8 +20,6 @@ class GuestContro extends GetxController {
     isguest.value = true;
 
     try {
-      SharedPreferences preferencesToken =
-          await SharedPreferences.getInstance();
       var uri = Uri.parse(apiHelper.guest);
       var request = http.MultipartRequest("POST", uri);
 
@@ -38,19 +35,17 @@ class GuestContro extends GetxController {
       if (guestmodel.value!.status == true && guestmodel.value!.user != null) {
         isguest.value = false;
 
-        // SharedPreferences preferencesToken =
-        //     await SharedPreferences.getInstance();
-        await preferencesToken.setString(SharedPreferencesKey.LOGGED_IN_USERID,
+        await SharedPrefs.setString(SharedPreferencesKey.LOGGED_IN_USERID,
             guestmodel.value!.user!.id.toString());
 
-        userID =
-            preferencesToken.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
+        SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
         // Show snackbar message from the API response
         snackBar(guestmodel.value!.message!);
 
         // If the user ID is available, navigate to the TabbarScreen
-        if (userID.isNotEmpty) {
+        if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+            .isNotEmpty) {
           Get.to(TabbarScreen(
             currentIndex: 0,
           ));

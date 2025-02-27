@@ -7,6 +7,8 @@ import 'package:nlytical_app/controllers/user_controllers/like_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/subcate_service_contro.dart';
 import 'package:nlytical_app/User/screens/homeScreen/details.dart';
 import 'package:nlytical_app/User/screens/shimmer_loader/catedetail_loader.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/comman_screen.dart';
@@ -14,7 +16,6 @@ import 'package:nlytical_app/utils/comman_screen_new.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/size_config.dart';
-import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Categoriesdetails extends StatefulWidget {
@@ -132,20 +133,15 @@ class _CategoriesdetailsState extends State<Categoriesdetails> {
                                     subcateservicecontro.subcateservicemodel
                                             .value!.subcategoryName ==
                                         null
-                                ? Shimmer.fromColors(
-                                    baseColor: Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? Colors.white12
-                                        : Colors.grey.shade300,
-                                    highlightColor:
-                                        Theme.of(context).brightness ==
-                                                Brightness.dark
-                                            ? Colors.white24
-                                            : Colors.grey.shade100,
+                                ? SizedBox(
+                                    width: 255,
                                     child: label(
-                                      '',
-                                      fontSize: 19,
-                                      fontWeight: FontWeight.w600,
+                                      "Sub Categories",
+                                      fontSize: 20,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      textColor: Colors.white,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   )
                                 : SizedBox(
@@ -243,69 +239,6 @@ class _CategoriesdetailsState extends State<Categoriesdetails> {
         ));
   }
 
-  Widget appBarWidget() {
-    return Container(
-      height: getProportionateScreenHeight(100),
-      width: Get.width,
-      decoration: BoxDecoration(boxShadow: [
-        BoxShadow(
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-            spreadRadius: 0,
-            color: Colors.grey.shade300)
-      ], color: Colors.white),
-      child: Align(
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Image.asset(
-                    'assets/images/arrow-left1.png',
-                    height: 24,
-                  )),
-              sizeBoxWidth(10),
-              Obx(() {
-                return subcateservicecontro.issubcat.value &&
-                        subcateservicecontro
-                                .subcateservicemodel.value!.subcategoryName ==
-                            null
-                    ? Shimmer.fromColors(
-                        baseColor:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white12
-                                : Colors.grey.shade300,
-                        highlightColor:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? Colors.white24
-                                : Colors.grey.shade100,
-                        child: label(
-                          '',
-                          fontSize: 19,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    : SizedBox(
-                        width: 100,
-                        child: label(
-                          subcateservicecontro
-                              .subcateservicemodel.value!.subcategoryName
-                              .toString(),
-                          fontSize: 20,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          textColor: Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      );
-              }),
-            ],
-          )).paddingOnly(left: 18, right: 20, top: 25),
-    );
-  }
-
   Widget storelist() {
     return subcateservicecontro.subcatelist.isNotEmpty
         ? SizedBox(
@@ -345,11 +278,15 @@ class _CategoriesdetailsState extends State<Categoriesdetails> {
                   avrageReview: subcateservicecontro
                       .subcatelist[index].totalReviewCount!
                       .toString(),
-                  isLike: userID.isEmpty
+                  isLike: SharedPrefs.getString(
+                              SharedPreferencesKey.LOGGED_IN_USERID)
+                          .isEmpty
                       ? 0
                       : subcateservicecontro.subcatelist[index].isLike!,
                   onTaplike: () {
-                    if (userID.isEmpty) {
+                    if (SharedPrefs.getString(
+                            SharedPreferencesKey.LOGGED_IN_USERID)
+                        .isEmpty) {
                       snackBar('Please login to like this service');
                     } else {
                       likecontro.likeApi(subcateservicecontro
@@ -482,11 +419,15 @@ class _CategoriesdetailsState extends State<Categoriesdetails> {
                 avrageReview: subcateservicecontro
                     .allcatelist[index].totalReviewCount!
                     .toString(),
-                isLike: userID.isEmpty
-                    ? 0
-                    : subcateservicecontro.allcatelist[index].isLike!,
+                isLike:
+                    SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                            .isEmpty
+                        ? 0
+                        : subcateservicecontro.allcatelist[index].isLike!,
                 onTaplike: () {
-                  if (userID.isEmpty) {
+                  if (SharedPrefs.getString(
+                          SharedPreferencesKey.LOGGED_IN_USERID)
+                      .isEmpty) {
                     snackBar('Please login to like this service');
                   } else {
                     for (var i = 0;

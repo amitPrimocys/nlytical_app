@@ -40,7 +40,8 @@ class HomeContro extends GetxController {
 
       request.fields['lat'] = Latitude;
       request.fields['lon'] = Longitude;
-      request.fields['user_id'] = userID;
+      request.fields['user_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
       var response = await request.send();
       String responsData = await response.stream.transform(utf8.decoder).join();

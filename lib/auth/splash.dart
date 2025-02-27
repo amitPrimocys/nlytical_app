@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unnecessary_new, no_leading_underscores_for_local_identifiers, avoid_print
+// ignore_for_file: prefer_const_constructors, use_key_in_widget_constructors, unnecessary_new, no_leading_underscores_for_local_identifiers, avoid_print, prefer_typing_uninitialized_variables
 
 import 'dart:async';
 import 'dart:developer';
@@ -10,7 +10,6 @@ import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
-import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/controllers/theme_contro.dart';
 import 'package:nlytical_app/Vendor/screens/add_store.dart';
 import 'package:nlytical_app/Vendor/screens/auth/subcription.dart';
@@ -127,7 +126,7 @@ class SplashScreenState extends State<SplashScreen>
       // Navigate to SplashScreen if both IDs are null
       return Welcome();
     } else if (userid != null) {
-      userID = prefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
+      SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
       print("ROLE: ${prefs.getString(SharedPreferencesKey.ROlE)}");
       Get.find<HomeContro>().checkLocationPermission();
       return TabbarScreen(currentIndex: 0);

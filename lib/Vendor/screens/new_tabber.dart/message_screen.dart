@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_is_empty, prefer_if_null_operators
 
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/auth/splash.dart';
@@ -98,14 +99,6 @@ class _MessageScreenState extends State<MessageScreen> {
                       height: 22,
                     ),
                   ),
-
-                  // Uncomment and use if required
-                  // sizeBoxWidth(240),
-                  // Image.asset(
-                  //   AppAsstes.search,
-                  //   scale: 3.5,
-                  //   color: Colors.white,
-                  // ),
                 ],
               ),
             ),
@@ -199,9 +192,11 @@ class _MessageScreenState extends State<MessageScreen> {
                                                 padding: EdgeInsets.zero,
                                                 separatorBuilder:
                                                     (context, index) {
-                                                  return const Divider(
-                                                    color:
-                                                        AppColors.colorE9E9E9,
+                                                  return Divider(
+                                                    color: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.colorE9E9E9
+                                                        : AppColors.darkGray,
                                                     height: 1,
                                                   );
                                                 },
@@ -498,12 +493,20 @@ class _MessageScreenState extends State<MessageScreen> {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.grey.shade300)),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(100),
-                  child: Image.network(
-                    data.profilePic!,
-                    fit: BoxFit.cover,
-                  ),
-                ),
+                    borderRadius: BorderRadius.circular(100),
+                    child: CachedNetworkImage(
+                      imageUrl: data.profilePic!,
+                      placeholder: (context, url) {
+                        return shimmerLoader(50, 50, 100);
+                      },
+                      errorWidget: (context, url, error) {
+                        return Image.asset(
+                          AppAsstes.default_user,
+                          fit: BoxFit.cover,
+                        );
+                      },
+                      fit: BoxFit.cover,
+                    )),
               ),
               Positioned(
                 bottom: 4,

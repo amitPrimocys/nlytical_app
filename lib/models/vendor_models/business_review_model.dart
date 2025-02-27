@@ -22,7 +22,7 @@ class BusinessReviewModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (serviceDetails != null) {
@@ -58,7 +58,7 @@ class ServiceDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['service_name'] = serviceName;
     data['service_description'] = serviceDescription;
     data['service_images'] = serviceImages;
@@ -103,7 +103,7 @@ class UserReviews {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['service_id'] = serviceId;
     data['user_id'] = userId;

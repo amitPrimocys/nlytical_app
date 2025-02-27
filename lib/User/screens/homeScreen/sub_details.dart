@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, avoid_print
 
 import 'dart:io';
 import 'package:expandable_text/expandable_text.dart';
@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/service_contro.dart';
 import 'package:nlytical_app/User/screens/homeScreen/chat_screen.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
@@ -31,12 +33,14 @@ class _SubDetailsState extends State<SubDetails> {
   @override
   void initState() {
     super.initState();
-    print("😀😀😀😀USER_ID:$userID");
+    print(
+        "😀😀😀😀USER_ID:${SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)}");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        extendBody: true,
         // extendBodyBehindAppBar: true,
         backgroundColor: themeContro.isLightMode.value
             ? AppColors.white
@@ -44,46 +48,9 @@ class _SubDetailsState extends State<SubDetails> {
         bottomNavigationBar: BottomAppBar(
           height: 73,
           elevation: 0,
-          color: themeContro.isLightMode.value
-              ? AppColors.white
-              : AppColors.darkMainBlack,
+          color: Colors.transparent,
           child: bottam(),
         ),
-        // appBar: AppBar(
-        //   backgroundColor: AppColors.white,
-        //   automaticallyImplyLeading: false,
-        //   scrolledUnderElevation: 0,
-        //   shadowColor: Colors.white,
-        //   elevation: 5,
-        //   title: Row(
-        //     children: [
-        //       GestureDetector(
-        //           onTap: () {
-        //             Navigator.pop(context);
-        //           },
-        //           child: Image.asset(
-        //             'assets/images/arrow-left1.png',
-        //             height: 24,
-        //           )),
-        //       sizeBoxWidth(10),
-        //       SizedBox(
-        //         width: 250,
-        //         child: label(
-        //           servicecontro
-        //               .servicemodel.value!.stores![widget.index!].storeName
-        //               .toString(),
-
-        //           // servicecontro.servicemodel.value!.stores![0].storeName
-        //           //     .toString(),
-        //           fontSize: 20,
-        //           maxLines: 1,
-        //           textColor: Colors.black,
-        //           fontWeight: FontWeight.w500,
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
         body: SizedBox(
           height: Get.height,
           child: Stack(
@@ -144,7 +111,7 @@ class _SubDetailsState extends State<SubDetails> {
                 top: 100,
                 child: Container(
                   width: Get.width,
-                  height: getProportionateScreenHeight(800),
+                  height: getProportionateScreenHeight(700),
                   decoration: BoxDecoration(
                       color: themeContro.isLightMode.value
                           ? AppColors.white
@@ -170,58 +137,19 @@ class _SubDetailsState extends State<SubDetails> {
                       // ),
 
                       Expanded(
-                        child: Column(
-                          children: [
-                            sizeBoxHeight(15),
-                            Stack(
-                              clipBehavior: Clip.none,
-                              children: [
-                                Container(
-                                  height: Get.height * 0.28,
-                                  width: Get.width,
-                                  decoration: BoxDecoration(
-                                      color: themeContro.isLightMode.value
-                                          ? AppColors.white
-                                          : AppColors.darkGray,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(16),
-                                        topRight: Radius.circular(16),
-                                        bottomLeft: Radius.circular(6),
-                                        bottomRight: Radius.circular(6),
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 5,
-                                          spreadRadius: 0,
-                                          color: themeContro.isLightMode.value
-                                              ? Colors.grey.shade300
-                                              : AppColors.darkShadowColor,
-                                          offset: const Offset(0.0, 3.0),
-                                        ),
-                                      ],
-                                      image: DecorationImage(
-                                          image: NetworkImage(servicecontro
-                                                  .servicemodel
-                                                  .value!
-                                                  .stores![widget.index!]
-                                                  .storeImages![0]
-                                                  .toString()
-                                              // servicecontro
-                                              //     .servicemodel.value!.stores![0].storeImages![0]
-                                              //     .toString(),
-                                              ),
-                                          fit: BoxFit.cover)),
-                                ),
-                                Positioned(
-                                    bottom: -1,
-                                    left: 0,
-                                    right: 0,
-                                    child: Container(
-                                      height: 70,
-                                      width: Get.width,
-                                      decoration: BoxDecoration(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              sizeBoxHeight(15),
+                              Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Container(
+                                    height: Get.height * 0.28,
+                                    width: Get.width,
+                                    decoration: BoxDecoration(
                                         color: themeContro.isLightMode.value
-                                            ? Colors.white
+                                            ? AppColors.white
                                             : AppColors.darkGray,
                                         borderRadius: const BorderRadius.only(
                                           topLeft: Radius.circular(16),
@@ -229,325 +157,373 @@ class _SubDetailsState extends State<SubDetails> {
                                           bottomLeft: Radius.circular(6),
                                           bottomRight: Radius.circular(6),
                                         ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: 240,
-                                              child: label(
-                                                servicecontro
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 5,
+                                            spreadRadius: 0,
+                                            color: themeContro.isLightMode.value
+                                                ? Colors.grey.shade300
+                                                : AppColors.darkShadowColor,
+                                            offset: const Offset(0.0, 3.0),
+                                          ),
+                                        ],
+                                        image: DecorationImage(
+                                            image: NetworkImage(servicecontro
                                                     .servicemodel
                                                     .value!
-                                                    .serviceDetail!
-                                                    .serviceName!
-                                                    .toString(),
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 18,
-                                                textColor: themeContro
-                                                        .isLightMode.value
-                                                    ? AppColors.brown
-                                                    : AppColors.white,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 3),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                RatingBar.builder(
-                                                  initialRating: servicecontro
-                                                              .servicemodel
-                                                              .value!
-                                                              .serviceDetail!
-                                                              .totalAvgReview!
-                                                              .toString() !=
-                                                          ''
-                                                      ? double.parse(
-                                                          servicecontro
-                                                              .servicemodel
-                                                              .value!
-                                                              .serviceDetail!
-                                                              .totalAvgReview!
-                                                              .toString())
-                                                      : 0.0,
-                                                  // initialRating: ratingCount,
-                                                  minRating: 0,
-                                                  direction: Axis.horizontal,
-                                                  allowHalfRating: true,
-                                                  itemCount: 5,
-                                                  itemSize: 12.5,
-                                                  ignoreGestures: true,
-                                                  unratedColor:
-                                                      Colors.grey.shade400,
-                                                  itemBuilder: (context, _) =>
-                                                      Image.asset(
-                                                    'assets/images/Star.png',
-                                                    height: 16,
-                                                  ),
-                                                  onRatingUpdate: (rating) {},
+                                                    .stores![widget.index!]
+                                                    .storeImages![0]
+                                                    .toString()
+                                                // servicecontro
+                                                //     .servicemodel.value!.stores![0].storeImages![0]
+                                                //     .toString(),
                                                 ),
-                                                const SizedBox(width: 5),
-                                                label(
-                                                  '(${servicecontro.servicemodel.value!.serviceDetail!.totalReviewCount!.toString()} Review)',
-                                                  fontSize: 10,
-                                                  textColor: themeContro
-                                                          .isLightMode.value
-                                                      ? AppColors.black
-                                                      : AppColors.white,
-                                                  fontWeight: FontWeight.w400,
-                                                ),
-                                              ],
-                                            ).paddingOnly(right: 14),
-                                          ],
-                                        ),
-                                      ),
-                                    )),
-                                Positioned(
-                                  top: 14,
-                                  child: Container(
-                                    height: 18,
-                                    decoration: const BoxDecoration(
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(3),
-                                          bottomRight: Radius.circular(3)),
-                                      color: AppColors.blue,
-                                    ),
-                                    child: Center(
-                                      child: label(
-                                        servicecontro.servicemodel.value!
-                                            .stores![widget.index!].category
-                                            .toString(),
-                                        // servicecontro.servicemodel.value!.stores![0].category
-                                        //     .toString(),
-                                        fontSize: 8,
-                                        textColor: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                      ).paddingSymmetric(horizontal: 8),
-                                    ),
+                                            fit: BoxFit.cover)),
                                   ),
-                                ),
-                              ],
-                            ),
-                            sizeBoxHeight(15),
-                            Container(
-                              width: Get.width,
-                              decoration: BoxDecoration(
-                                  color: themeContro.isLightMode.value
-                                      ? Colors.white
-                                      : AppColors.darkGray,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.black12)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(14.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ExpandableText(
-                                      servicecontro
-                                          .servicemodel
-                                          .value!
-                                          .stores![widget.index!]
-                                          .storeDescription
-                                          .toString(),
-                                      // servicecontro
-                                      //     .servicemodel.value!.stores![0].storeDescription
-                                      //     .toString(),
-                                      expandText: 'Read More',
-                                      collapseText: 'Show Less',
-                                      maxLines: 3,
-                                      linkColor: AppColors.blue,
-                                      linkStyle: const TextStyle(
-                                          fontWeight: FontWeight.w600),
-                                      style: TextStyle(
-                                          fontSize: 12,
+                                  Positioned(
+                                      bottom: -1,
+                                      left: 0,
+                                      right: 0,
+                                      child: Container(
+                                        height: 70,
+                                        width: Get.width,
+                                        decoration: BoxDecoration(
                                           color: themeContro.isLightMode.value
-                                              ? AppColors.black
-                                              : AppColors.white,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            sizeBoxHeight(15),
-                            Container(
-                              height: 50,
-                              width: Get.width,
-                              decoration: BoxDecoration(
-                                  color: themeContro.isLightMode.value
-                                      ? Colors.white
-                                      : AppColors.darkGray,
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.black12)),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  label(
-                                    'Price',
-                                    fontSize: 12,
-                                    textColor: themeContro.isLightMode.value
-                                        ? Colors.black
-                                        : AppColors.white,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  label(
-                                    servicecontro.servicemodel.value!
-                                        .stores![widget.index!].price
-                                        .toString(),
-                                    fontSize: 12,
-                                    textColor: AppColors.blue,
-                                    fontWeight: FontWeight.w400,
-                                  )
-                                ],
-                              ).paddingSymmetric(horizontal: 20),
-                            ),
-                            sizeBoxHeight(15),
-                            Container(
-                              height: Get.height * 0.2,
-                              width: Get.width,
-                              decoration: BoxDecoration(
-                                color: themeContro.isLightMode.value
-                                    ? Colors.white
-                                    : AppColors.darkGray,
-                                borderRadius: BorderRadius.circular(10),
-                                border: Border.all(color: Colors.black12),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 15),
-                                  label(
-                                    'Attachment',
-                                    fontSize: 12,
-                                    textColor: themeContro.isLightMode.value
-                                        ? Colors.black
-                                        : AppColors.white,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  const SizedBox(height: 15),
-                                  SizedBox(
-                                    height: 50,
-                                    child: servicecontro
-                                            .servicemodel
-                                            .value!
-                                            .stores![widget.index!]
-                                            .storeAttachments!
-                                            .isNotEmpty
-                                        ? ListView.builder(
-                                            itemCount: servicecontro
-                                                .servicemodel
-                                                .value!
-                                                .stores![widget.index!]
-                                                .storeAttachments!
-                                                .length, // Replace with the actual number of attachments
-                                            shrinkWrap: true,
-                                            scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context, index) {
-                                              String attachmentUrl =
+                                              ? Colors.white
+                                              : AppColors.darkGray,
+                                          borderRadius: const BorderRadius.only(
+                                            topLeft: Radius.circular(16),
+                                            topRight: Radius.circular(16),
+                                            bottomLeft: Radius.circular(6),
+                                            bottomRight: Radius.circular(6),
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 240,
+                                                child: label(
                                                   servicecontro
                                                       .servicemodel
                                                       .value!
-                                                      .stores![widget.index!]
-                                                      .storeAttachments![index];
-
-                                              bool isImage = attachmentUrl
-                                                      .endsWith('.jpg') ||
-                                                  attachmentUrl
-                                                      .endsWith('.jpeg') ||
-                                                  attachmentUrl
-                                                      .endsWith('.png');
-
-                                              return Row(
+                                                      .serviceDetail!
+                                                      .serviceName!
+                                                      .toString(),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  fontSize: 18,
+                                                  textColor: themeContro
+                                                          .isLightMode.value
+                                                      ? AppColors.brown
+                                                      : AppColors.white,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 3),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
                                                 children: [
-                                                  GestureDetector(
-                                                    onTap: () async {
-                                                      if (isImage) {
-                                                        // Open image viewer directly with the URL
-                                                        Get.to(() =>
-                                                            ImageViewerScreen(
-                                                                imageUrl:
-                                                                    attachmentUrl));
-                                                      } else {
-                                                        // Download PDF then open it
-                                                        Get.to(() =>
-                                                            PDFViewerScreen(
-                                                                attachmentUrl));
-
-                                                        // PDF(
-                                                        //   swipeHorizontal: true,
-                                                        // ).cachedFromUrl(
-                                                        // 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf');
-                                                      }
-                                                    },
-                                                    child: Container(
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        50)),
-                                                        child: isImage
-                                                            ? Image.network(
-                                                                servicecontro
-                                                                    .servicemodel
-                                                                    .value!
-                                                                    .stores![widget
-                                                                        .index!]
-                                                                    .storeAttachments![0],
-                                                                height: 50,
-                                                                width: 50,
-                                                                fit:
-                                                                    BoxFit.fill,
-                                                                errorBuilder:
-                                                                    (context,
-                                                                        error,
-                                                                        stackTrace) {
-                                                                  return Icon(
-                                                                    Icons.error,
-                                                                    color: themeContro
-                                                                            .isLightMode
-                                                                            .value
-                                                                        ? AppColors
-                                                                            .black
-                                                                        : AppColors
-                                                                            .white,
-                                                                  );
-                                                                },
-                                                              )
-                                                            : Image.asset(
-                                                                'assets/images/pdf.png',
-                                                                height: 50,
-                                                                width: 50,
-                                                                fit: BoxFit
-                                                                    .fill)),
+                                                  RatingBar.builder(
+                                                    initialRating: servicecontro
+                                                                .servicemodel
+                                                                .value!
+                                                                .serviceDetail!
+                                                                .totalAvgReview!
+                                                                .toString() !=
+                                                            ''
+                                                        ? double.parse(
+                                                            servicecontro
+                                                                .servicemodel
+                                                                .value!
+                                                                .serviceDetail!
+                                                                .totalAvgReview!
+                                                                .toString())
+                                                        : 0.0,
+                                                    // initialRating: ratingCount,
+                                                    minRating: 0,
+                                                    direction: Axis.horizontal,
+                                                    allowHalfRating: true,
+                                                    itemCount: 5,
+                                                    itemSize: 12.5,
+                                                    ignoreGestures: true,
+                                                    unratedColor:
+                                                        Colors.grey.shade400,
+                                                    itemBuilder: (context, _) =>
+                                                        Image.asset(
+                                                      'assets/images/Star.png',
+                                                      height: 16,
+                                                    ),
+                                                    onRatingUpdate: (rating) {},
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  label(
+                                                    '(${servicecontro.servicemodel.value!.serviceDetail!.totalReviewCount!.toString()} Review)',
+                                                    fontSize: 10,
+                                                    textColor: themeContro
+                                                            .isLightMode.value
+                                                        ? AppColors.black
+                                                        : AppColors.white,
+                                                    fontWeight: FontWeight.w400,
                                                   ),
                                                 ],
-                                              );
-                                            },
-                                          )
-                                        : Center(
-                                            child: label(
-                                              'No attachments available',
-                                              fontSize: 12,
-                                              textColor: AppColors.black,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                              ).paddingOnly(right: 14),
+                                            ],
                                           ),
+                                        ),
+                                      )),
+                                  Positioned(
+                                    top: 14,
+                                    child: Container(
+                                      height: 18,
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                            topRight: Radius.circular(3),
+                                            bottomRight: Radius.circular(3)),
+                                        color: AppColors.blue,
+                                      ),
+                                      child: Center(
+                                        child: label(
+                                          servicecontro.servicemodel.value!
+                                              .stores![widget.index!].category
+                                              .toString(),
+                                          // servicecontro.servicemodel.value!.stores![0].category
+                                          //     .toString(),
+                                          fontSize: 8,
+                                          textColor: Colors.white,
+                                          fontWeight: FontWeight.w600,
+                                        ).paddingSymmetric(horizontal: 8),
+                                      ),
+                                    ),
                                   ),
                                 ],
-                              ).paddingSymmetric(horizontal: 20),
-                            ),
-                          ],
-                        ).paddingSymmetric(horizontal: 20),
+                              ),
+                              sizeBoxHeight(15),
+                              Container(
+                                width: Get.width,
+                                decoration: BoxDecoration(
+                                    color: themeContro.isLightMode.value
+                                        ? Colors.white
+                                        : AppColors.darkGray,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.black12)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(14.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ExpandableText(
+                                        servicecontro
+                                            .servicemodel
+                                            .value!
+                                            .stores![widget.index!]
+                                            .storeDescription
+                                            .toString(),
+                                        // servicecontro
+                                        //     .servicemodel.value!.stores![0].storeDescription
+                                        //     .toString(),
+                                        expandText: 'Read More',
+                                        collapseText: 'Show Less',
+                                        maxLines: 3,
+                                        linkColor: AppColors.blue,
+                                        linkStyle: const TextStyle(
+                                            fontWeight: FontWeight.w600),
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: themeContro.isLightMode.value
+                                                ? AppColors.black
+                                                : AppColors.white,
+                                            fontWeight: FontWeight.w400),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              sizeBoxHeight(15),
+                              Container(
+                                height: 50,
+                                width: Get.width,
+                                decoration: BoxDecoration(
+                                    color: themeContro.isLightMode.value
+                                        ? Colors.white
+                                        : AppColors.darkGray,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: Colors.black12)),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    label(
+                                      'Price',
+                                      fontSize: 12,
+                                      textColor: themeContro.isLightMode.value
+                                          ? Colors.black
+                                          : AppColors.white,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    label(
+                                      servicecontro.servicemodel.value!
+                                          .stores![widget.index!].price
+                                          .toString(),
+                                      fontSize: 12,
+                                      textColor: AppColors.blue,
+                                      fontWeight: FontWeight.w400,
+                                    )
+                                  ],
+                                ).paddingSymmetric(horizontal: 20),
+                              ),
+                              sizeBoxHeight(15),
+                              Container(
+                                height: Get.height * 0.2,
+                                width: Get.width,
+                                decoration: BoxDecoration(
+                                  color: themeContro.isLightMode.value
+                                      ? Colors.white
+                                      : AppColors.darkGray,
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(color: Colors.black12),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 15),
+                                    label(
+                                      'Attachment',
+                                      fontSize: 12,
+                                      textColor: themeContro.isLightMode.value
+                                          ? Colors.black
+                                          : AppColors.white,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    const SizedBox(height: 15),
+                                    SizedBox(
+                                      height: 50,
+                                      child: servicecontro
+                                              .servicemodel
+                                              .value!
+                                              .stores![widget.index!]
+                                              .storeAttachments!
+                                              .isNotEmpty
+                                          ? ListView.builder(
+                                              itemCount: servicecontro
+                                                  .servicemodel
+                                                  .value!
+                                                  .stores![widget.index!]
+                                                  .storeAttachments!
+                                                  .length, // Replace with the actual number of attachments
+                                              shrinkWrap: true,
+                                              scrollDirection: Axis.horizontal,
+                                              itemBuilder: (context, index) {
+                                                String attachmentUrl =
+                                                    servicecontro
+                                                        .servicemodel
+                                                        .value!
+                                                        .stores![widget.index!]
+                                                        .storeAttachments![index];
+
+                                                bool isImage = attachmentUrl
+                                                        .endsWith('.jpg') ||
+                                                    attachmentUrl
+                                                        .endsWith('.jpeg') ||
+                                                    attachmentUrl
+                                                        .endsWith('.png');
+
+                                                return Row(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        print(
+                                                            "attachmentUrl:$attachmentUrl");
+                                                        if (isImage) {
+                                                          // Open image viewer directly with the URL
+                                                          Get.to(() =>
+                                                              ImageViewerScreen(
+                                                                  imageUrl:
+                                                                      attachmentUrl));
+                                                        } else {
+                                                          // Download PDF then open it
+
+                                                          Get.to(() =>
+                                                              PDFViewerScreen(
+                                                                  attachmentUrl));
+
+                                                          // PDF(
+                                                          //   swipeHorizontal: true,
+                                                          // ).cachedFromUrl(
+                                                          // 'https://ontheline.trincoll.edu/images/bookdown/sample-local-pdf.pdf');
+                                                        }
+                                                      },
+                                                      child: Container(
+                                                          decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          50)),
+                                                          child: isImage
+                                                              ? Image.network(
+                                                                  servicecontro
+                                                                      .servicemodel
+                                                                      .value!
+                                                                      .stores![
+                                                                          widget
+                                                                              .index!]
+                                                                      .storeAttachments![0],
+                                                                  height: 50,
+                                                                  width: 50,
+                                                                  fit: BoxFit
+                                                                      .fill,
+                                                                  errorBuilder:
+                                                                      (context,
+                                                                          error,
+                                                                          stackTrace) {
+                                                                    return Icon(
+                                                                      Icons
+                                                                          .error,
+                                                                      color: themeContro
+                                                                              .isLightMode
+                                                                              .value
+                                                                          ? AppColors
+                                                                              .black
+                                                                          : AppColors
+                                                                              .white,
+                                                                    );
+                                                                  },
+                                                                )
+                                                              : Image.asset(
+                                                                  'assets/images/pdf.png',
+                                                                  height: 50,
+                                                                  width: 50,
+                                                                  fit: BoxFit
+                                                                      .fill)),
+                                                    ),
+                                                  ],
+                                                );
+                                              },
+                                            )
+                                          : Center(
+                                              child: label(
+                                                'No attachments available',
+                                                fontSize: 12,
+                                                textColor: AppColors.black,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                    ),
+                                  ],
+                                ).paddingSymmetric(horizontal: 20),
+                              ),
+                            ],
+                          ).paddingSymmetric(horizontal: 20),
+                        ),
                       ),
                     ],
                   ),
@@ -608,7 +584,8 @@ class _SubDetailsState extends State<SubDetails> {
         child: GestureDetector(
           // onTap: onTapcall,
           onTap: () async {
-            if (userID.isEmpty) {
+            if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                .isEmpty) {
               snackBar("Login must need for see mobile number");
             } else {
               String phoneNum = Uri.encodeComponent(servicecontro
@@ -653,7 +630,8 @@ class _SubDetailsState extends State<SubDetails> {
       Expanded(
         child: GestureDetector(
           onTap: () {
-            if (userID.isEmpty) {
+            if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                .isEmpty) {
               snackBar("Login must need for chat with vendor");
             } else {
               Get.to(
@@ -705,7 +683,8 @@ class _SubDetailsState extends State<SubDetails> {
       Expanded(
         child: GestureDetector(
           onTap: () async {
-            if (userID.isEmpty) {
+            if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                .isEmpty) {
               snackBar("Login must need for see what's app number");
             } else {
               whatsapp();

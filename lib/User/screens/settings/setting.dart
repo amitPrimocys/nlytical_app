@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors, unused_element, non_constant_identifier_names, avoid_print
 
 import 'dart:io';
-import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/web_view.dart';
+import 'package:nlytical_app/auth/google_signin.dart';
 import 'package:nlytical_app/auth/splash.dart';
+import 'package:nlytical_app/auth/welcome.dart';
 import 'package:nlytical_app/controllers/user_controllers/appfeedback_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/chat_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/delete_contro.dart';
@@ -50,9 +52,10 @@ class _SettingState extends State<Setting> {
 
   FeedbackContro feedbackContro = Get.put(FeedbackContro());
   TextEditingController msgController = TextEditingController();
-
+  String userID = '';
   @override
   void initState() {
+    userID = SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
     getprofilecontro.getprofileApi();
     privacycontro.privacypolicyApi();
     termscontro.termsandcondiApi();
@@ -65,13 +68,12 @@ class _SettingState extends State<Setting> {
     return Builder(builder: (context) {
       return Obx(() {
         return Scaffold(
+            extendBody: true,
             backgroundColor: themeContro.isLightMode.value
                 ? AppColors.white
                 : AppColors.darkMainBlack,
             bottomNavigationBar: BottomAppBar(
-              color: themeContro.isLightMode.value
-                  ? AppColors.white
-                  : AppColors.darkMainBlack,
+              color: Colors.transparent,
               elevation: 0,
               height: 70,
               child: button(),
@@ -179,7 +181,8 @@ class _SettingState extends State<Setting> {
                                                         clipBehavior:
                                                             Clip.hardEdge,
                                                         child: Image.asset(
-                                                          'assets/images/default_user.jpg',
+                                                          AppAsstes
+                                                              .default_user,
                                                           fit: BoxFit.cover,
                                                         ),
                                                       ).paddingAll(3),
@@ -217,32 +220,6 @@ class _SettingState extends State<Setting> {
     });
   }
 
-  Widget appBarWidget() {
-    return Container(
-      height: getProportionateScreenHeight(100),
-      width: Get.width,
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                blurRadius: 10,
-                offset: const Offset(0, 2),
-                spreadRadius: 0,
-                color: Colors.grey.shade300)
-          ],
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Theme.of(context).scaffoldBackgroundColor
-              : AppColors.white),
-      child: Align(
-          alignment: Alignment.centerLeft,
-          child: label(
-            "Settings",
-            fontSize: 20,
-            textColor: AppColors.black,
-            fontWeight: FontWeight.w500,
-          )).paddingOnly(left: 21, right: 20, top: 25),
-    );
-  }
-
   Widget profileImage(BuildContext context) {
     return Obx(() {
       return getprofilecontro.isprofile.value
@@ -269,7 +246,9 @@ class _SettingState extends State<Setting> {
                         child: Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: AppColors.white,
+                            color: themeContro.isLightMode.value
+                                ? AppColors.white
+                                : AppColors.darkGray,
                             border: Border.all(
                               width: 2.5,
                               color: AppColors.blue,
@@ -283,7 +262,7 @@ class _SettingState extends State<Setting> {
                                   .toString(),
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.asset(
-                                  'assets/images/default_user.jpg',
+                                  AppAsstes.default_user,
                                   fit: BoxFit.cover,
                                 );
                               },
@@ -371,7 +350,7 @@ class _SettingState extends State<Setting> {
                       height: 16,
                       width: 16,
                       color: themeContro.isLightMode.value
-                          ? Colors.transparent
+                          ? Colors.black
                           : AppColors.white,
                     ),
                     sizeBoxWidth(7),
@@ -439,7 +418,7 @@ class _SettingState extends State<Setting> {
         ),
         sizeBoxHeight(15),
         setting(
-          imagepath: AppAsstes.heart,
+          imagepath: AppAsstes.lock2,
           name: 'Privacy & Policy',
           buttonOnTap: () {
             handleURLButtonPress(
@@ -652,7 +631,8 @@ class _SettingState extends State<Setting> {
                   userIMAGE = '';
                   await SharedPrefs.remove(
                       SharedPreferencesKey.LOGGED_IN_VENDORID);
-                  Get.offAll(() => const Login());
+                  signOutGoogle();
+                  Get.offAll(() => const Welcome());
                 }
                 Get.back();
               },
@@ -899,16 +879,16 @@ class _SettingState extends State<Setting> {
             ),
             sizeBoxHeight(10),
             TextFormField(
-              cursorColor: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white
-                  : AppColors.blue,
+              cursorColor: themeContro.isLightMode.value
+                  ? Colors.black
+                  : AppColors.white,
               autofocus: false,
               controller: msgController,
               style: TextStyle(
                   fontSize: 14,
-                  color: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : AppColors.black,
+                  color: themeContro.isLightMode.value
+                      ? Colors.black
+                      : AppColors.white,
                   fontWeight: FontWeight.w400),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               readOnly: false,
@@ -944,7 +924,7 @@ class _SettingState extends State<Setting> {
             sizeBoxHeight(15),
             Obx(() {
               return feedbackContro.isfeedback.value
-                  ? loader()
+                  ? commonLoading()
                   : GestureDetector(
                       onTap: () {
                         feedbackContro.feedbackApi(

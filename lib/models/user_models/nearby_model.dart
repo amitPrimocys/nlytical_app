@@ -104,7 +104,6 @@
 //   }
 // }
 
-
 class NearbyModel {
   bool? status;
   String? message;
@@ -126,12 +125,11 @@ class NearbyModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (nearbyService != null) {
-      data['NearbyService'] =
-          nearbyService!.map((v) => v.toJson()).toList();
+      data['NearbyService'] = nearbyService!.map((v) => v.toJson()).toList();
     }
     data['total_page'] = totalPage;
     return data;
@@ -206,7 +204,7 @@ class NearbyService {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['service_name'] = serviceName;
     data['address'] = address;

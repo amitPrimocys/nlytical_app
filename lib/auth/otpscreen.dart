@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, avoid_print
 
 import 'dart:async';
 
@@ -293,7 +293,7 @@ class _OtpscreenState extends State<Otpscreen> {
                   sizeBoxHeight(30),
                   Obx(() {
                     return otpcontro.isLoading.value
-                        ? loader()
+                        ? commonLoading()
                         : GestureDetector(
                             onTap: () {
                               if (widget.isfortap == 1) {

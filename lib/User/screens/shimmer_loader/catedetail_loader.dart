@@ -55,7 +55,7 @@ Widget storelist() {
   return SizedBox(
     height: 240,
     child: ListView.builder(
-      itemCount: subcateservicecontro.subcatelist.length,
+      itemCount: 3,
       shrinkWrap: true,
       scrollDirection: Axis.horizontal,
       padding: EdgeInsets.symmetric(horizontal: 12),
@@ -63,12 +63,12 @@ Widget storelist() {
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: 6),
           child: Shimmer.fromColors(
-            baseColor: !themeContro.isLightMode.value
-                ? Colors.white12
-                : Colors.grey.shade300,
-            highlightColor: !themeContro.isLightMode.value
-                ? Colors.white24
-                : Colors.grey.shade100,
+            baseColor: themeContro.isLightMode.value
+                ? Colors.grey.shade300
+                : Colors.white12,
+            highlightColor: themeContro.isLightMode.value
+                ? Colors.grey.shade100
+                : Colors.white24,
             child: SizedBox(
               width: 290,
               // Set the width for each Card
@@ -223,22 +223,15 @@ Widget allstore(BuildContext context) {
           mainAxisSpacing: 14,
           crossAxisSpacing: 14,
         ),
-        itemCount: subcateservicecontro.allcatelist.length,
+        itemCount: 6,
         itemBuilder: (BuildContext context, int index) {
           return Shimmer.fromColors(
-            // baseColor: Theme.of(context).brightness == Brightness.dark
-            //     ? Colors.white12
-            //     : Colors.grey.shade200,
-            // highlightColor:
-            //     Theme.of(context).brightness == Brightness.dark
-            //         ? Colors.white24
-            //         : Colors.grey.shade100,
-            baseColor: !themeContro.isLightMode.value
-                ? Colors.white12
-                : Colors.grey.shade300,
-            highlightColor: !themeContro.isLightMode.value
-                ? Colors.white24
-                : Colors.grey.shade100,
+            baseColor: themeContro.isLightMode.value
+                ? Colors.grey.shade300
+                : Colors.white12,
+            highlightColor: themeContro.isLightMode.value
+                ? Colors.grey.shade100
+                : Colors.white24,
             child: Card(
               color: Colors.white,
               shape: const RoundedRectangleBorder(

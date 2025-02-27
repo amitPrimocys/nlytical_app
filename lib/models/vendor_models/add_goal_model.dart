@@ -8,11 +8,11 @@ class AddGoalsModel {
   AddGoalsModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
-    goal = json['goal'] != null ? new Goal.fromJson(json['goal']) : null;
+    goal = json['goal'] != null ? Goal.fromJson(json['goal']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (goal != null) {
@@ -54,7 +54,7 @@ class Goal {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['start_date'] = startDate;
     data['campaign_id'] = campaignId;
     data['end_date'] = endDate;

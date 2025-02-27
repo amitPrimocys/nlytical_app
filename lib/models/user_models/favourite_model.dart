@@ -11,13 +11,13 @@ class FavouriteModel {
     if (json['ServiceLikedList'] != null) {
       serviceLikedList = <ServiceLikedList>[];
       json['ServiceLikedList'].forEach((v) {
-        serviceLikedList!.add(new ServiceLikedList.fromJson(v));
+        serviceLikedList!.add(ServiceLikedList.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (serviceLikedList != null) {
@@ -96,7 +96,7 @@ class ServiceLikedList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['category_id'] = categoryId;
     data['service_name'] = serviceName;

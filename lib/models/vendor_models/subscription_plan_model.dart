@@ -172,13 +172,13 @@ class SubscriptionDetailModel {
     if (json['subscriptionDetail'] != null) {
       subscriptionDetail = <SubscriptionDetail>[];
       json['subscriptionDetail'].forEach((v) {
-        subscriptionDetail!.add(new SubscriptionDetail.fromJson(v));
+        subscriptionDetail!.add(SubscriptionDetail.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (subscriptionDetail != null) {
@@ -217,13 +217,13 @@ class SubscriptionDetail {
     if (json['plan_services'] != null) {
       planServices = <PlanServices>[];
       json['plan_services'].forEach((v) {
-        planServices!.add(new PlanServices.fromJson(v));
+        planServices!.add(PlanServices.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['plan_name'] = planName;
     data['description'] = description;
@@ -231,8 +231,7 @@ class SubscriptionDetail {
     data['validity_day'] = validityDay;
     data['currency_value'] = currencyValue;
     if (planServices != null) {
-      data['plan_services'] =
-          planServices!.map((v) => v.toJson()).toList();
+      data['plan_services'] = planServices!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -250,7 +249,7 @@ class PlanServices {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['plan_services'] = planServices;
     data['status'] = status;
     return data;

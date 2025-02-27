@@ -37,11 +37,10 @@ class AddStoreModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     data['service_id'] = serviceId;
     return data;
   }
 }
-

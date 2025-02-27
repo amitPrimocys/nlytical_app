@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/global_fonts.dart';
@@ -16,12 +17,10 @@ Widget BusinessLoader(BuildContext context) {
   w = MediaQuery.sizeOf(context).width;
   return SingleChildScrollView(
     child: Shimmer.fromColors(
-      baseColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.white12
-          : Colors.grey.shade300,
-      highlightColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.white24
-          : Colors.grey.shade100,
+      baseColor:
+          themeContro.isLightMode.value ? Colors.grey.shade300 : Colors.white12,
+      highlightColor:
+          themeContro.isLightMode.value ? Colors.grey.shade100 : Colors.white24,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,12 +50,12 @@ Widget reviewContainer() {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return Shimmer.fromColors(
-          baseColor: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white12
-              : Colors.grey.shade300,
-          highlightColor: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white24
-              : Colors.grey.shade100,
+          baseColor: themeContro.isLightMode.value
+              ? Colors.grey.shade300
+              : Colors.white12,
+          highlightColor: themeContro.isLightMode.value
+              ? Colors.grey.shade100
+              : Colors.white24,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -149,12 +148,10 @@ Widget reviewContainer() {
 
 Widget storeContainer(BuildContext context) {
   return Shimmer.fromColors(
-    baseColor: Theme.of(context).brightness == Brightness.dark
-        ? Colors.white12
-        : Colors.grey.shade300,
-    highlightColor: Theme.of(context).brightness == Brightness.dark
-        ? Colors.white24
-        : Colors.grey.shade100,
+    baseColor:
+        themeContro.isLightMode.value ? Colors.grey.shade300 : Colors.white12,
+    highlightColor:
+        themeContro.isLightMode.value ? Colors.grey.shade100 : Colors.white24,
     child: Column(
       children: [
         Stack(

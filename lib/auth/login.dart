@@ -1,6 +1,7 @@
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: avoid_print
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/google_signin.dart';
 import 'package:nlytical_app/controllers/user_controllers/login_contro.dart';
 import 'package:nlytical_app/auth/forgotpass.dart';
 import 'package:nlytical_app/auth/mobile.dart';
@@ -8,7 +9,6 @@ import 'package:nlytical_app/auth/register.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
-
 import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/global_text_form_field.dart';
 import 'package:nlytical_app/utils/size_config.dart';
@@ -176,7 +176,7 @@ class _LoginState extends State<Login> {
                     sizeBoxHeight(25),
                     Obx(() {
                       return logincontro.isLoading.value
-                          ? loader()
+                          ? commonLoading()
                           : GestureDetector(
                               // logincontro.loginApi(
                               //     Email: emailcontroller.text,
@@ -216,63 +216,64 @@ class _LoginState extends State<Login> {
                     sizeBoxHeight(25),
                     orTextField(),
                     sizeBoxHeight(25),
-                    // Obx(() => logincontro.isSocial.value
-                    //     ? const CupertinoActivityIndicator()
-                    //     :
-                    GestureDetector(
-                      onTap: () async {
-                        // try {
-                        //   // Set the button state to loading
-                        //   setState(() {
-                        //     // Update state as needed
-                        //     logincontro.isSocial(true);
-                        //   });
+                    Obx(
+                      () => logincontro.isSocial.value
+                          ? googleLoading()
+                          : GestureDetector(
+                              onTap: () async {
+                                print("Go to Google Login");
+                                try {
+                                  // Set the button state to loading
+                                  setState(() {
+                                    // Update state as needed
+                                    logincontro.isSocial(true);
+                                  });
 
-                        //   // Perform the asynchronous operation, e.g., sign in with Google
-                        //   await signInWithGoogle(context);
+                                  // Perform the asynchronous operation, e.g., sign in with Google
+                                  await signInWithGoogle(context);
 
-                        //   // If successful, set the button state to success
-                        //   logincontro.isSocial(false);
-                        // } catch (error) {
-                        //   // If there's an error, set the button state to fail
-                        //   logincontro.isSocial(false);
-                        // } finally {
-                        //   // Regardless of success or failure, set the button state back to idle
-                        //   logincontro.isSocial(false);
-                        // }
-                      },
-                      child: Container(
-                        height: 50,
-                        width: Get.width * 0.7,
-                        decoration: BoxDecoration(
-                            border: Border.all(
-                                color: themeContro.isLightMode.value
-                                    ? AppColors.blue
-                                    : AppColors.white),
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/google.png',
-                              height: 20,
+                                  // If successful, set the button state to success
+                                  logincontro.isSocial(false);
+                                } catch (error) {
+                                  // If there's an error, set the button state to fail
+                                  logincontro.isSocial(false);
+                                } finally {
+                                  // Regardless of success or failure, set the button state back to idle
+                                  logincontro.isSocial(false);
+                                }
+                              },
+                              child: Container(
+                                height: 50,
+                                width: Get.width * 0.7,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: themeContro.isLightMode.value
+                                            ? AppColors.blue
+                                            : AppColors.white),
+                                    borderRadius: BorderRadius.circular(10)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/google.png',
+                                      height: 20,
+                                    ),
+                                    sizeBoxWidth(10),
+                                    label(
+                                      "Continue with Google",
+                                      maxLines: 2,
+                                      textColor: themeContro.isLightMode.value
+                                          ? AppColors.brown
+                                          : AppColors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
-                            sizeBoxWidth(10),
-                            label(
-                              "Continue with Google",
-                              maxLines: 2,
-                              textColor: themeContro.isLightMode.value
-                                  ? AppColors.brown
-                                  : AppColors.white,
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ],
-                        ),
-                      ),
                     ),
-                    // ),
                     sizeBoxHeight(25),
                     GestureDetector(
                       onTap: () {
@@ -431,8 +432,8 @@ class _LoginState extends State<Login> {
             style: TextStyle(
               fontSize: 14,
               color: themeContro.isLightMode.value
-                  ? Colors.transparent
-                  : AppColors.color3A3333,
+                  ? Colors.black
+                  : AppColors.white,
               fontWeight: FontWeight.w500,
               fontFamily: "Poppins",
             )).paddingSymmetric(horizontal: 14),

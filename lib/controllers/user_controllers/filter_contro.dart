@@ -6,9 +6,10 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:nlytical_app/models/user_models/filter_model.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
-import 'package:nlytical_app/utils/global.dart';
 
 final ApiHelper apiHelper = ApiHelper();
 
@@ -95,7 +96,8 @@ class FilterContro extends GetxController {
 
       request.headers.addAll(headers);
 
-      request.fields['user_id'] = userID;
+      request.fields['user_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
       if (catId != null) {
         request.fields['category_id'] = catId;
       }

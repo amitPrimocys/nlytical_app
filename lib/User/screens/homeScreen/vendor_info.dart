@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/like_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/vendor_info_contro.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
@@ -35,10 +37,6 @@ class _VendorInfoState extends State<VendorInfo> {
   //     streamController.close();
   //   super.dispose();
   // }
-
-  void _scrollListener() {
-    // Handle scroll events if needed
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -737,7 +735,8 @@ class _VendorInfoState extends State<VendorInfo> {
           child: GestureDetector(
             onTap: () {
               // Call the API to like/unlike the service
-              if (userID.isEmpty) {
+              if (SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                  .isEmpty) {
                 snackBar('Please login to like this service');
               } else {
                 likecontro.likeApi(vendorcontro

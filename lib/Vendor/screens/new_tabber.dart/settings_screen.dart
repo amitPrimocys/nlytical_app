@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
-import 'package:nlytical_app/auth/login.dart';
+import 'package:nlytical_app/auth/google_signin.dart';
+import 'package:nlytical_app/auth/welcome.dart';
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/controllers/theme_contro.dart';
@@ -78,13 +79,12 @@ class _SettingScreenState extends State<SettingScreen> {
 
     return Obx(() {
       return Scaffold(
+        extendBody: true,
         backgroundColor: themeContro.isLightMode.value
             ? Colors.white
             : AppColors.darkMainBlack,
         bottomNavigationBar: BottomAppBar(
-          color: themeContro.isLightMode.value
-              ? Colors.white
-              : AppColors.darkMainBlack,
+          color: Colors.transparent,
           elevation: 0,
           height: 70,
           child: button(),
@@ -495,11 +495,12 @@ class _SettingScreenState extends State<SettingScreen> {
                   await pref.clear();
                   await SharedPrefs.clear();
                   userEmail = '';
-                  userID = '';
+                  // userID = '';
                   userIMAGE = '';
                   await SharedPrefs.remove(
                       SharedPreferencesKey.LOGGED_IN_VENDORID);
-                  Get.offAll(() => const Login());
+                  signOutGoogle();
+                  Get.offAll(() => const Welcome());
                 }
                 Get.back();
               },
@@ -646,9 +647,8 @@ class _SettingScreenState extends State<SettingScreen> {
         ),
         sizeBoxHeight(15),
         TextFormField(
-          cursorColor: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white
-              : AppColors.blue,
+          cursorColor:
+              themeContro.isLightMode.value ? AppColors.blue : Colors.white,
           autofocus: false,
           controller: reviewController,
           style: TextStyle(
@@ -662,10 +662,6 @@ class _SettingScreenState extends State<SettingScreen> {
           keyboardType: TextInputType.text,
           maxLines: 5,
           decoration: InputDecoration(
-            // filled: true,
-            // fillColor: Theme.of(context).brightness == Brightness.dark
-            //     ? AppColors.appColorBlack
-            //     : AppColors.scaffoldColor,
             contentPadding:
                 const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             focusedBorder: OutlineInputBorder(
@@ -682,7 +678,6 @@ class _SettingScreenState extends State<SettingScreen> {
                 fontSize: 12,
                 color: Colors.grey.shade400,
                 fontWeight: FontWeight.w400),
-
             errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(13),
                 borderSide: BorderSide(color: Colors.grey.shade200)),

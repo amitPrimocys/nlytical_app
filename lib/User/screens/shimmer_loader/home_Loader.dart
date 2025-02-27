@@ -1,9 +1,10 @@
-// ignore_for_file: prefer_const_constructors, unused_element
+// ignore_for_file: prefer_const_constructors, unused_element, file_names
 
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/global.dart';
@@ -23,55 +24,18 @@ Widget homeLoader(BuildContext context) {
   return SingleChildScrollView(
     child: Column(
       children: [
-        // sizeBoxHeight(15),
-        // Shimmer.fromColors(
-        //   baseColor: Theme.of(context).brightness == Brightness.dark
-        //       ? Colors.white12
-        //       : Colors.grey.shade300,
-        //   highlightColor: Theme.of(context).brightness == Brightness.dark
-        //       ? Colors.white24
-        //       : Colors.grey.shade100,
-        //   child: Container(
-        //       height: 40,
-        //       decoration: BoxDecoration(
-        //         border: Border.all(color: Colors.grey),
-        //         borderRadius: BorderRadius.circular(12),
-        //       ),
-        //       child: Row(
-        //         children: [
-        //           const SizedBox(
-        //             width: 15,
-        //           ),
-        //           Image.asset(
-        //             AppAsstes.search,
-        //             scale: 4.0,
-        //             color: AppColors.greyColor,
-        //           ),
-        //           const SizedBox(
-        //             width: 15,
-        //           ),
-        //           const Text(
-        //             'Search Services...',
-        //             style: TextStyle(
-        //                 fontSize: 11,
-        //                 fontWeight: FontWeight.w400,
-        //                 color: Colors.grey),
-        //           )
-        //         ],
-        //       )).paddingSymmetric(horizontal: 20),
-        // ),
         sizeBoxHeight(5),
         _poster2(context, imageUrls),
         sizeBoxHeight(5),
         category(context),
         sizeBoxHeight(10),
         Shimmer.fromColors(
-          baseColor: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white12
-              : Colors.grey.shade300,
-          highlightColor: Theme.of(context).brightness == Brightness.dark
-              ? Colors.white24
-              : Colors.grey.shade100,
+          baseColor: themeContro.isLightMode.value
+              ? Colors.grey.shade300
+              : Colors.white12,
+          highlightColor: themeContro.isLightMode.value
+              ? Colors.grey.shade100
+              : Colors.white24,
           child: Column(
             children: [
               Row(
@@ -185,21 +149,7 @@ Widget _poster2(BuildContext context, List<String> imageUrls) {
           indicatorBackgroundColor: Colors.grey.shade400,
           indicatorRadius: 3,
           children: imageUrls.map((img) {
-            return Shimmer.fromColors(
-              baseColor: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white12
-                  : Colors.grey.shade300,
-              highlightColor: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.white24
-                  : Colors.grey.shade100,
-              child: Container(
-                height: 180,
-                width: Get.width,
-                decoration: BoxDecoration(
-                    color: Colors.grey.shade300,
-                    borderRadius: BorderRadius.circular(15)),
-              ),
-            );
+            return shimmerLoader(180, Get.width, 15);
           }).toList(),
         ),
       ),
@@ -219,12 +169,10 @@ Widget _poster2(BuildContext context, List<String> imageUrls) {
 
 Widget category(BuildContext context) {
   return Shimmer.fromColors(
-    baseColor: Theme.of(context).brightness == Brightness.dark
-        ? Colors.white12
-        : Colors.grey.shade300,
-    highlightColor: Theme.of(context).brightness == Brightness.dark
-        ? Colors.white24
-        : Colors.grey.shade100,
+    baseColor:
+        themeContro.isLightMode.value ? Colors.grey.shade300 : Colors.white12,
+    highlightColor:
+        themeContro.isLightMode.value ? Colors.grey.shade100 : Colors.white24,
     child: Column(
       children: [
         Row(
@@ -236,19 +184,11 @@ Widget category(BuildContext context) {
               textColor: Colors.grey,
               fontWeight: FontWeight.w600,
             ),
-            // InkWell(
-            //   child: label(
-            //     'See all',
-            //     fontSize: 11,
-            //     textColor: Colors.grey,
-            //     fontWeight: FontWeight.w400,
-            //   ),
-            // ),
           ],
         ).paddingSymmetric(horizontal: 20),
         sizeBoxHeight(18),
         SizedBox(
-          height: 220,
+          height: 240,
           child: GridView.builder(
             itemCount: 10,
             padding: EdgeInsets.zero,
@@ -311,12 +251,10 @@ Widget categorylist() {
 
 Widget store(BuildContext context) {
   return Shimmer.fromColors(
-    baseColor: Theme.of(context).brightness == Brightness.dark
-        ? Colors.white12
-        : Colors.grey.shade300,
-    highlightColor: Theme.of(context).brightness == Brightness.dark
-        ? Colors.white24
-        : Colors.grey.shade100,
+    baseColor:
+        themeContro.isLightMode.value ? Colors.grey.shade300 : Colors.white12,
+    highlightColor:
+        themeContro.isLightMode.value ? Colors.grey.shade100 : Colors.white24,
     child: Column(
       children: [
         Row(

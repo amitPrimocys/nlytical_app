@@ -17,12 +17,11 @@ class SearchModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (serviceSearch != null) {
-      data['serviceSearch'] =
-          serviceSearch!.map((v) => v.toJson()).toList();
+      data['serviceSearch'] = serviceSearch!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -90,7 +89,7 @@ class ServiceSearch {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['service_name'] = serviceName;
     data['category_name'] = categoryName;

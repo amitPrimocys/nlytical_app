@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable
 
 import 'dart:ui';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
@@ -103,10 +104,24 @@ class CommanScreen extends StatelessWidget {
                           height: 20,
                           width: 20,
                           decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: NetworkImage(vendorImages),
-                                  fit: BoxFit.fill)),
+                              borderRadius: BorderRadius.circular(50),
+                              border: Border.all(
+                                  color: themeContro.isLightMode.value
+                                      ? Colors.grey.shade100
+                                      : AppColors.darkgray2)),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: CachedNetworkImage(
+                              imageUrl: vendorImages,
+                              fit: BoxFit.cover,
+                              errorWidget: (context, url, error) {
+                                return Image.asset(
+                                  AppAsstes.default_user,
+                                  fit: BoxFit.cover,
+                                );
+                              },
+                            ),
+                          ),
                         ),
                         SizedBox(width: 5),
                         label(

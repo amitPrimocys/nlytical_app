@@ -4,7 +4,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:nlytical_app/auth/login.dart';
+import 'package:nlytical_app/auth/google_signin.dart';
+import 'package:nlytical_app/auth/welcome.dart';
 import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/store_controller.dart';
@@ -19,30 +20,10 @@ import 'package:nlytical_app/models/vendor_models/user_plan_model.dart';
 import 'package:nlytical_app/Vendor/screens/add_store.dart';
 import 'package:nlytical_app/Vendor/screens/auth/subcription.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/vendor_new_tabbar.dart';
-// import 'package:nlytical_app/Vendor/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/utils/global.dart';
-// import 'package:nlytical_vendor/controller/store_controller.dart';
-// import 'package:nlytical_vendor/models/delete_model.dart';
-// import 'package:nlytical_vendor/models/forgot_model.dart';
-// import 'package:nlytical_vendor/models/forgot_otp_model.dart';
-// import 'package:nlytical_vendor/models/login_model.dart';
-// import 'package:nlytical_vendor/models/otp_model.dart';
-// import 'package:nlytical_vendor/models/sign_up_model.dart';
-// import 'package:nlytical_vendor/models/subscription_plan_model.dart';
-// import 'package:nlytical_vendor/models/user_plan_model.dart';
-// import 'package:nlytical_vendor/screens/add_store.dart';
-// import 'package:nlytical_vendor/screens/auth/login.dart';
-// import 'package:nlytical_vendor/screens/auth/otp_screen.dart';
-// import 'package:nlytical_vendor/screens/auth/subcription.dart';
-// import 'package:nlytical_vendor/screens/new_tabber.dart/vendor_new_tabbar.dart';
-// import 'package:nlytical_vendor/shared_preferences/prefrences_key.dart';
-// import 'package:nlytical_vendor/shared_preferences/shared_prefkey.dart';
-// import 'package:nlytical_vendor/utils/api_helper.dart';
-// import 'package:nlytical_vendor/utils/assets.dart';
-// import 'package:nlytical_vendor/utils/global.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginContro1 extends GetxController {
@@ -95,8 +76,8 @@ class LoginContro1 extends GetxController {
             await SharedPreferences.getInstance();
         preferencesToken.setString(SharedPreferencesKey.LOGGED_IN_USERID,
             loginModel.value.userId.toString());
-        userID =
-            preferencesToken.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
+
+        SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
         SharedPrefs.setString(
             SharedPreferencesKey.LOGGED_IN_USEREMAIL, loginModel.value.email!);
@@ -217,8 +198,8 @@ class LoginContro1 extends GetxController {
             await SharedPreferences.getInstance();
         preferencesToken.setString(SharedPreferencesKey.LOGGED_IN_USERID,
             registerModel.value.userId.toString());
-        userID =
-            preferencesToken.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
+
+        SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
         SharedPrefs.setString(
             SharedPreferencesKey.LOGGED_IN_USERNAME, Username!);
@@ -529,8 +510,7 @@ class LoginContro1 extends GetxController {
             SharedPreferencesKey.LOGGED_IN_USERID,
             otpmodel.value.userId.toString(),
           );
-          userID = preferencesToken
-              .getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
           snackBar("Login Successfully".tr);
 
@@ -808,10 +788,9 @@ class LoginContro1 extends GetxController {
         await pref.clear();
         await SharedPrefs.clear();
         userEmail = '';
-        userID = '';
         userIMAGE = '';
-
-        Get.offAll(() => const Login());
+        signOutGoogle();
+        Get.offAll(() => const Welcome());
 
         snackBar("Delete Successfully");
         isdelete.value = false;

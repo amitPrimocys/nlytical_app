@@ -131,4 +131,37 @@ class ProfileCotroller extends GetxController {
       snackBar("Something went wrong, try again");
     }
   }
+
+  updateProfileApi1() async {
+    try {
+      isUpdate(true);
+
+      var uri = Uri.parse(apiHelper.updateUserprofile);
+      var request = http.MultipartRequest("POST", uri);
+
+      request.fields['user_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_VENDORID);
+      request.fields['role'] = "vendor";
+
+      var response = await request.send();
+      String responseData =
+          await response.stream.transform(utf8.decoder).join();
+      var data = json.decode(responseData);
+
+      updateModel.value = UpdateProfileModel.fromJson(data);
+
+      if (updateModel.value.status == true) {
+        snackBar(updateModel.value.message!);
+        getProfleApi();
+        isUpdate(false);
+      } else {
+        isUpdate(false);
+        snackBar(updateModel.value.message!);
+      }
+    } catch (e) {
+      isUpdate(false);
+      print(e.toString());
+      snackBar("Something went wrong, try again");
+    }
+  }
 }

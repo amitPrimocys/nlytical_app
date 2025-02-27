@@ -9,7 +9,6 @@ import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/models/vendor_models/feedback_model.dart';
 import 'package:nlytical_app/models/vendor_models/review_model.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
-import 'package:nlytical_app/utils/global.dart';
 
 final ApiHelper apiHelper = ApiHelper();
 
@@ -89,7 +88,8 @@ class ReviewControvendor extends GetxController {
 
       request.headers.addAll(headers);
 
-      request.fields['user_id'] = userID;
+      request.fields['user_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
       request.fields['feedback_star'] = feedstar;
       request.fields['feedback_review'] = feedmsg;
 

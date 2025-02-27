@@ -252,10 +252,9 @@ class _RegisterState extends State<Register> {
                         print(number);
                         phone = number.completeNumber;
                       },
-                      cursorColor:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? Colors.white
-                              : AppColors.blue,
+                      cursorColor: themeContro.isLightMode.value
+                          ? Colors.blue
+                          : AppColors.white,
                       autofocus: false,
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       style: TextStyle(
@@ -396,7 +395,7 @@ class _RegisterState extends State<Register> {
                     sizeBoxHeight(25),
                     Obx(() {
                       return registercontro.isLoading.value
-                          ? loader()
+                          ? commonLoading()
                           : GestureDetector(
                               onTap: () {
                                 if (_keyform.currentState!.validate()) {
@@ -595,7 +594,10 @@ class _RegisterState extends State<Register> {
                     borderSide: const BorderSide(color: AppColors.blue)),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: AppColors.colorEFEFEF)),
+                    borderSide: BorderSide(
+                        color: themeContro.isLightMode.value
+                            ? AppColors.colorEFEFEF
+                            : AppColors.darkgray3)),
                 disabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                     borderSide: BorderSide.none),

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "231154851270",
+    "project_id": "nlytical-5e6c9",
+    "storage_bucket": "nlytical-5e6c9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231154851270:android:7dc5b5a764652d2317a6c7",
+        "android_client_info": {
+          "package_name": "com.nlytical_app.primo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "231154851270-tks4mjt8ath5r04vces667jq905j52nf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nlytical_app.primo",
+            "certificate_hash": "67a4b3f3a9af3777c5d203091db0b7e424ec5b0d"
+          }
+        },
+        {
+          "client_id": "231154851270-jo8pmg3sdbudsja4j549ooadtcalm995.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwyOKb9kZS6bYBexFqZismv2Z-oeVx3YI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "231154851270-jo8pmg3sdbudsja4j549ooadtcalm995.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

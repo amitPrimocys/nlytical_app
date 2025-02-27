@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, unused_local_variable
+// ignore_for_file: must_be_immutable, unused_local_variable, avoid_print
 
 import 'dart:async';
 import 'dart:developer';
@@ -17,6 +17,8 @@ import 'package:nlytical_app/controllers/user_controllers/report_contro.dart';
 import 'package:nlytical_app/models/user_models/chat_get_model.dart';
 import 'package:nlytical_app/models/user_models/online_model.dart';
 import 'package:nlytical_app/User/screens/homeScreen/vendor_info.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
@@ -588,18 +590,26 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Container(
                 padding: EdgeInsets.only(
-                    left: data.fromUser.toString() != userID ? 12 : 12,
+                    left: data.fromUser.toString() !=
+                            SharedPrefs.getString(
+                                SharedPreferencesKey.LOGGED_IN_USERID)
+                        ? 12
+                        : 12,
                     right: 12,
                     top: 0,
                     bottom: 0),
                 child: Column(
                   children: [
                     Align(
-                      alignment: (data.fromUser.toString() != userID
+                      alignment: (data.fromUser.toString() !=
+                              SharedPrefs.getString(
+                                  SharedPreferencesKey.LOGGED_IN_USERID)
                           ? Alignment.topLeft
                           : Alignment.topRight),
                       child: Column(
-                        crossAxisAlignment: data.fromUser.toString() != userID
+                        crossAxisAlignment: data.fromUser.toString() !=
+                                SharedPrefs.getString(
+                                    SharedPreferencesKey.LOGGED_IN_USERID)
                             ? CrossAxisAlignment.start
                             : CrossAxisAlignment.end,
                         children: [
@@ -612,7 +622,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                         MediaQuery.of(context).size.width * .6),
                                 decoration: BoxDecoration(
                                     borderRadius: data.fromUser.toString() !=
-                                            userID
+                                            SharedPrefs.getString(
+                                                SharedPreferencesKey
+                                                    .LOGGED_IN_USERID)
                                         ? const BorderRadius.only(
                                             topLeft: Radius.circular(15),
                                             topRight: Radius.circular(15),
@@ -621,7 +633,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                             topRight: Radius.circular(15),
                                             topLeft: Radius.circular(15),
                                             bottomLeft: Radius.circular(15)),
-                                    gradient: data.fromUser.toString() != userID
+                                    gradient: data.fromUser.toString() !=
+                                            SharedPrefs.getString(
+                                                SharedPreferencesKey
+                                                    .LOGGED_IN_USERID)
                                         ? AppColors.oppositechat
                                         : AppColors.ownchat
 
@@ -638,7 +653,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
-                                      color: data.fromUser.toString() != userID
+                                      color: data.fromUser.toString() !=
+                                              SharedPrefs.getString(
+                                                  SharedPreferencesKey
+                                                      .LOGGED_IN_USERID)
                                           ? AppColors.black
                                           : AppColors.white),
                                 ),
@@ -682,18 +700,26 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Container(
                 padding: EdgeInsets.only(
-                    left: data.fromUser.toString() != userID ? 12 : 12,
+                    left: data.fromUser.toString() !=
+                            SharedPrefs.getString(
+                                SharedPreferencesKey.LOGGED_IN_USERID)
+                        ? 12
+                        : 12,
                     right: 12,
                     top: 0,
                     bottom: 0),
                 child: Column(
                   children: [
                     Align(
-                      alignment: (data.fromUser.toString() != userID
+                      alignment: (data.fromUser.toString() !=
+                              SharedPrefs.getString(
+                                  SharedPreferencesKey.LOGGED_IN_USERID)
                           ? Alignment.topLeft
                           : Alignment.topRight),
                       child: Column(
-                        crossAxisAlignment: data.fromUser.toString() != userID
+                        crossAxisAlignment: data.fromUser.toString() !=
+                                SharedPrefs.getString(
+                                    SharedPreferencesKey.LOGGED_IN_USERID)
                             ? CrossAxisAlignment.start
                             : CrossAxisAlignment.end,
                         children: [
@@ -707,7 +733,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                               .6),
                                   decoration: BoxDecoration(
                                       borderRadius: data.fromUser.toString() !=
-                                              userID
+                                              SharedPrefs.getString(
+                                                  SharedPreferencesKey
+                                                      .LOGGED_IN_USERID)
                                           ? const BorderRadius.only(
                                               topLeft: Radius.circular(15),
                                               topRight: Radius.circular(15),
@@ -716,10 +744,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                               topRight: Radius.circular(15),
                                               topLeft: Radius.circular(15),
                                               bottomLeft: Radius.circular(15)),
-                                      gradient:
-                                          data.fromUser.toString() != userID
-                                              ? AppColors.oppositechat
-                                              : AppColors.ownchat),
+                                      gradient: data.fromUser.toString() !=
+                                              SharedPrefs.getString(
+                                                  SharedPreferencesKey.LOGGED_IN_USERID)
+                                          ? AppColors.oppositechat
+                                          : AppColors.ownchat),
                                   padding: const EdgeInsets.all(4),
                                   child: GestureDetector(
                                     onTap: () {
@@ -765,7 +794,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                       decoration: BoxDecoration(
                                         borderRadius: data.fromUser
                                                     .toString() !=
-                                                userID
+                                                SharedPrefs.getString(
+                                                    SharedPreferencesKey
+                                                        .LOGGED_IN_USERID)
                                             ? const BorderRadius.only(
                                                 topLeft: Radius.circular(15),
                                                 topRight: Radius.circular(15),
@@ -782,7 +813,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                       child: ClipRRect(
                                         borderRadius: data.fromUser
                                                     .toString() !=
-                                                userID
+                                                SharedPrefs.getString(
+                                                    SharedPreferencesKey
+                                                        .LOGGED_IN_USERID)
                                             ? const BorderRadius.only(
                                                 topLeft: Radius.circular(15),
                                                 topRight: Radius.circular(15),
@@ -851,18 +884,26 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Container(
                 padding: EdgeInsets.only(
-                    left: data.fromUser.toString() != userID ? 12 : 12,
+                    left: data.fromUser.toString() !=
+                            SharedPrefs.getString(
+                                SharedPreferencesKey.LOGGED_IN_USERID)
+                        ? 12
+                        : 12,
                     right: 12,
                     top: 0,
                     bottom: 0),
                 child: Column(
                   children: [
                     Align(
-                      alignment: (data.fromUser.toString() != userID
+                      alignment: (data.fromUser.toString() !=
+                              SharedPrefs.getString(
+                                  SharedPreferencesKey.LOGGED_IN_USERID)
                           ? Alignment.topLeft
                           : Alignment.topRight),
                       child: Column(
-                        crossAxisAlignment: data.fromUser.toString() != userID
+                        crossAxisAlignment: data.fromUser.toString() !=
+                                SharedPrefs.getString(
+                                    SharedPreferencesKey.LOGGED_IN_USERID)
                             ? CrossAxisAlignment.start
                             : CrossAxisAlignment.end,
                         children: [
@@ -876,7 +917,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                               .6),
                                   decoration: BoxDecoration(
                                       borderRadius: data.fromUser.toString() !=
-                                              userID
+                                              SharedPrefs.getString(
+                                                  SharedPreferencesKey
+                                                      .LOGGED_IN_USERID)
                                           ? const BorderRadius.only(
                                               topLeft: Radius.circular(15),
                                               topRight: Radius.circular(15),
@@ -885,10 +928,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                               topRight: Radius.circular(15),
                                               topLeft: Radius.circular(15),
                                               bottomLeft: Radius.circular(15)),
-                                      gradient:
-                                          data.fromUser.toString() != userID
-                                              ? AppColors.oppositechat
-                                              : AppColors.ownchat
+                                      gradient: data.fromUser.toString() !=
+                                              SharedPrefs.getString(
+                                                  SharedPreferencesKey.LOGGED_IN_USERID)
+                                          ? AppColors.oppositechat
+                                          : AppColors.ownchat
 
                                       // data.fromUser.toString() !=
                                       //         SharedPrefs.getString(
@@ -908,7 +952,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                       decoration: BoxDecoration(
                                         borderRadius: data.fromUser
                                                     .toString() !=
-                                                userID
+                                                SharedPrefs.getString(
+                                                    SharedPreferencesKey
+                                                        .LOGGED_IN_USERID)
                                             ? const BorderRadius.only(
                                                 topLeft: Radius.circular(12),
                                                 topRight: Radius.circular(12),
@@ -964,7 +1010,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                                   fontSize: 12,
                                                   color: data.fromUser
                                                               .toString() !=
-                                                          userID
+                                                          SharedPrefs.getString(
+                                                              SharedPreferencesKey
+                                                                  .LOGGED_IN_USERID)
                                                       ? AppColors.black
                                                       : AppColors.black,
                                                 ),

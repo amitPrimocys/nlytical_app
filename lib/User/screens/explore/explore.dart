@@ -498,12 +498,16 @@ class _ExploreState extends State<Explore> {
                 avrageReview: filtercontro
                     .filtermodel.value!.serviceFilter![index].totalReviewCount!
                     .toString(),
-                isLike: userID.isEmpty
-                    ? 0
-                    : filtercontro
-                        .filtermodel.value!.serviceFilter![index].isLike!,
+                isLike:
+                    SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                            .isEmpty
+                        ? 0
+                        : filtercontro
+                            .filtermodel.value!.serviceFilter![index].isLike!,
                 onTaplike: () {
-                  if (userID.isEmpty) {
+                  if (SharedPrefs.getString(
+                          SharedPreferencesKey.LOGGED_IN_USERID)
+                      .isEmpty) {
                     snackBar('Please login to like this service');
                   } else {
                     likecontro.likeApi(filtercontro
@@ -800,7 +804,10 @@ class _ExploreState extends State<Explore> {
                                           GestureDetector(
                                             onTap: () {
                                               // Call the API to like/unlike the service
-                                              if (userID.isEmpty) {
+                                              if (SharedPrefs.getString(
+                                                      SharedPreferencesKey
+                                                          .LOGGED_IN_USERID)
+                                                  .isEmpty) {
                                                 snackBar(
                                                     'Please login to like this service');
                                               } else {
@@ -1252,9 +1259,14 @@ class _ExploreState extends State<Explore> {
                 avrageReview:
                     nearcontro.nearbylist[index].totalReviewCount!.toString(),
                 isLike:
-                    userID.isEmpty ? 0 : nearcontro.nearbylist[index].isLike!,
+                    SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                            .isEmpty
+                        ? 0
+                        : nearcontro.nearbylist[index].isLike!,
                 onTaplike: () {
-                  if (userID.isEmpty) {
+                  if (SharedPrefs.getString(
+                          SharedPreferencesKey.LOGGED_IN_USERID)
+                      .isEmpty) {
                     snackBar('Please login to like this service');
                   } else {
                     likecontro
@@ -1400,7 +1412,10 @@ class _ExploreState extends State<Explore> {
                                         sizeBoxWidth(130),
                                         GestureDetector(
                                           onTap: () {
-                                            if (userID.isEmpty) {
+                                            if (SharedPrefs.getString(
+                                                    SharedPreferencesKey
+                                                        .LOGGED_IN_USERID)
+                                                .isEmpty) {
                                               snackBar(
                                                   'Please login to like this service');
                                             } else {
@@ -1568,7 +1583,7 @@ class _ExploreState extends State<Explore> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          sizeBoxHeight(150),
+          sizeBoxHeight(200),
           SizedBox(
             height: 150,
             child: Image.asset(

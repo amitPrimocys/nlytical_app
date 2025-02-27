@@ -374,7 +374,7 @@ class ServiceDetailModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     data['vendor'] = vendor;
@@ -420,7 +420,7 @@ class VendorDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['first_name'] = firstName;
     data['last_name'] = lastName;
@@ -559,7 +559,7 @@ class ServiceDetail {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['vendor_id'] = vendorId;
     data['category_id'] = categoryId;
@@ -639,7 +639,7 @@ class Reviews {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['service_id'] = serviceId;
     data['user_id'] = userId;
@@ -685,7 +685,7 @@ class Stores {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['store_name'] = storeName;
     data['store_description'] = storeDescription;
@@ -697,4 +697,3 @@ class Stores {
     return data;
   }
 }
-

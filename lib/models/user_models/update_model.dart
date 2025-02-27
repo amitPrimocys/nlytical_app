@@ -19,7 +19,6 @@
 //   }
 // }
 
-
 class UpdateModel {
   bool? status;
   String? message;
@@ -41,7 +40,7 @@ class UpdateModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (userdetails != null) {
@@ -89,7 +88,7 @@ class Userdetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['first_name'] = firstName;
     data['last_name'] = lastName;
@@ -126,7 +125,7 @@ class SubscriptionDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['user_id'] = userId;
     data['plan_name'] = planName;
     data['price'] = price;

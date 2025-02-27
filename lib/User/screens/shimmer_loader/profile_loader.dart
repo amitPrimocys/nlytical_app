@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/size_config.dart';
@@ -16,20 +17,14 @@ Widget ProfileLoader(BuildContext context) {
     child: Column(
       children: [
         Container(
-            decoration: const BoxDecoration(
-                // color: Theme.of(context).brightness == Brightness.dark
-                //     ? AppColors.darkColor
-                //     : Colors.white,
-                ),
+            decoration: const BoxDecoration(),
             child: Shimmer.fromColors(
-              baseColor: Colors.grey.shade300,
-              highlightColor: Colors.grey.shade100,
-              // baseColor: Theme.of(context).brightness == Brightness.dark
-              //     ? Colors.white12
-              //     : Colors.grey.shade300,
-              // highlightColor: Theme.of(context).brightness == Brightness.dark
-              //     ? Colors.white24
-              //     : Colors.grey.shade100,
+              baseColor: themeContro.isLightMode.value
+                  ? Colors.grey.shade300
+                  : AppColors.darkGray,
+              highlightColor: themeContro.isLightMode.value
+                  ? Colors.grey.shade100
+                  : AppColors.darkgray2,
               child: Column(
                 children: [
                   Center(

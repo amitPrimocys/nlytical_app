@@ -17,7 +17,7 @@ class GetCampaignModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
     data['message'] = message;
     if (campaignData != null) {
@@ -65,7 +65,7 @@ class CampaignData {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['vendor_id'] = vendorId;
     data['service_id'] = serviceId;

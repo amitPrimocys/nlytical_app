@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'dart:convert';
 import 'package:get/get.dart';
@@ -10,9 +10,7 @@ import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
-import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/vendor_new_tabbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpController extends GetxController {
   final ApiHelper apiHelper = ApiHelper();
@@ -63,25 +61,21 @@ class OtpController extends GetxController {
         otpmodel.value = OtpModel.fromJson(data);
 
         if (otpmodel.value?.status == true) {
-          SharedPreferences preferences = await SharedPreferences.getInstance();
-
           if (otpmodel.value!.role!.toLowerCase() == "user") {
-            await preferences.setString(
+            await SharedPrefs.setString(
               SharedPreferencesKey.LOGGED_IN_USERID,
               otpmodel.value!.userId.toString(),
             );
-            await preferences.setString(
+            await SharedPrefs.setString(
               SharedPreferencesKey.LOGGED_IN_USERFNAME,
               otpmodel.value!.firstName.toString(),
             );
 
-            userID =
-                preferences.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
+            SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
             // Check if LOGGED_IN_USERFNAME is empty
-            String userFName = preferences
-                    .getString(SharedPreferencesKey.LOGGED_IN_USERFNAME) ??
-                '';
+            String userFName =
+                SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERFNAME);
             if (userFName.isEmpty) {
               Get.offAll(() => ProfileDetails(
                     number: otpmodel.value!.mobile,
@@ -91,15 +85,15 @@ class OtpController extends GetxController {
             }
           } else {
             await SharedPrefs.remove(SharedPreferencesKey.LOGGED_IN_USERID);
-            await preferences.setString(
+            await SharedPrefs.setString(
               SharedPreferencesKey.LOGGED_IN_VENDORID,
               otpmodel.value!.userId.toString(),
             );
-            await preferences.setString(
+            await SharedPrefs.setString(
               SharedPreferencesKey.STORE_ID,
               otpmodel.value!.serviceId.toString(),
             );
-            await preferences.setString(
+            await SharedPrefs.setString(
               SharedPreferencesKey.SUBSCRIBE,
               otpmodel.value!.userSubscription.toString(),
             );

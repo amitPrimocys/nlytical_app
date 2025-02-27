@@ -159,10 +159,9 @@ class _ContactDetailState extends State<ContactDetail> {
                             log("Phone Number: $phoneNumber");
                           },
                           focusNode: phone1,
-                          cursorColor:
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white
-                                  : AppColors.bluee4,
+                          cursorColor: themeContro.isLightMode.value
+                              ? AppColors.bluee4
+                              : Colors.white,
                           autofocus: false,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           style: TextStyle(

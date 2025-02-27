@@ -3,9 +3,22 @@ class UpdateProfileModel {
   String? message;
   Userdetails? userdetails;
   SubscriptionDetails? subscriptionDetails;
+  int? isStore;
+  String? serviceId;
+  int? storeApproval;
+  int? campaign;
+  String? subscriberUser;
 
   UpdateProfileModel(
-      {this.status, this.message, this.userdetails, this.subscriptionDetails});
+      {this.status,
+      this.message,
+      this.userdetails,
+      this.subscriptionDetails,
+      this.isStore,
+      this.serviceId,
+      this.storeApproval,
+      this.campaign,
+      this.subscriberUser});
 
   UpdateProfileModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
@@ -16,6 +29,11 @@ class UpdateProfileModel {
     subscriptionDetails = json['subscriptionDetails'] != null
         ? SubscriptionDetails.fromJson(json['subscriptionDetails'])
         : null;
+    isStore = json['is_store'];
+    serviceId = json['service_id'];
+    storeApproval = json['store_approval'];
+    campaign = json['campaign'];
+    subscriberUser = json['subscriber_user'];
   }
 
   Map<String, dynamic> toJson() {
@@ -28,6 +46,11 @@ class UpdateProfileModel {
     if (subscriptionDetails != null) {
       data['subscriptionDetails'] = subscriptionDetails!.toJson();
     }
+    data['is_store'] = isStore;
+    data['service_id'] = serviceId;
+    data['store_approval'] = storeApproval;
+    data['campaign'] = campaign;
+    data['subscriber_user'] = subscriberUser;
     return data;
   }
 }
@@ -38,13 +61,12 @@ class Userdetails {
   String? lastName;
   String? mobile;
   String? email;
+  String? password;
+  String? username;
   String? countryCode;
   String? role;
   String? image;
   int? subscribedUser;
-
-
-  
 
   Userdetails(
       {this.id,
@@ -52,6 +74,8 @@ class Userdetails {
       this.lastName,
       this.mobile,
       this.email,
+      this.password,
+      this.username,
       this.countryCode,
       this.role,
       this.image,
@@ -63,6 +87,8 @@ class Userdetails {
     lastName = json['last_name'];
     mobile = json['mobile'];
     email = json['email'];
+    password = json['password'];
+    username = json['username'];
     countryCode = json['country_code'];
     role = json['role'];
     image = json['image'];
@@ -76,6 +102,8 @@ class Userdetails {
     data['last_name'] = lastName;
     data['mobile'] = mobile;
     data['email'] = email;
+    data['password'] = password;
+    data['username'] = username;
     data['country_code'] = countryCode;
     data['role'] = role;
     data['image'] = image;

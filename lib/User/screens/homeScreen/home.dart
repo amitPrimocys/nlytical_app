@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print, deprecated_member_use
 
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
@@ -18,6 +19,7 @@ import 'package:nlytical_app/User/screens/homeScreen/find_store.dart';
 import 'package:nlytical_app/User/screens/homeScreen/search.dart';
 import 'package:nlytical_app/User/screens/settings/profile.dart';
 import 'package:nlytical_app/User/screens/shimmer_loader/home_Loader.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
@@ -52,7 +54,8 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    print("USERID 😍😍😍😍😍 :- $userID");
+    print(
+        "USERID 😍😍😍😍😍 :- ${SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)}");
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       apis();
@@ -61,7 +64,7 @@ class _HomeState extends State<Home> {
   }
 
   apis() async {
-    print(userID);
+    print(SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID));
     await _getCurrentLocation();
     await homecontro.homeApi(
       latitudee: Latitude,
@@ -198,23 +201,15 @@ class _HomeState extends State<Home> {
                       return homecontro.ishome.value &&
                               // homecontro.homemodel.value == null &&
                               homecontro.homemodel.value!.firstName == null
-                          ? Shimmer.fromColors(
-                              baseColor: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white12
-                                  : Colors.grey.shade300,
-                              highlightColor: Theme.of(context).brightness ==
-                                      Brightness.dark
-                                  ? Colors.white24
-                                  : Colors.grey.shade100,
-                              child: label(
-                                'Hello,',
-                                fontSize: 19,
-                                textColor: Colors.grey,
-                                fontWeight: FontWeight.w600,
-                              ),
+                          ? label(
+                              'Hello,',
+                              fontSize: 19,
+                              textColor: Colors.grey,
+                              fontWeight: FontWeight.w600,
                             )
-                          : userID.isEmpty
+                          : SharedPrefs.getString(
+                                      SharedPreferencesKey.LOGGED_IN_USERID)
+                                  .isEmpty
                               ? label(
                                   'Hello, Guest',
                                   fontSize: 19,
@@ -252,7 +247,8 @@ class _HomeState extends State<Home> {
                       ],
                     )
                   ])),
-              userID.isEmpty
+              SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                      .isEmpty
                   ? const SizedBox.shrink()
                   : Container(
                       height: 40,
@@ -315,7 +311,7 @@ class _HomeState extends State<Home> {
                                               Object? exception,
                                               StackTrace? stackTrace) {
                                             return Image.asset(
-                                              'assets/images/default_user.jpg',
+                                              AppAsstes.default_user,
                                               fit: BoxFit.cover,
                                             );
                                           },
@@ -434,43 +430,7 @@ class _HomeState extends State<Home> {
                           color: Colors.grey),
                     )
                   ],
-                )
-
-                //  TextFormField(
-                //   // controller: searchTextContorller,
-                //   onTap: () {
-                //     Get.to(search());
-                //   },
-                //   readOnly: false,
-                //   // onChanged: onSearchTextChanged,
-                //   decoration: InputDecoration(
-                //     enabledBorder: OutlineInputBorder(
-                //       borderSide: const BorderSide(color: appColorGreen),
-                //       borderRadius: BorderRadius.circular(5),
-                //     ),
-                //     focusedBorder: OutlineInputBorder(
-                //       borderRadius: BorderRadius.circular(5),
-                //       borderSide: const BorderSide(color: appColorGreen),
-                //     ),
-                //     contentPadding: EdgeInsets.only(left: 20),
-
-                //     hintText: 'Search'.tr,
-                //     hintStyle: const TextStyle(
-                //       fontSize: 11,
-                //       fontWeight: FontWeight.w400,
-                //     ),
-                //     border: InputBorder.none, // Remove border
-                //     prefixIcon: Image.asset(
-                //       'assets/images/SS.png',
-                //       scale: 3.5,
-                //     ),
-                //     filled: true,
-                //     fillColor: Theme.of(context).brightness == Brightness.dark
-                //         ? Colors.black
-                //         : Colors.white, // Add search icon
-                //   ),
-                // ),
-                ),
+                )),
           ),
         ],
       ),
@@ -611,11 +571,15 @@ class _HomeState extends State<Home> {
                             .nearbylist[index].totalReviewCount!
                             .toString(),
                         isfeatured: homecontro.nearbylist[index].isFeatured!,
-                        isLike: userID.isEmpty
+                        isLike: SharedPrefs.getString(
+                                    SharedPreferencesKey.LOGGED_IN_USERID)
+                                .isEmpty
                             ? 0
                             : homecontro.nearbylist[index].isLike!,
                         onTaplike: () {
-                          if (userID.isEmpty) {
+                          if (SharedPrefs.getString(
+                                  SharedPreferencesKey.LOGGED_IN_USERID)
+                              .isEmpty) {
                             snackBar('Please login to like this service');
                           } else {
                             likecontro.likeApi(
@@ -746,11 +710,15 @@ class _HomeState extends State<Home> {
                     avrageReview: homecontro
                         .allcatelist[index].totalReviewCount!
                         .toString(),
-                    isLike: userID.isEmpty
+                    isLike: SharedPrefs.getString(
+                                SharedPreferencesKey.LOGGED_IN_USERID)
+                            .isEmpty
                         ? 0
                         : homecontro.allcatelist[index].isLike!,
                     onTaplike: () {
-                      if (userID.isEmpty) {
+                      if (SharedPrefs.getString(
+                              SharedPreferencesKey.LOGGED_IN_USERID)
+                          .isEmpty) {
                         snackBar('Please login to like this service');
                       } else {
                         for (var i = 0; i < homecontro.nearbylist.length; i++) {
@@ -900,33 +868,38 @@ class _HomeState extends State<Home> {
         ? postershimmer(context, imageUrls)
         : Stack(
             children: <Widget>[
-              ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade100),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
-                child: ImageSlideshow(
-                  initialPage: 0, // You can set this to any valid index
-                  autoPlayInterval: 3000,
-                  isLoop: true,
-                  indicatorColor: AppColors.white,
-                  indicatorBackgroundColor: Colors.grey.shade400,
-                  indicatorRadius: 3,
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(11),
+                  ),
+                  child: ImageSlideshow(
+                    initialPage: 0, // You can set this to any valid index
+                    autoPlayInterval: 3000,
+                    isLoop: true,
+                    indicatorColor: AppColors.white,
+                    indicatorBackgroundColor: Colors.grey.shade400,
+                    indicatorRadius: 3,
 
-                  children: homecontro.homemodel.value!.slides!.map((img) {
-                    return Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(25)),
-                      child: Image.network(
-                        img, // Use the image URL from your API
-                        fit: BoxFit.fill,
-                        errorBuilder: (context, error, stackTrace) {
+                    children: homecontro.homemodel.value!.slides!.map((img) {
+                      return CachedNetworkImage(
+                        imageUrl: img, // Use the image URL from your API
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) {
+                          return shimmerLoader(200, 200, 10);
+                        },
+                        errorWidget: (context, error, stackTrace) {
                           return const Center(
                             child: Icon(Icons.error, color: Colors.red),
                           ); // Handle image loading error
                         },
-                      ),
-                    );
-                  }).toList(),
+                      );
+                    }).toList(),
+                  ),
                 ),
               ),
             ],
@@ -939,57 +912,6 @@ class _HomeState extends State<Home> {
       child: Padding(
         padding: const EdgeInsets.all(10),
         child: carousel.paddingSymmetric(horizontal: 10),
-      ),
-    );
-  }
-
-  Widget nearshimmer() {
-    return Shimmer.fromColors(
-      baseColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.white12
-          : Colors.grey.shade300,
-      highlightColor: Theme.of(context).brightness == Brightness.dark
-          ? Colors.white24
-          : Colors.grey.shade100,
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              label(
-                'Nearby Stores',
-                fontSize: 14,
-                textColor: Colors.grey,
-                fontWeight: FontWeight.w600,
-              ),
-            ],
-          ).paddingSymmetric(horizontal: 20),
-          sizeBoxHeight(12),
-          SizedBox(
-            height: 180,
-            child: ListView.builder(
-              clipBehavior: Clip.none,
-              itemCount: 10,
-              shrinkWrap: true,
-              padding: const EdgeInsets.only(left: 5),
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Container(
-                    height: 80,
-                    width: 300,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          10,
-                        ),
-                        color: Colors.white),
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -1008,14 +930,14 @@ class _HomeState extends State<Home> {
             indicatorRadius: 3,
             children: imageUrls.map((img) {
               return Shimmer.fromColors(
-                baseColor: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white12
-                    : Colors.grey.shade300,
-                highlightColor: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white24
-                    : Colors.grey.shade100,
+                baseColor: themeContro.isLightMode.value
+                    ? Colors.grey.shade300
+                    : Colors.white12,
+                highlightColor: themeContro.isLightMode.value
+                    ? Colors.grey.shade100
+                    : Colors.white24,
                 child: Container(
-                  height: 180,
+                  height: 200,
                   width: Get.width,
                   decoration: BoxDecoration(
                       color: Colors.grey.shade300,

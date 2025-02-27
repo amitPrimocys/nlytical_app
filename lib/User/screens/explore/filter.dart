@@ -926,7 +926,7 @@ class _FilterState extends State<Filter> {
                       // const SizedBox(height: 25)
                       Obx(() {
                         return filtercontro.isfilter.value
-                            ? loader()
+                            ? commonLoading()
                             : CustomButtom(
                                     title: "Apply",
                                     onPressed: () {
@@ -1568,7 +1568,7 @@ class _FilterState extends State<Filter> {
   Widget button() {
     return Obx(() {
       return filtercontro.isfilter.value
-          ? loader()
+          ? commonLoading()
           : Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,

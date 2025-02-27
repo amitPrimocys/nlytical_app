@@ -555,10 +555,6 @@ class _ReviewState extends State<Review> {
                                     keyboardType: TextInputType.text,
                                     maxLines: 4,
                                     decoration: InputDecoration(
-                                      // filled: true,
-                                      // fillColor: Theme.of(context).brightness == Brightness.dark
-                                      //     ? AppColors.appColorBlack
-                                      //     : AppColors.scaffoldColor,
                                       contentPadding:
                                           const EdgeInsets.symmetric(
                                               vertical: 15, horizontal: 20),
@@ -582,7 +578,6 @@ class _ReviewState extends State<Review> {
                                           fontSize: 12,
                                           color: Colors.grey,
                                           fontWeight: FontWeight.w400),
-
                                       errorBorder: OutlineInputBorder(
                                           borderRadius:
                                               BorderRadius.circular(13),
@@ -601,7 +596,7 @@ class _ReviewState extends State<Review> {
                                   sizeBoxHeight(20),
                                   Obx(() {
                                     return editreview.isedit.value
-                                        ? loader()
+                                        ? commonLoading()
                                         : Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,

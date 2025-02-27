@@ -13,6 +13,7 @@ class ApiHelper {
   String userRegister = "$baseUrl/newuser-registeraccount";
   String otp = "$baseUrl/verify-user";
   String login = "$baseUrl/user-login";
+  String socialLogin = "$baseUrl/social-login";
   String forgot = "$baseUrl/forgot-password";
   String forgotVerify = "$baseUrl/passwordotp-verify";
   String reset = "$baseUrl/reset-password";

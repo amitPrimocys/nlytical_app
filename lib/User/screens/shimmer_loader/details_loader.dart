@@ -245,12 +245,12 @@ Widget _poster2(BuildContext context, List<String> imageUrls) {
         indicatorRadius: 3,
         children: imageUrls.map((img) {
           return Shimmer.fromColors(
-            baseColor: Theme.of(context).brightness == Brightness.dark
-                ? Colors.white12
-                : Colors.grey.shade300,
-            highlightColor: Theme.of(context).brightness == Brightness.dark
-                ? Colors.white24
-                : Colors.grey.shade100,
+            baseColor: themeContro.isLightMode.value
+                ? Colors.grey.shade300
+                : Colors.white12,
+            highlightColor: themeContro.isLightMode.value
+                ? Colors.grey.shade100
+                : Colors.white24,
             child: Container(
               height: 180,
               width: Get.width,

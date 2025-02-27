@@ -109,10 +109,12 @@ class GetprofileContro extends GetxController {
 
       if (isUpdateProfile == false) {
         print('Go to Vendor');
-        request.fields['user_id'] = userID;
+        request.fields['user_id'] =
+            SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
         request.fields['role'] = 'vendor';
       } else {
-        request.fields['user_id'] = userID;
+        request.fields['user_id'] =
+            SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
         request.fields['first_name'] = FnameController.text;
         request.fields['last_name'] = LnameController.text;
         request.fields['email'] = emailcontroller.text;
@@ -157,7 +159,6 @@ class GetprofileContro extends GetxController {
             SharedPreferencesKey.LOGGED_IN_VENDORID,
           )}');
 
-          userID = '';
           await SharedPrefs.remove(SharedPreferencesKey.LOGGED_IN_USERID);
           Get.offAll(() => const SubscriptionSceen(),
               transition: Transition.rightToLeft);

@@ -41,7 +41,8 @@ class _DetailsState extends State<Details>
   @override
   void initState() {
     super.initState();
-    print("😀😀😀😀USER_ID:$userID");
+    print(
+        "😀😀😀😀USER_ID:${SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)}");
     serviceController.servicedetailApi();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(() {
@@ -2233,18 +2234,16 @@ class _DetailsState extends State<Details>
                                 ).paddingSymmetric(horizontal: 25),
                                 sizeBoxHeight(22),
                                 TextFormField(
-                                  cursorColor: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : AppColors.black,
+                                  cursorColor: themeContro.isLightMode.value
+                                      ? Colors.black
+                                      : AppColors.white,
                                   autofocus: false,
                                   controller: msgController,
                                   style: TextStyle(
                                       fontSize: 14,
-                                      color: Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.white
-                                          : AppColors.black,
+                                      color: themeContro.isLightMode.value
+                                          ? Colors.black
+                                          : AppColors.white,
                                       fontWeight: FontWeight.w400),
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,

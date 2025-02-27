@@ -352,7 +352,7 @@ class _ProfileState extends State<Profile> {
                   sizeBoxHeight(17),
                   sizeBoxHeight(25),
                   // Obx(() => getprofilecontro.isupdate.value
-                  //     ? loader()
+                  //     ? commonLoading()
                   //     : globButton(
                   //         name: "Save",
                   //         gradient: AppColors.logoColork,
@@ -378,7 +378,7 @@ class _ProfileState extends State<Profile> {
                   Center(
                     child: Obx(() {
                       return getprofilecontro.isupdate.value
-                          ? loader()
+                          ? commonLoading()
                           : GestureDetector(
                               onTap: () async {
                                 // Call update API with the values from the text controllers
@@ -531,12 +531,12 @@ class _ProfileState extends State<Profile> {
                                         Object? exception,
                                         StackTrace? stackTrace) {
                                     return Image.asset(
-                                      'assets/images/default_user.jpg',
+                                      AppAsstes.default_user,
                                       fit: BoxFit.cover,
                                     );
                                   })
                                 : Image.asset(
-                                    'assets/images/default_user.jpg',
+                                    AppAsstes.default_user,
                                     fit: BoxFit.cover,
                                   )
                             : Image.file(selectedImages!, fit: BoxFit.cover))

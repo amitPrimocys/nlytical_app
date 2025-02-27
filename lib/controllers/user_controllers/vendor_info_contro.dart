@@ -1,9 +1,12 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:nlytical_app/models/user_models/vendor_info_model.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
-import 'package:nlytical_app/utils/global.dart';
 
 ApiHelper apiHelper = ApiHelper();
 
@@ -28,7 +31,8 @@ class VendorInfoContro extends GetxController {
 
       request.headers.addAll(headers);
 
-      request.fields['user_id'] = userID;
+      request.fields['user_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
       request.fields['vendor_id'] = toUSerID!;
 
       var response = await request.send();

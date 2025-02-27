@@ -125,9 +125,9 @@ class _MobileState extends State<Mobile> {
                             : AppColors.white,
                         fontWeight: FontWeight.w400,
                         fontFamily: "Poppins"),
-                    cursorColor: Theme.of(context).brightness == Brightness.dark
-                        ? Colors.white
-                        : AppColors.blue,
+                    cursorColor: themeContro.isLightMode.value
+                        ? AppColors.blue
+                        : Colors.white,
                     autofocus: false,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     style: TextStyle(
@@ -202,7 +202,7 @@ class _MobileState extends State<Mobile> {
                   sizeBoxHeight(25),
                   Obx(() {
                     return mobilecontro.isLoading.value
-                        ? Center(child: loader())
+                        ? Center(child: commonLoading())
                         : GestureDetector(
                             onTap: () {
                               if (mobilecontroller.text.isEmpty) {

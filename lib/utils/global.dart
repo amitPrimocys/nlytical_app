@@ -21,7 +21,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 String contrycode = '+91';
 // String countryCode = '+91';
 SharedPreferences? preferences;
-String userID = '';
+// String userID = '';
 String userEmail = '';
 String userIMAGE = '';
 String Latitude = '';
@@ -264,29 +264,29 @@ Widget twoText({
   );
 }
 
-Widget loader() {
-  return Center(
-    child: Card(
-        elevation: 5,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
-        ),
-        child: Container(
-          height: 50,
-          width: 50,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50), color: AppColors.blue),
-          child: const Padding(
-              padding: EdgeInsets.all(10),
-              child: SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
-              )),
-        )),
-  );
-}
+// Widget commonLoading() {
+//   return Center(
+//     child: Card(
+//         elevation: 5,
+//         shape: RoundedRectangleBorder(
+//           borderRadius: BorderRadius.circular(50),
+//         ),
+//         child: Container(
+//           height: 50,
+//           width: 50,
+//           decoration: BoxDecoration(
+//               borderRadius: BorderRadius.circular(50), color: AppColors.blue),
+//           child: const Padding(
+//               padding: EdgeInsets.all(10),
+//               child: SizedBox(
+//                 height: 20,
+//                 width: 20,
+//                 child: CircularProgressIndicator(
+//                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
+//               )),
+//         )),
+//   );
+// }
 
 //===================================================================================================================================================================
 class ImageViewerScreen extends StatelessWidget {
@@ -442,15 +442,7 @@ Widget commonImage({
               imageUrl: image,
               fit: BoxFit.cover,
               progressIndicatorBuilder: (context, url, progress) {
-                return Shimmer.fromColors(
-                  baseColor: Colors.grey[800]!,
-                  highlightColor: Colors.grey[600]!,
-                  child: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(radius ?? 10)),
-                  ),
-                );
+                return shimmerLoader(50, 50, 100);
               },
               errorWidget: (context, url, error) {
                 return Container(
@@ -1397,8 +1389,10 @@ enum DropDownType {
 
 Shimmer shimmerLoader(double height, double width, double radius) {
   return Shimmer.fromColors(
-    baseColor: Colors.grey.shade300,
-    highlightColor: Colors.grey.shade100,
+    baseColor:
+        themeContro.isLightMode.value ? Colors.grey.shade300 : Colors.white12,
+    highlightColor:
+        themeContro.isLightMode.value ? Colors.grey.shade100 : Colors.white24,
     child: Container(
       height: height,
       width: width,
@@ -2231,7 +2225,7 @@ Map<String, Map<String, String>> countryCurrency = {
   }
 };
 
-Widget gogleLoading() {
+Widget googleLoading() {
   return CircularProgressIndicator(
     strokeWidth: 1.5,
     color: themeContro.isLightMode.value ? AppColors.blue : AppColors.white,

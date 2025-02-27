@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, unused_local_variable
+// ignore_for_file: prefer_const_constructors, unused_local_variable, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,6 +6,8 @@ import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/like_contro.dart';
 import 'package:nlytical_app/User/screens/homeScreen/details.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
 import 'package:nlytical_app/utils/comman_screen.dart';
@@ -181,9 +183,14 @@ class _FindStoreState extends State<FindStore> {
                 avrageReview:
                     homecontro.allcatelist[index].totalReviewCount!.toString(),
                 isLike:
-                    userID.isEmpty ? 0 : homecontro.allcatelist[index].isLike!,
+                    SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)
+                            .isEmpty
+                        ? 0
+                        : homecontro.allcatelist[index].isLike!,
                 onTaplike: () {
-                  if (userID.isEmpty) {
+                  if (SharedPrefs.getString(
+                          SharedPreferencesKey.LOGGED_IN_USERID)
+                      .isEmpty) {
                     snackBar('Please login to like this service');
                   } else {
                     for (var i = 0; i < homecontro.nearbylist.length; i++) {

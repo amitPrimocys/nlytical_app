@@ -7,9 +7,10 @@ import 'package:nlytical_app/models/user_models/add_chat_model.dart';
 import 'package:nlytical_app/models/user_models/chat_get_model.dart';
 import 'package:nlytical_app/models/user_models/chat_list_model.dart';
 import 'package:nlytical_app/models/user_models/online_model.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:http/http.dart' as http;
-import 'package:nlytical_app/utils/global.dart';
 
 class ChatController extends GetxController {
   RxBool isChatListLoading = false.obs;
@@ -45,7 +46,8 @@ class ChatController extends GetxController {
 
       request.headers.addAll(headers);
 
-      request.fields['user_id'] = userID;
+      request.fields['user_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
       if (issearch) {
         request.fields['first_name'] = xyz!;
       }
@@ -150,11 +152,13 @@ class ChatController extends GetxController {
       };
 
       Map<String, String> body = {
-        'from_user': userID,
+        'from_user':
+            SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID),
         'to_user': toUSerID,
       };
 
-      print("FROM_USER**: $userID");
+      print(
+          "FROM_USER**: ${SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)}");
       print("Request Fields: $body");
 
       // Make the POST request
@@ -211,7 +215,8 @@ class ChatController extends GetxController {
 
       request.headers.addAll(headers);
 
-      request.fields['from_user'] = userID;
+      request.fields['from_user'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
       request.fields['to_user'] = toUSerID;
 
@@ -223,7 +228,8 @@ class ChatController extends GetxController {
         request.files.add(await http.MultipartFile.fromPath('url', image));
       }
 
-      print("FROM_USER:$userID");
+      print(
+          "FROM_USER:${SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)}");
 
       print("*******${request.files}");
 
@@ -264,11 +270,13 @@ class ChatController extends GetxController {
 
       request.headers.addAll(headers);
 
-      request.fields['user_id'] = userID;
+      request.fields['user_id'] =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
       request.fields['status'] = onlineStatus;
 
-      print("FROM_USER:$userID");
+      print(
+          "FROM_USER:${SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID)}");
 
       print("*******${request.files}");
 

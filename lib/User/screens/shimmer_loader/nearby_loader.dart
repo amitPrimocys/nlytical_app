@@ -43,13 +43,6 @@ Widget nearbyListLoader(BuildContext context) {
         itemCount: nearcontro.nearbylist.length,
         itemBuilder: (BuildContext context, int index) {
           return Shimmer.fromColors(
-            // baseColor: Theme.of(context).brightness == Brightness.dark
-            //     ? Colors.white12
-            //     : Colors.grey.shade200,
-            // highlightColor:
-            //     Theme.of(context).brightness == Brightness.dark
-            //         ? Colors.white24
-            //         : Colors.grey.shade100,
             baseColor: Colors.grey.shade300,
             highlightColor: Colors.grey.shade100,
             child: Card(

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
@@ -8,7 +10,6 @@ import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
-import 'package:nlytical_app/utils/global.dart';
 
 class ProfileDetailContro extends GetxController {
   final ApiHelper apiHelper = ApiHelper();
@@ -34,7 +35,7 @@ class ProfileDetailContro extends GetxController {
         'first_name': fname,
         'last_name': laname,
         'email': email,
-        'user_id': userID,
+        'user_id': SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID),
       });
 
       if (file != null && file.isNotEmpty) {
@@ -65,11 +66,9 @@ class ProfileDetailContro extends GetxController {
         );
 
         String userFName =
-            SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERFNAME) ??
-                '';
+            SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERFNAME);
         String userMAIL =
-            SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USEREMAIL) ??
-                '';
+            SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USEREMAIL);
         if (userFName.isEmpty && userMAIL.isEmpty) {
           Get.offAll(() => ProfileDetails(
                 number: updatemodel.value!.userdetails!.mobile.toString(),

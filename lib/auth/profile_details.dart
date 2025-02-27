@@ -295,7 +295,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                     sizeBoxHeight(25),
                     Obx(() {
                       return profiledetailcontro.isLoading.value
-                          ? loader()
+                          ? commonLoading()
                           : GestureDetector(
                               onTap: () {
                                 // forgotcontro.forgotApi(
@@ -402,8 +402,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                               },
                               errorBuilder: (BuildContext? context,
                                   Object? exception, StackTrace? stackTrace) {
-                                return Image.asset(
-                                    'assets/images/default_user.jpg');
+                                return Image.asset(AppAsstes.default_user);
                               },
                             )
                           : const Icon(Icons.person, size: 50),

@@ -9,6 +9,8 @@ import 'package:nlytical_app/controllers/user_controllers/like_contro.dart';
 import 'package:nlytical_app/models/user_models/search_model.dart';
 import 'package:nlytical_app/User/screens/homeScreen/details.dart';
 import 'package:nlytical_app/User/screens/shimmer_loader/favourite_loader.dart';
+import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
+import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
@@ -48,7 +50,8 @@ class _SearchState extends State<Search> {
     request.headers.addAll(headers);
 
     request.fields['service_name'] = xyz;
-    request.fields['user_id'] = userID;
+    request.fields['user_id'] =
+        SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
 
     var response = await request.send();
     String responseData = await response.stream.transform(utf8.decoder).join();
@@ -304,11 +307,15 @@ class _SearchState extends State<Search> {
                             avrageReview: model
                                 .serviceSearch![index].totalReviewCount!
                                 .toString(),
-                            isLike: userID.isEmpty
+                            isLike: SharedPrefs.getString(
+                                        SharedPreferencesKey.LOGGED_IN_USERID)
+                                    .isEmpty
                                 ? 0
                                 : model.serviceSearch![index].isLike!,
                             onTaplike: () {
-                              if (userID.isEmpty) {
+                              if (SharedPrefs.getString(
+                                      SharedPreferencesKey.LOGGED_IN_USERID)
+                                  .isEmpty) {
                                 snackBar('Please login to like this service');
                               } else {
                                 likecontro.likeApi(
