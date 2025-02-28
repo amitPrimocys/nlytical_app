@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:nlytical_app/utils/spinkit_loader.dart';
 import 'package:get/get.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/web_view.dart';
 import 'package:nlytical_app/auth/google_signin.dart';
@@ -260,6 +261,12 @@ class _SettingState extends State<Setting> {
                               getprofilecontro
                                   .getprofilemodel.value!.userDetails!.image
                                   .toString(),
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                return Center(
+                                    child: SpinKitSpinningLines(
+                                        size: 30, color: AppColors.blue));
+                              },
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.asset(
                                   AppAsstes.default_user,

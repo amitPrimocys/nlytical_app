@@ -3,7 +3,7 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:nlytical_app/utils/spinkit_loader.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:nlytical_app/controllers/user_controllers/get_profile_contro.dart';

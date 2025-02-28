@@ -105,8 +105,10 @@ class HomeContro extends GetxController {
 
       log("☺☺☺☺☺☺☺☺☺LAT :$Latitude");
       log("☺☺☺☺☺☺☺☺☺LONG : $Longitude");
-      SharedPrefs.setString(SharedPreferencesKey.LATTITUDE, Latitude);
-      SharedPrefs.setString(SharedPreferencesKey.LONGITUDE, Longitude);
+      SharedPrefs.setString(
+          SharedPreferencesKey.LATTITUDE, position.latitude.toString());
+      SharedPrefs.setString(
+          SharedPreferencesKey.LONGITUDE, position.longitude.toString());
       homeApi(
         latitudee: Latitude,
         longitudee: Longitude,

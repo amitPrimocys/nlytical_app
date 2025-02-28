@@ -188,7 +188,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   const BorderRadius.all(
-                                                      Radius.circular(4)),
+                                                      Radius.circular(10)),
                                               borderSide: themeContro
                                                       .isLightMode.value
                                                   ? BorderSide.none
@@ -199,13 +199,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                               const OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(4)),
+                                                          Radius.circular(10)),
                                                   borderSide: BorderSide.none),
                                           disabledBorder:
                                               const OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(4)),
+                                                          Radius.circular(10)),
                                                   borderSide: BorderSide.none),
                                           hintText: "Email Address",
                                           contentPadding:
@@ -297,7 +297,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   const BorderRadius.all(
-                                                      Radius.circular(4)),
+                                                      Radius.circular(10)),
                                               borderSide: themeContro
                                                       .isLightMode.value
                                                   ? BorderSide.none
@@ -308,13 +308,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                               const OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(4)),
+                                                          Radius.circular(10)),
                                                   borderSide: BorderSide.none),
                                           disabledBorder:
                                               const OutlineInputBorder(
                                                   borderRadius:
                                                       BorderRadius.all(
-                                                          Radius.circular(4)),
+                                                          Radius.circular(10)),
                                                   borderSide: BorderSide.none),
                                           hintText: "Mobile Number",
                                           hintStyle: const TextStyle(

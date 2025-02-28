@@ -56,7 +56,7 @@ class CommanScreen extends StatelessWidget {
                 border: Border.all(
                     color: themeContro.isLightMode.value
                         ? AppColors.white
-                        : Colors.transparent),
+                        : Colors.white10),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 16,

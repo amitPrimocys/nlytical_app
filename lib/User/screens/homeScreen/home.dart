@@ -3,7 +3,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -30,6 +29,7 @@ import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/global_fonts.dart';
 import 'package:nlytical_app/utils/size_config.dart';
+import 'package:nlytical_app/utils/spinkit_loader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';

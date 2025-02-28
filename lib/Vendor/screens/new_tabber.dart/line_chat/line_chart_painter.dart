@@ -78,7 +78,10 @@ class LineChartPainter extends CustomPainter {
 
   final columnFocusingPaint = Paint()
     ..style = PaintingStyle.fill
-    ..color = const Color(0xffE6EAF6).withOpacity(0.5);
+    ..color = themeContro.isLightMode.value
+        ? Colors.transparent
+        //const Color(0xffE6EAF6).withOpacity(0.5)
+        : Colors.transparent;
 
   final tappableColumnPaint = Paint()
     ..style = PaintingStyle.fill

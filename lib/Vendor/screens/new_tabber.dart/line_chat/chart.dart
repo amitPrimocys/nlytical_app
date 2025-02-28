@@ -40,6 +40,7 @@ class _ChartState extends State<Chart> {
   @override
   void initState() {
     super.initState();
+    selectedMonthValue = _monthList.first;
     _refreshChart$.add(UniqueKey());
   }
 
@@ -337,7 +338,7 @@ class _ChartState extends State<Chart> {
                                     heightChart: _heightChart,
                                   );
                                 },
-                              ),
+                              ).paddingSymmetric(horizontal: 20),
                               const SizedBox(height: 40),
                               customBtn(
                                       onTap: () {},

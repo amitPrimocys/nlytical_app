@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:nlytical_app/utils/spinkit_loader.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/get_profile_contro.dart';
 import 'package:nlytical_app/User/screens/controller/user_tab_controller.dart';
@@ -233,15 +233,15 @@ class _ProfileState extends State<Profile> {
                       filled: true,
                       focusedBorder: OutlineInputBorder(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(4)),
+                              const BorderRadius.all(Radius.circular(10)),
                           borderSide: themeContro.isLightMode.value
                               ? BorderSide.none
                               : const BorderSide(color: AppColors.darkBorder)),
                       enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide.none),
                       disabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide.none),
                       hintText: "Email Address",
                       contentPadding: const EdgeInsets.symmetric(
@@ -316,15 +316,15 @@ class _ProfileState extends State<Profile> {
                           : AppColors.darkGray,
                       focusedBorder: OutlineInputBorder(
                           borderRadius:
-                              const BorderRadius.all(Radius.circular(4)),
+                              const BorderRadius.all(Radius.circular(10)),
                           borderSide: themeContro.isLightMode.value
                               ? BorderSide.none
                               : const BorderSide(color: AppColors.darkBorder)),
                       enabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide.none),
                       disabledBorder: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(4)),
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                           borderSide: BorderSide.none),
                       hintText: "Mobile Number",
                       hintStyle: const TextStyle(
@@ -502,7 +502,9 @@ class _ProfileState extends State<Profile> {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: AppColors.white,
+                  color: themeContro.isLightMode.value
+                      ? AppColors.white
+                      : AppColors.darkGray,
                   border: Border.all(
                     width: 2.5,
                     color: AppColors.blue,

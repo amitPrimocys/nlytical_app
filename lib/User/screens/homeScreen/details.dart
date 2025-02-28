@@ -97,15 +97,14 @@ class _DetailsState extends State<Details>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBody: true,
       backgroundColor: themeContro.isLightMode.value
           ? Colors.white
           : AppColors.darkMainBlack,
       bottomNavigationBar: BottomAppBar(
         height: 73,
         elevation: 0,
-        color: themeContro.isLightMode.value
-            ? Colors.white
-            : AppColors.darkMainBlack,
+        color: Colors.transparent,
         child: bottam(),
       ),
       body: Obx(() {
@@ -561,9 +560,14 @@ class _DetailsState extends State<Details>
                       children: [
                         GestureDetector(
                           onTap: () {
+                            print("My_Lat:$Latitude, LON:$Longitude");
+                            print(
+                                "To_Lat:${servicecontro.servicemodel.value!.serviceDetail!.lat!}, LON:${servicecontro.servicemodel.value!.serviceDetail!.lon!}");
                             openGoogleMaps(
-                                originLat: Latitude,
-                                originLong: Longitude,
+                                originLat: SharedPrefs.getString(
+                                    SharedPreferencesKey.LATTITUDE),
+                                originLong: SharedPrefs.getString(
+                                    SharedPreferencesKey.LONGITUDE),
                                 destLat: servicecontro
                                     .servicemodel.value!.serviceDetail!.lat!
                                     .toString(),
@@ -677,55 +681,62 @@ class _DetailsState extends State<Details>
                         ),
                       ],
                     ),
-                    sizeBoxHeight(10),
-                    InkWell(
-                      onTap: () {
-                        final url = servicecontro
-                            .servicemodel.value!.serviceDetail!.serviceWebsite!;
-                        _launchURL(url);
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          label('Visit Website',
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              textColor: themeContro.isLightMode.value
-                                  ? Color(0xff3E5155)
-                                  : AppColors.white),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 75,
-                                child: GestureDetector(
-                                  child: Text(
-                                    servicecontro.servicemodel.value!
-                                        .serviceDetail!.serviceWebsite!
-                                        .toString(),
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      fontSize: 10,
-                                      decoration: TextDecoration.underline,
-                                      decorationThickness: 2,
-                                      decorationColor: Colors.transparent,
-                                      fontFamily: "Poppins",
-                                      color: Colors.transparent,
-                                      fontWeight: FontWeight.w500,
+                    servicecontro.servicemodel.value!.serviceDetail!
+                            .serviceWebsite!.isEmpty
+                        ? SizedBox.shrink()
+                        : sizeBoxHeight(10),
+                    servicecontro.servicemodel.value!.serviceDetail!
+                            .serviceWebsite!.isEmpty
+                        ? SizedBox.shrink()
+                        : InkWell(
+                            onTap: () {
+                              final url = servicecontro.servicemodel.value!
+                                  .serviceDetail!.serviceWebsite!;
+                              _launchURL(url);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                label('Visit Website',
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    textColor: themeContro.isLightMode.value
+                                        ? Color(0xff3E5155)
+                                        : AppColors.white),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 75,
+                                      child: GestureDetector(
+                                        child: Text(
+                                          servicecontro.servicemodel.value!
+                                              .serviceDetail!.serviceWebsite!
+                                              .toString(),
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            decoration:
+                                                TextDecoration.underline,
+                                            decorationThickness: 2,
+                                            decorationColor: Colors.transparent,
+                                            fontFamily: "Poppins",
+                                            color: Colors.transparent,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                  ),
+                                    sizeBoxWidth(5),
+                                    Image.asset(
+                                      'assets/images/export.png',
+                                      height: 12,
+                                      color: AppColors.blue,
+                                    )
+                                  ],
                                 ),
-                              ),
-                              sizeBoxWidth(5),
-                              Image.asset(
-                                'assets/images/export.png',
-                                height: 12,
-                                color: AppColors.blue,
-                              )
-                            ],
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
                     sizeBoxHeight(10),
                     GestureDetector(
                       onTap: () async {
@@ -1901,7 +1912,7 @@ class _DetailsState extends State<Details>
                                     label("No Service found",
                                         fontSize: 16,
                                         textColor: themeContro.isLightMode.value
-                                            ? AppColors.white
+                                            ? AppColors.black
                                             : AppColors.brown,
                                         fontWeight: FontWeight.w500)
                                   ],
@@ -1949,7 +1960,9 @@ class _DetailsState extends State<Details>
                             sizeBoxHeight(10),
                             label("No Service found",
                                 fontSize: 16,
-                                textColor: AppColors.white,
+                                textColor: themeContro.isLightMode.value
+                                    ? AppColors.black
+                                    : AppColors.brown,
                                 fontWeight: FontWeight.w500)
                           ],
                         ),
@@ -2982,26 +2995,30 @@ class _DetailsState extends State<Details>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                children: [
-                                  Image.asset(
-                                    'assets/images/routing.png',
-                                    height: 15,
-                                  ),
-                                  sizeBoxWidth(5),
-                                  label(
-                                    servicecontro.servicemodel.value!
-                                        .serviceDetail!.distance!
-                                        .toString(),
-                                    // ${avrageReview} Years in Business,
-                                    fontSize: 11,
-                                    textColor: themeContro.isLightMode.value
-                                        ? AppColors.black
-                                        : AppColors.white,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ],
-                              ),
+                              servicecontro.servicemodel.value!.serviceDetail!
+                                      .distance!.isEmpty
+                                  ? SizedBox.shrink()
+                                  : Row(
+                                      children: [
+                                        Image.asset(
+                                          'assets/images/routing.png',
+                                          height: 15,
+                                        ),
+                                        sizeBoxWidth(5),
+                                        label(
+                                          servicecontro.servicemodel.value!
+                                              .serviceDetail!.distance!
+                                              .toString(),
+                                          // ${avrageReview} Years in Business,
+                                          fontSize: 11,
+                                          textColor:
+                                              themeContro.isLightMode.value
+                                                  ? AppColors.black
+                                                  : AppColors.white,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                      ],
+                                    ),
                               isBusinessOpen()
                                   ? Row(
                                       children: [

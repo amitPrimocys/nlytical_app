@@ -7,8 +7,11 @@ void openGoogleMaps(
     required String originLong,
     required String destLat,
     required String destLong}) async {
+  // final googleMapsUrl =
+  //     'https://www.google.com/maps/dir/?api=1&origin=$originLat,$originLong&destination=$destLat,$destLong&travelmode=driving';
   final googleMapsUrl =
-      'https://www.google.com/maps/dir/?api=1&origin=$originLat,$originLong&destination=$destLat,$destLong&travelmode=driving';
+      'https://www.google.com/maps/dir/?api=1&origin=$originLat,$originLong'
+      '&destination=$destLat,$destLong&travelmode=driving&dir_action=navigate';
 
   if (await canLaunch(googleMapsUrl)) {
     await launch(googleMapsUrl);

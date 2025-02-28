@@ -39,7 +39,6 @@ dependencies:
   intl_phone_field: ^3.2.0
   flutter_rating_bar: ^4.0.1
   image_picker: ^1.1.2
-  flutter_spinkit: ^5.2.1
   http: ^1.2.2
   shared_preferences: ^2.3.2
   dynamic_themes: ^1.1.0
