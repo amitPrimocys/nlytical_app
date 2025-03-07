@@ -400,6 +400,28 @@ class _DetailsState extends State<Details>
     }
   }
 
+  Future<void> launchWhatsapp(String phoneNumber) async {
+    String whatsappUrl =
+        "whatsapp://send?phone=$phoneNumber"; // Mobile WhatsApp
+    String webWhatsappUrl =
+        "https://web.whatsapp.com/send?phone=$phoneNumber"; // Web WhatsApp
+
+    Uri uri = Uri.parse(whatsappUrl);
+
+    if (await canLaunchUrl(uri)) {
+      // Open WhatsApp app if installed
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      // Open WhatsApp Web if app is not available
+      Uri webUri = Uri.parse(webWhatsappUrl);
+      if (await canLaunchUrl(webUri)) {
+        await launchUrl(webUri, mode: LaunchMode.externalApplication);
+      } else {
+        throw 'Could not launch WhatsApp';
+      }
+    }
+  }
+
   void _launchSocial(String urll
       //, String fallbackUrl
       ) async {
@@ -813,11 +835,16 @@ class _DetailsState extends State<Details>
                                             } else {
                                               print(
                                                   "WHPLINK:${servicecontro.servicemodel.value!.serviceDetail!.whatsappLink}");
-                                              _launchWhatsapp(servicecontro
+                                              // _launchWhatsapp(servicecontro
+                                              //     .servicemodel
+                                              //     .value!
+                                              //     .serviceDetail!
+                                              //     .whatsappLink);
+                                              launchWhatsapp(servicecontro
                                                   .servicemodel
                                                   .value!
                                                   .serviceDetail!
-                                                  .whatsappLink);
+                                                  .whatsappLink!);
                                             }
                                           },
                                           child: Container(

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nlytical_app/Vendor/screens/add_store.dart';
+import 'package:nlytical_app/auth/profile_details.dart';
 import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/profile_cotroller.dart';
 import 'package:nlytical_app/models/social_login_model.dart';
@@ -141,9 +142,28 @@ class LoginContro extends GetxController {
           SharedPrefs.setString(SharedPreferencesKey.LOGGED_IN_USERID,
               socialLoginModel.value.user!.id.toString());
           SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
+          await SharedPrefs.setString(
+            SharedPreferencesKey.LOGGED_IN_USERFNAME,
+            "",
+          );
+
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
+          SharedPrefs.setString(
+              SharedPreferencesKey.LOGGED_IN_USEREMAIL, email);
+          // Check if LOGGED_IN_USERFNAME is empty
+          String userFName =
+              SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERFNAME);
+          if (userFName.isEmpty) {
+            Get.offAll(() => ProfileDetails(
+                  email: email,
+                  number: "",
+                ));
+          } else {
+            Get.offAll(() => TabbarScreen(currentIndex: 0));
+          }
           Get.find<HomeContro>().checkLocationPermission();
           Get.find<HomeContro>().checkLocationPermission();
-          Get.offAll(() => TabbarScreen(currentIndex: 0));
+          // Get.offAll(() => TabbarScreen(currentIndex: 0));
         } else {
           print("🙂🙂🙂Go to Vendor flow🙂🙂🙂");
           await SharedPrefs.remove(SharedPreferencesKey.LOGGED_IN_USERID);

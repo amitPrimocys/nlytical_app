@@ -10,6 +10,7 @@ import 'package:nlytical_app/shared_preferences/prefrences_key.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/api_helper.dart';
 import 'package:nlytical_app/utils/common_widgets.dart';
+import 'package:nlytical_app/utils/global.dart';
 
 final ApiHelper apiHelper = ApiHelper();
 
@@ -18,9 +19,12 @@ class FilterContro extends GetxController {
   RxBool isnavfilter = false.obs;
   Rx<FilterModel?> filtermodel = FilterModel().obs;
   // RxList<ServiceFilter> filterlist = <ServiceFilter>[].obs;
-  var selectedCategories = <String>[].obs; // Store selected category
-  var selectedSubCate = <String>[].obs; // Store selected category
+  RxList<String> selectedCategories = <String>[].obs; // Store selected category
+  RxList<String> selectedSubCate = <String>[].obs; // Store selected category
   var selectedRating = 0.obs; // Store selected rating
+  var selectedPrice = 0.obs;
+  RxList<String> selectedType = <String>[].obs;
+  RxString location = ''.obs;
 
   RxList<Marker> filtermarkerList = <Marker>[].obs;
 
@@ -73,7 +77,7 @@ class FilterContro extends GetxController {
   RxInt? selectedIndexType;
   RxInt? selectedIndexRating;
 
-  Future<void> filterApi({
+  filterApi({
     required String page,
     String? catId,
     String? catName,
@@ -132,17 +136,37 @@ class FilterContro extends GetxController {
         // print("allcatelist ${filterlist.length}");
         isfilter.value = false;
         isnavfilter.value = true;
+        if (price != null) {
+          selectedPrice.value = int.parse(price);
+        } else {
+          selectedPrice.value = 0;
+        }
         if (rivstar != null) {
           selectedRating.value = rivstar;
         } else {
           selectedRating.value = 0;
         }
+        print("IDC:${catId}");
         if (catId != null) {
           selectedCategories.value = [catName.toString()];
+          print("selectedCategories:${jsonEncode(selectedCategories)}");
+        } else {
+          selectedCategories.clear();
+          print("selectedCategories:${jsonEncode(selectedCategories)}");
         }
+        print("IDS:${subCatId}");
         if (subCatId != null) {
           selectedSubCate.value = [subCatName.toString()];
           print("selectedSubCate:${selectedSubCate}");
+        } else {
+          selectedSubCate.clear();
+          print("selectedSubCate:${selectedSubCate}");
+        }
+        if (type != null) {
+          selectedType.value = [type.toString()];
+          print("selectedType:${selectedType}");
+        } else {
+          selectedType.clear();
         }
         filtermarkerList.clear();
         addMarker1();
@@ -165,7 +189,7 @@ class FilterContro extends GetxController {
   GoogleMapController? mapController;
 
   getLonLat(String input) async {
-    String kPlaceApiKey = "AIzaSyAo178gm6y82PrD-BBC5s4UST_leL_I1Ns";
+    String kPlaceApiKey = googleMapKey;
     String baseURL =
         'https://maps.googleapis.com/maps/api/geocode/json?address=$input&key=$kPlaceApiKey';
 
@@ -197,7 +221,7 @@ class FilterContro extends GetxController {
   List<dynamic> mapresult = [];
 
   getsuggestion(String input) async {
-    String kPlaceApiKey = "AIzaSyAo178gm6y82PrD-BBC5s4UST_leL_I1Ns";
+    String kPlaceApiKey = googleMapKey;
     String baseURL =
         "https://maps.googleapis.com/maps/api/place/autocomplete/json";
     String request = '$baseURL?input=$input&key=$kPlaceApiKey';

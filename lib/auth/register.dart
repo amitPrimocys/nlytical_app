@@ -53,8 +53,9 @@ class _RegisterState extends State<Register> {
     setState(() {
       isselected = emailcontroller.text.isEmail &&
           passcontroller.text.isNotEmpty &&
-          passcontroller.text.contains(RegExp(
-              r'[A-Za-z0-9@#$%^&+=]')) && // Example: check for specific characters
+          passcontroller.text.contains(
+            RegExp(r'[A-Za-z0-9@#$%^&+=]'),
+          ) && // Example: check for specific characters
           passcontroller.text.length >= 8 && // Minimum length requirement
           mobilecontroller.text.isNotEmpty &&
           lnamecontroller.text.isNotEmpty &&
@@ -78,395 +79,415 @@ class _RegisterState extends State<Register> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
         decoration: BoxDecoration(
-            color: themeContro.isLightMode.value
-                ? Colors.white
-                : AppColors.darkMainBlack,
-            image: const DecorationImage(
-              image: AssetImage(AppAsstes.appbackground),
-              fit: BoxFit.fitWidth,
-            )),
+          color: themeContro.isLightMode.value
+              ? Colors.white
+              : AppColors.darkMainBlack,
+          image: const DecorationImage(
+            image: AssetImage(AppAsstes.appbackground),
+            fit: BoxFit.fitWidth,
+          ),
+        ),
         child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: SingleChildScrollView(
-              child: Form(
-                key: _keyform,
-                child: Column(
-                  children: [
-                    sizeBoxHeight(105),
-                    Image.asset(
-                      AppAsstes.logo,
-                      height: 55,
-                      width: 180,
-                      fit: BoxFit.contain,
-                      // width: SizeConfig.blockSizeHorizontal * 50,
-                    ).paddingSymmetric(
-                      horizontal: 100,
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+            child: Form(
+              key: _keyform,
+              child: Column(
+                children: [
+                  sizeBoxHeight(105),
+                  Image.asset(
+                    AppAsstes.logo,
+                    height: 55,
+                    width: 180,
+                    fit: BoxFit.contain,
+                    // width: SizeConfig.blockSizeHorizontal * 50,
+                  ).paddingSymmetric(horizontal: 100),
+                  sizeBoxHeight(15),
+                  Center(
+                    child: label(
+                      "Discover more about our app by registering",
+                      maxLines: 2,
+                      textColor: const Color.fromRGBO(113, 113, 113, 1),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
                     ),
-                    sizeBoxHeight(15),
-                    Center(
-                      child: label(
-                        "Discover more about our app by registering",
-                        maxLines: 2,
-                        textColor: const Color.fromRGBO(113, 113, 113, 1),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
+                  ),
+                  sizeBoxHeight(1),
+                  Center(
+                    child: label(
+                      "or logging in",
+                      maxLines: 2,
+                      textColor: const Color.fromRGBO(113, 113, 113, 1),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
                     ),
-                    sizeBoxHeight(1),
-                    Center(
-                      child: label(
-                        "or logging in",
-                        maxLines: 2,
-                        textColor: const Color.fromRGBO(113, 113, 113, 1),
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    sizeBoxHeight(15),
-                    sizeBoxHeight(17),
-                    globalTextField(
-                        lable: "User Name",
-                        controller: usercontroller,
-                        onEditingComplete: () {
-                          FocusScope.of(context)
-                              .requestFocus(userpassFocusNode);
-                        },
-                        focusNode: userFocusNode,
-                        hintText: 'User Name',
-                        context: context,
-                        suffixIcon: Padding(
+                  ),
+                  sizeBoxHeight(15),
+                  sizeBoxHeight(17),
+                  globalTextField(
+                    lable: "User Name",
+                    controller: usercontroller,
+                    onEditingComplete: () {
+                      FocusScope.of(context).requestFocus(userpassFocusNode);
+                    },
+                    focusNode: userFocusNode,
+                    hintText: 'User Name',
+                    context: context,
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 26,
+                        width: 26,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.sufcolor,
+                        ),
+                        child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 26,
-                            width: 26,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.sufcolor),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/profile1.png',
-                                color: Colors.grey.shade500,
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                        )).paddingSymmetric(horizontal: 20),
-                    sizeBoxHeight(10),
-                    globalTextField(
-                        lable: 'First Name',
-                        lable2: " *",
-                        controller: fnamecontroller,
-                        onEditingComplete: () {
-                          FocusScope.of(context)
-                              .requestFocus(firstnamepassFocusNode);
-                        },
-                        focusNode: firstnameFocusNode,
-                        hintText: 'First Name',
-                        context: context,
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 26,
-                            width: 26,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.sufcolor),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/profile1.png',
-                                color: Colors.grey.shade500,
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                        )).paddingSymmetric(horizontal: 20),
-                    sizeBoxHeight(10),
-                    globalTextField(
-                        lable: "Last Name",
-                        lable2: " *",
-                        controller: lnamecontroller,
-                        onEditingComplete: () {
-                          FocusScope.of(context)
-                              .requestFocus(lastnamepassFocusNode);
-                        },
-                        focusNode: lastnameFocusNode,
-                        hintText: 'Last Name',
-                        context: context,
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 26,
-                            width: 26,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.sufcolor),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/profile1.png',
-                                color: Colors.grey.shade500,
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                        )).paddingSymmetric(horizontal: 20),
-                    sizeBoxHeight(10),
-                    Align(
-                      alignment: Alignment.topLeft,
-                      child: Row(
-                        children: [
-                          label(
-                            'Mobile Number',
-                            fontSize: 10,
-                            textColor: themeContro.isLightMode.value
-                                ? AppColors.black
-                                : AppColors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          sizeBoxWidth(3),
-                          label(' *',
-                              textColor: Colors.redAccent,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600)
-                        ],
-                      ),
-                    ).paddingSymmetric(horizontal: 20),
-                    sizeBoxHeight(4),
-                    IntlPhoneField(
-                      dropdownTextStyle: poppinsFont(
-                          14,
-                          themeContro.isLightMode.value
-                              ? Colors.black
-                              : AppColors.white,
-                          FontWeight.w400),
-                      showCountryFlag: true,
-                      showDropdownIcon: false,
-                      initialValue: contrycode,
-                      onCountryChanged: (value) {
-                        contrycode = value.dialCode;
-                        print('+$contrycode');
-                      },
-                      onChanged: (number) {
-                        print(number);
-                        phone = number.completeNumber;
-                      },
-                      cursorColor: themeContro.isLightMode.value
-                          ? Colors.blue
-                          : AppColors.white,
-                      autofocus: false,
-                      autovalidateMode: AutovalidateMode.onUserInteraction,
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: themeContro.isLightMode.value
-                              ? Colors.black
-                              : AppColors.white,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Poppins"),
-                      controller: mobilecontroller,
-                      keyboardType: TextInputType.number,
-                      flagsButtonPadding: const EdgeInsets.only(left: 5),
-                      decoration: InputDecoration(
-                        fillColor: themeContro.isLightMode.value
-                            ? Colors.transparent
-                            : AppColors.darkGray,
-                        filled: true,
-                        counterText: '',
-                        contentPadding: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide.none),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide:
-                                const BorderSide(color: AppColors.blue)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(
-                                color: themeContro.isLightMode.value
-                                    ? AppColors.colorEFEFEF
-                                    : AppColors.grey1)),
-                        disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide.none),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide:
-                                const BorderSide(color: Colors.redAccent)),
-                        focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide:
-                                const BorderSide(color: Colors.redAccent)),
-                        hintText: "Enter Your Mobile Number".tr,
-                        hintStyle: const TextStyle(
-                            fontSize: 14,
-                            color: AppColors.colorB0B0B0,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: "Poppins"),
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 26,
-                            width: 26,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.sufcolor),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/call.png',
-                                color: Colors.grey.shade500,
-                                height: 20,
-                              ),
-                            ),
+                          child: Image.asset(
+                            'assets/images/profile1.png',
+                            color: Colors.grey.shade500,
+                            height: 20,
                           ),
                         ),
-                        errorStyle: const TextStyle(
-                          color: Colors.redAccent,
-                          fontSize: 12,
+                      ),
+                    ),
+                  ).paddingSymmetric(horizontal: 20),
+                  sizeBoxHeight(10),
+                  globalTextField(
+                    lable: 'First Name',
+                    lable2: " *",
+                    controller: fnamecontroller,
+                    onEditingComplete: () {
+                      FocusScope.of(
+                        context,
+                      ).requestFocus(firstnamepassFocusNode);
+                    },
+                    focusNode: firstnameFocusNode,
+                    hintText: 'First Name',
+                    context: context,
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 26,
+                        width: 26,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.sufcolor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/images/profile1.png',
+                            color: Colors.grey.shade500,
+                            height: 20,
+                          ),
                         ),
                       ),
-                      validator: (value) {
-                        if (phone == null ||
-                            phone!.isEmpty ||
-                            mobilecontroller.text.isEmpty) {
-                          return 'Please Enter Your Valid Number';
-                        }
-                      },
-                    ).paddingSymmetric(horizontal: 20),
-                    sizeBoxHeight(10),
-                    globalTextField(
-                        lable: "Email Address",
-                        lable2: " *",
-                        controller: emailcontroller,
-                        onEditingComplete: () {
-                          FocusScope.of(context)
-                              .requestFocus(signUpPasswordFocusNode);
-                        },
-                        isEmail: true,
-                        focusNode: signUpEmailIDFocusNode,
-                        hintText: 'Email Address',
-                        context: context,
-                        imagePath: 'assets/images/sms.png',
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 26,
-                            width: 26,
-                            decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.sufcolor),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/sms.png',
-                                color: Colors.grey.shade500,
-                                height: 20,
-                              ),
-                            ),
-                          ),
-                        )).paddingSymmetric(horizontal: 20),
-                    sizeBoxHeight(10),
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Row(
-                        children: [
-                          label(
-                            'Password',
-                            fontSize: 10,
-                            textColor: themeContro.isLightMode.value
-                                ? AppColors.black
-                                : AppColors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          sizeBoxWidth(3),
-                          label(' *',
-                              textColor: Colors.redAccent,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600)
-                        ],
-                      ),
-                    ).paddingSymmetric(horizontal: 20),
-                    sizeBoxHeight(4),
-                    passwordField().paddingSymmetric(horizontal: 10),
-                    sizeBoxHeight(10),
-                    sizeBoxHeight(25),
-                    Obx(() {
-                      return registercontro.isLoading.value
-                          ? commonLoading()
-                          : GestureDetector(
-                              onTap: () {
-                                if (_keyform.currentState!.validate()) {
-                                  registercontro.registerApi(
-                                    Username: usercontroller.text,
-                                    Firstname: fnamecontroller.text,
-                                    Lastname: lnamecontroller.text,
-                                    Newmobile:
-                                        "$contrycode${mobilecontroller.text}",
-                                    Countrycode: contrycode,
-                                    Email: emailcontroller.text,
-                                    Password: passcontroller.text,
-                                  );
-                                }
-                              },
-                              child: Container(
-                                height: 50,
-                                width: Get.width * 0.7,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  gradient: isselected
-                                      ? AppColors.logoColork
-                                      : AppColors.logoColorWith60Opacityk,
-                                ),
-                                child: Center(
-                                  child: label(
-                                    "Next",
-                                    textColor: AppColors.white,
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                              ),
-                            );
-                    }),
-                    SizedBox(
-                      height: Get.height * 0.05,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
+                  ).paddingSymmetric(horizontal: 20),
+                  sizeBoxHeight(10),
+                  globalTextField(
+                    lable: "Last Name",
+                    lable2: " *",
+                    controller: lnamecontroller,
+                    onEditingComplete: () {
+                      FocusScope.of(
+                        context,
+                      ).requestFocus(lastnamepassFocusNode);
+                    },
+                    focusNode: lastnameFocusNode,
+                    hintText: 'Last Name',
+                    context: context,
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 26,
+                        width: 26,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.sufcolor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/images/profile1.png',
+                            color: Colors.grey.shade500,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ).paddingSymmetric(horizontal: 20),
+                  sizeBoxHeight(10),
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Row(
                       children: [
                         label(
-                          "Don’t have an account? ",
-                          textColor: AppColors.brown,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
+                          'Mobile Number',
+                          fontSize: 10,
+                          textColor: themeContro.isLightMode.value
+                              ? AppColors.black
+                              : AppColors.white,
+                          fontWeight: FontWeight.w500,
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Get.to(
-                              const Login(),
-                              transition: Transition.rightToLeft,
-                            );
-                          },
-                          child: label(
-                            "Sign In",
-                            textColor: AppColors.blue,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        sizeBoxWidth(3),
+                        label(
+                          ' *',
+                          textColor: Colors.redAccent,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: Get.height * 0.02,
+                  ).paddingSymmetric(horizontal: 20),
+                  sizeBoxHeight(4),
+                  IntlPhoneField(
+                    dropdownTextStyle: poppinsFont(
+                      14,
+                      themeContro.isLightMode.value
+                          ? Colors.black
+                          : AppColors.white,
+                      FontWeight.w400,
                     ),
-                  ],
-                ),
+                    showCountryFlag: true,
+                    showDropdownIcon: false,
+                    initialValue: contrycode,
+                    onCountryChanged: (value) {
+                      contrycode = value.dialCode;
+                      print('+$contrycode');
+                    },
+                    onChanged: (number) {
+                      print(number);
+                      phone = number.completeNumber;
+                    },
+                    cursorColor: themeContro.isLightMode.value
+                        ? Colors.blue
+                        : AppColors.white,
+                    autofocus: false,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: themeContro.isLightMode.value
+                          ? Colors.black
+                          : AppColors.white,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: "Poppins",
+                    ),
+                    controller: mobilecontroller,
+                    keyboardType: TextInputType.number,
+                    flagsButtonPadding: const EdgeInsets.only(left: 5),
+                    decoration: InputDecoration(
+                      fillColor: themeContro.isLightMode.value
+                          ? Colors.transparent
+                          : AppColors.darkGray,
+                      filled: true,
+                      counterText: '',
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: const BorderSide(color: AppColors.blue),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(
+                          color: themeContro.isLightMode.value
+                              ? AppColors.colorEFEFEF
+                              : AppColors.grey1,
+                        ),
+                      ),
+                      disabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide.none,
+                      ),
+                      errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: const BorderSide(color: Colors.redAccent),
+                      ),
+                      focusedErrorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: const BorderSide(color: Colors.redAccent),
+                      ),
+                      hintText: "Enter Your Mobile Number".tr,
+                      hintStyle: const TextStyle(
+                        fontSize: 14,
+                        color: AppColors.colorB0B0B0,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: "Poppins",
+                      ),
+                      suffixIcon: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 26,
+                          width: 26,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.sufcolor,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              'assets/images/call.png',
+                              color: Colors.grey.shade500,
+                              height: 20,
+                            ),
+                          ),
+                        ),
+                      ),
+                      errorStyle: const TextStyle(
+                        color: Colors.redAccent,
+                        fontSize: 12,
+                      ),
+                    ),
+                    validator: (value) {
+                      if (phone == null ||
+                          phone!.isEmpty ||
+                          mobilecontroller.text.isEmpty) {
+                        return 'Please Enter Your Valid Number';
+                      }
+                    },
+                  ).paddingSymmetric(horizontal: 20),
+                  sizeBoxHeight(10),
+                  globalTextField(
+                    lable: "Email Address",
+                    lable2: " *",
+                    controller: emailcontroller,
+                    onEditingComplete: () {
+                      FocusScope.of(
+                        context,
+                      ).requestFocus(signUpPasswordFocusNode);
+                    },
+                    isEmail: true,
+                    focusNode: signUpEmailIDFocusNode,
+                    hintText: 'Email Address',
+                    context: context,
+                    imagePath: 'assets/images/sms.png',
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        height: 26,
+                        width: 26,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.sufcolor,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset(
+                            'assets/images/sms.png',
+                            color: Colors.grey.shade500,
+                            height: 20,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ).paddingSymmetric(horizontal: 20),
+                  sizeBoxHeight(10),
+                  Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Row(
+                      children: [
+                        label(
+                          'Password',
+                          fontSize: 10,
+                          textColor: themeContro.isLightMode.value
+                              ? AppColors.black
+                              : AppColors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        sizeBoxWidth(3),
+                        label(
+                          ' *',
+                          textColor: Colors.redAccent,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                  ).paddingSymmetric(horizontal: 20),
+                  sizeBoxHeight(4),
+                  passwordField().paddingSymmetric(horizontal: 10),
+                  sizeBoxHeight(10),
+                  sizeBoxHeight(25),
+                  Obx(() {
+                    return registercontro.isLoading.value
+                        ? commonLoading()
+                        : GestureDetector(
+                            onTap: () {
+                              if (_keyform.currentState!.validate()) {
+                                registercontro.registerApi(
+                                  Username: usercontroller.text,
+                                  Firstname: fnamecontroller.text,
+                                  Lastname: lnamecontroller.text,
+                                  Newmobile:
+                                      "$contrycode${mobilecontroller.text}",
+                                  Countrycode: contrycode,
+                                  Email: emailcontroller.text,
+                                  Password: passcontroller.text,
+                                );
+                              }
+                            },
+                            child: Container(
+                              height: 50,
+                              width: Get.width * 0.7,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                gradient: isselected
+                                    ? AppColors.logoColork
+                                    : AppColors.logoColorWith60Opacityk,
+                              ),
+                              child: Center(
+                                child: label(
+                                  "Next",
+                                  textColor: AppColors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                          );
+                  }),
+                  SizedBox(height: Get.height * 0.05),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      label(
+                        "Don’t have an account? ",
+                        textColor: AppColors.brown,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.to(
+                            const Login(),
+                            transition: Transition.rightToLeft,
+                          );
+                        },
+                        child: label(
+                          "Sign In",
+                          textColor: AppColors.blue,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: Get.height * 0.02),
+                ],
               ),
-            )),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -474,10 +495,12 @@ class _RegisterState extends State<Register> {
   Widget passwordField() {
     return Theme(
       data: Theme.of(context).copyWith(
-          textSelectionTheme: TextSelectionThemeData(
-              selectionHandleColor: AppColors.blue,
-              cursorColor: AppColors.blue,
-              selectionColor: AppColors.blue.withOpacity(0.5))),
+        textSelectionTheme: TextSelectionThemeData(
+          selectionHandleColor: AppColors.blue,
+          cursorColor: AppColors.blue,
+          selectionColor: AppColors.blue.withOpacity(0.5),
+        ),
+      ),
       child: Obx(() {
         return Column(
           children: [
@@ -492,11 +515,12 @@ class _RegisterState extends State<Register> {
               },
               autovalidateMode: AutovalidateMode.onUserInteraction,
               style: poppinsFont(
-                  14,
-                  themeContro.isLightMode.value
-                      ? AppColors.black
-                      : AppColors.white,
-                  FontWeight.normal),
+                14,
+                themeContro.isLightMode.value
+                    ? AppColors.black
+                    : AppColors.white,
+                FontWeight.normal,
+              ),
               // focusNode: focusNode,
               onFieldSubmitted: (value) {
                 FocusScope.of(context).unfocus();
@@ -568,7 +592,9 @@ class _RegisterState extends State<Register> {
                     height: 26,
                     width: 26,
                     decoration: const BoxDecoration(
-                        shape: BoxShape.circle, color: AppColors.sufcolor),
+                      shape: BoxShape.circle,
+                      color: AppColors.sufcolor,
+                    ),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Image.asset(
@@ -584,33 +610,50 @@ class _RegisterState extends State<Register> {
                 hintText: "Password",
                 contentPadding: const EdgeInsets.symmetric(horizontal: 16),
 
-                hintStyle:
-                    poppinsFont(14, AppColors.colorB0B0B0, FontWeight.w400),
+                hintStyle: poppinsFont(
+                  14,
+                  AppColors.colorB0B0B0,
+                  FontWeight.w400,
+                ),
                 border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none),
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
                 focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: AppColors.blue)),
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: AppColors.blue),
+                ),
                 enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(
-                        color: themeContro.isLightMode.value
-                            ? AppColors.colorEFEFEF
-                            : AppColors.darkgray3)),
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: themeContro.isLightMode.value
+                        ? AppColors.colorEFEFEF
+                        : AppColors.darkgray3,
+                  ),
+                ),
                 disabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide.none),
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
 
                 errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: Colors.redAccent)),
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.redAccent),
+                ),
                 focusedErrorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: const BorderSide(color: Colors.redAccent)),
-                errorStyle:
-                    poppinsFont(12, Colors.redAccent, FontWeight.normal),
-                labelStyle: poppinsFont(12, AppColors.black, FontWeight.w400),
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: const BorderSide(color: Colors.redAccent),
+                ),
+                errorStyle: poppinsFont(
+                  12,
+                  Colors.redAccent,
+                  FontWeight.normal,
+                ),
+                labelStyle: poppinsFont(
+                  12,
+                  AppColors.black,
+                  FontWeight.w400,
+                ),
               ),
               // validator: (value) {
               //   if (!passCheckCtrl.moreThan8Char.value ||
@@ -645,13 +688,14 @@ class _RegisterState extends State<Register> {
                 return null;
               },
             ).paddingSymmetric(horizontal: 6).paddingSymmetric(
-                vertical: (passCheckCtrl.moreThan8Char.value &&
-                        passCheckCtrl.oneNumberChar.value &&
-                        passCheckCtrl.oneUpperCaseChar.value &&
-                        passCheckCtrl.oneLowerCaseChar.value &&
-                        passCheckCtrl.oneSpecialCaseChar.value)
-                    ? 0
-                    : 0),
+                  vertical: (passCheckCtrl.moreThan8Char.value &&
+                          passCheckCtrl.oneNumberChar.value &&
+                          passCheckCtrl.oneUpperCaseChar.value &&
+                          passCheckCtrl.oneLowerCaseChar.value &&
+                          passCheckCtrl.oneSpecialCaseChar.value)
+                      ? 0
+                      : 0,
+                ),
             (passCheckCtrl.moreThan8Char.value &&
                     passCheckCtrl.oneNumberChar.value &&
                     passCheckCtrl.oneUpperCaseChar.value &&
@@ -677,13 +721,16 @@ class _RegisterState extends State<Register> {
                                   size: 15,
                                   color: Colors.red,
                                 ),
-                          Text("8 or more character ",
-                              style: poppinsFont(
-                                  12,
-                                  passCheckCtrl.moreThan8Char.value
-                                      ? Colors.green
-                                      : Colors.red,
-                                  FontWeight.w400)),
+                          Text(
+                            "8 or more character ",
+                            style: poppinsFont(
+                              12,
+                              passCheckCtrl.moreThan8Char.value
+                                  ? Colors.green
+                                  : Colors.red,
+                              FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
                       Row(
@@ -700,13 +747,16 @@ class _RegisterState extends State<Register> {
                                   size: 15,
                                   color: Colors.red,
                                 ),
-                          Text("1 number ",
-                              style: poppinsFont(
-                                  12,
-                                  passCheckCtrl.oneNumberChar.value
-                                      ? Colors.green
-                                      : Colors.red,
-                                  FontWeight.w400)),
+                          Text(
+                            "1 number ",
+                            style: poppinsFont(
+                              12,
+                              passCheckCtrl.oneNumberChar.value
+                                  ? Colors.green
+                                  : Colors.red,
+                              FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
                       Row(
@@ -723,13 +773,16 @@ class _RegisterState extends State<Register> {
                                   size: 15,
                                   color: Colors.red,
                                 ),
-                          Text("1 Uppercase ",
-                              style: poppinsFont(
-                                  12,
-                                  passCheckCtrl.oneUpperCaseChar.value
-                                      ? Colors.green
-                                      : Colors.red,
-                                  FontWeight.w400)),
+                          Text(
+                            "1 Uppercase ",
+                            style: poppinsFont(
+                              12,
+                              passCheckCtrl.oneUpperCaseChar.value
+                                  ? Colors.green
+                                  : Colors.red,
+                              FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
                       Row(
@@ -746,13 +799,16 @@ class _RegisterState extends State<Register> {
                                   size: 15,
                                   color: Colors.red,
                                 ),
-                          Text("1 LowerCase ",
-                              style: poppinsFont(
-                                  12,
-                                  passCheckCtrl.oneLowerCaseChar.value
-                                      ? Colors.green
-                                      : Colors.red,
-                                  FontWeight.w400)),
+                          Text(
+                            "1 LowerCase ",
+                            style: poppinsFont(
+                              12,
+                              passCheckCtrl.oneLowerCaseChar.value
+                                  ? Colors.green
+                                  : Colors.red,
+                              FontWeight.w400,
+                            ),
+                          ),
                         ],
                       ),
                       Row(
@@ -769,15 +825,18 @@ class _RegisterState extends State<Register> {
                                   size: 15,
                                   color: Colors.red,
                                 ),
-                          Text("1 special character ",
-                              style: poppinsFont(
-                                  12,
-                                  passCheckCtrl.oneSpecialCaseChar.value
-                                      ? Colors.green
-                                      : Colors.red,
-                                  FontWeight.w400)),
+                          Text(
+                            "1 special character ",
+                            style: poppinsFont(
+                              12,
+                              passCheckCtrl.oneSpecialCaseChar.value
+                                  ? Colors.green
+                                  : Colors.red,
+                              FontWeight.w400,
+                            ),
+                          ),
                         ],
-                      )
+                      ),
                     ],
                   ),
             (passCheckCtrl.moreThan8Char.value &&
@@ -786,20 +845,13 @@ class _RegisterState extends State<Register> {
                     passCheckCtrl.oneLowerCaseChar.value &&
                     passCheckCtrl.oneSpecialCaseChar.value)
                 ? const SizedBox.shrink()
-                : const SizedBox(
-                    height: 0,
-                  ),
+                : const SizedBox(height: 0),
           ],
         ).paddingSymmetric(horizontal: 6);
       }),
     );
   }
 }
-
-
-
-
-
 
 //  twoText(
 //           text1: "Select Number of Employees",

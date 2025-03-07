@@ -1,4 +1,5 @@
 // ignore_for_file: non_constant_identifier_names, must_be_immutable, use_build_context_synchronously, avoid_print, use_full_hex_values_for_flutter_colors
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,9 +8,12 @@ import 'package:nlytical_app/controllers/user_controllers/categories_contro.dart
 import 'package:nlytical_app/controllers/user_controllers/filter_contro.dart';
 import 'package:nlytical_app/utils/assets.dart';
 import 'package:nlytical_app/utils/colors.dart';
+import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/utils/global.dart';
 import 'package:nlytical_app/utils/global_fonts.dart';
+import 'package:nlytical_app/utils/location.dart';
 import 'package:nlytical_app/utils/size_config.dart';
+import 'package:http/http.dart' as http;
 
 class Filter extends StatefulWidget {
   String? catid;
@@ -20,6 +24,7 @@ class Filter extends StatefulWidget {
 }
 
 class _FilterState extends State<Filter> {
+  final LocationService locationService = LocationService();
   CategoriesContro catecontro = Get.put(CategoriesContro());
   FilterContro filtercontro = Get.put(FilterContro());
   bool isnavfilter = false;
@@ -31,6 +36,7 @@ class _FilterState extends State<Filter> {
   @override
   void initState() {
     scrollController.addListener(_scrollListener);
+    _fetchNearbyPlaces();
     // Load initial data
     // fetchRestaurants();
     catecontro.cateApi();
@@ -114,9 +120,96 @@ class _FilterState extends State<Filter> {
     "5 Star"
   ];
 
-  // double minPrice = 1000;
-  // double maxPrice = 6000;
-  // RangeValues rangeValues = const RangeValues(1000, 6000);
+  final String _sessionToken = "";
+  List<Map<String, dynamic>> mapResult = [];
+  List<Map<String, dynamic>> nearbyLocations = [];
+  Future<void> _fetchNearbyPlaces() async {
+    try {
+      List<Map<String, dynamic>> results =
+          await locationService.fetchNearbyPlaces();
+      setState(() {
+        // Insert "All Location" at the top
+        nearbyLocations = [
+          {'name': 'All Location', 'description': 'All locations'}
+        ];
+        nearbyLocations.addAll(results);
+
+        // Initially display nearby locations
+        mapResult = List.from(nearbyLocations);
+      });
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+  void onSearchChange() {
+    String query = searchLocationCtrl.text.trim();
+
+    if (query.isEmpty) {
+      // Restore nearby locations including "All Location"
+      setState(() {
+        mapResult = List.from(nearbyLocations);
+      });
+    } else {
+      getsuggestion(query);
+    }
+  }
+
+  void getsuggestion(String input) async {
+    if (input.isEmpty) return;
+
+    String kPlaceApiKey = googleMapKey;
+    String baseURL =
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json";
+    String request =
+        '$baseURL?input=$input&key=$kPlaceApiKey&sessiontoken=$_sessionToken';
+
+    var response = await http.get(Uri.parse(request));
+
+    if (response.statusCode == 200) {
+      var jsonResponse = jsonDecode(response.body);
+      List<dynamic> predictions = jsonResponse['predictions'];
+
+      List<Map<String, dynamic>> suggestionsWithDetails = [];
+
+      for (var suggestion in predictions) {
+        String placeId = suggestion['place_id'];
+        String placeDetailsURL =
+            'https://maps.googleapis.com/maps/api/place/details/json?place_id=$placeId&key=$kPlaceApiKey';
+
+        var placeResponse = await http.get(Uri.parse(placeDetailsURL));
+        if (placeResponse.statusCode == 200) {
+          var placeDetails = jsonDecode(placeResponse.body);
+          var addressComponents = placeDetails['result']['address_components'];
+
+          String? state;
+          String? country;
+
+          for (var component in addressComponents) {
+            List types = component['types'];
+            if (types.contains('administrative_area_level_1')) {
+              state = component['long_name'];
+            }
+            if (types.contains('country')) {
+              country = component['long_name'];
+            }
+          }
+
+          suggestionsWithDetails.add({
+            'description': suggestion['description'],
+            'state': state,
+            'country': country,
+          });
+        }
+      }
+
+      setState(() {
+        mapResult = suggestionsWithDetails; // Update only with search results
+      });
+    } else {
+      snackBar("Problem while getting Location");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -371,97 +464,66 @@ class _FilterState extends State<Filter> {
                                             title: "Location",
                                             searchCtrl: searchLocationCtrl,
                                             onChanged: (p0) async {
-                                              setState(() {});
-                                              await filtercontro.getLonLat(p0);
-                                              await filtercontro
-                                                  .getsuggestion(p0);
-                                              setState(() {});
+                                              onSearchChange();
                                             },
-                                            child:
-                                                searchLocationCtrl.text.isEmpty
-                                                    ? Text(
-                                                        "Location not found",
-                                                        style: poppinsFont(
-                                                            12,
-                                                            AppColors.brown,
-                                                            FontWeight.w500),
-                                                      ).paddingSymmetric(
-                                                        vertical: 40)
-                                                    : filtercontro
-                                                            .mapresult.isEmpty
-                                                        ? Text(
-                                                            "Location not found",
-                                                            style: poppinsFont(
-                                                                12,
-                                                                AppColors.brown,
-                                                                FontWeight
-                                                                    .w500),
+                                            child: mapResult.isEmpty
+                                                ? Text(
+                                                    "Location not found",
+                                                    style: poppinsFont(
+                                                        12,
+                                                        AppColors.brown,
+                                                        FontWeight.w500),
+                                                  ).paddingSymmetric(
+                                                    vertical: 40)
+                                                : ListView.builder(
+                                                    itemCount: mapResult.length,
+                                                    padding:
+                                                        const EdgeInsets.all(0),
+                                                    shrinkWrap: true,
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return InkWell(
+                                                        onTap: () {},
+                                                        child: Container(
+                                                          height: 45,
+                                                          width: Get.width,
+                                                          decoration: BoxDecoration(
+                                                              border: Border(
+                                                                  bottom: BorderSide(
+                                                                      color: themeContro.isLightMode.value
+                                                                          ? Colors
+                                                                              .grey
+                                                                              .shade200
+                                                                          : AppColors
+                                                                              .darkgray2))),
+                                                          child: Align(
+                                                            alignment: Alignment
+                                                                .centerLeft,
+                                                            child: Text(
+                                                              mapResult[index][
+                                                                      'description'] ??
+                                                                  "${mapResult[index]['name']}",
+                                                              style: poppinsFont(
+                                                                  12,
+                                                                  themeContro
+                                                                          .isLightMode
+                                                                          .value
+                                                                      ? AppColors
+                                                                          .black
+                                                                      : AppColors
+                                                                          .white,
+                                                                  FontWeight
+                                                                      .w500),
+                                                            ),
                                                           ).paddingSymmetric(
-                                                            vertical: 40)
-                                                        : ListView.builder(
-                                                            itemCount:
-                                                                filtercontro
-                                                                    .mapresult
-                                                                    .length,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .all(0),
-                                                            shrinkWrap: true,
-                                                            scrollDirection:
-                                                                Axis.vertical,
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return InkWell(
-                                                                onTap: () {
-                                                                  setState(() {
-                                                                    searchLocationCtrl
-                                                                        .text = filtercontro
-                                                                            .mapresult[index]
-                                                                        [
-                                                                        'description'];
-                                                                    filtercontro
-                                                                        .mapresult
-                                                                        .clear();
-                                                                    filtercontro
-                                                                        .getLonLat(
-                                                                            searchLocationCtrl.text);
-                                                                  });
-                                                                },
-                                                                child:
-                                                                    Container(
-                                                                  height: 36,
-                                                                  width:
-                                                                      Get.width,
-                                                                  decoration: BoxDecoration(
-                                                                      border: Border(
-                                                                          bottom:
-                                                                              BorderSide(color: themeContro.isLightMode.value ? Colors.grey.shade200 : AppColors.darkgray2))),
-                                                                  child: Align(
-                                                                    alignment:
-                                                                        Alignment
-                                                                            .centerLeft,
-                                                                    child: Text(
-                                                                      filtercontro
-                                                                              .mapresult[index]
-                                                                          [
-                                                                          'description'],
-                                                                      style: poppinsFont(
-                                                                          12,
-                                                                          themeContro.isLightMode.value
-                                                                              ? AppColors.black
-                                                                              : AppColors.white,
-                                                                          FontWeight.w500),
-                                                                    ),
-                                                                  ).paddingSymmetric(
-                                                                      horizontal:
-                                                                          15),
-                                                                ).paddingSymmetric(
-                                                                        horizontal:
-                                                                            20),
-                                                              );
-                                                            },
-                                                          ),
+                                                              horizontal: 15),
+                                                        ).paddingSymmetric(
+                                                            horizontal: 20),
+                                                      );
+                                                    },
+                                                  ),
                                           ),
                                           const SizedBox(height: 30),
                                           //============================================ CATEGORIES

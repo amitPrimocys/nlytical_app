@@ -51,22 +51,24 @@ class _ExploreState extends State<Explore> {
   @override
   void initState() {
     filtercontro.scrollControllerlocation = ScrollController();
-    addMarker();
     // addMarker1();
-    nearcontro.nearbyApi(
-        latitudee: Latitude,
-        longitudee: Longitude,
-        page: nearcontro.currentpage.toString());
+    debugPrint(
+        "lat****** ${SharedPrefs.getString(SharedPreferencesKey.LATTITUDE)}");
+    debugPrint(
+        "lng***** ${SharedPrefs.getString(SharedPreferencesKey.LONGITUDE)}");
+    nearcontro
+        .nearbyApi(
+      latitudee: SharedPrefs.getString(SharedPreferencesKey.LATTITUDE),
+      longitudee: SharedPrefs.getString(SharedPreferencesKey.LONGITUDE),
+      page: nearcontro.currentpage.toString(),
+    )
+        .then((_) {
+      addMarker();
+    });
     scrollController.addListener(_scrollListener);
 
     // Load initial data
     fetchRestaurants();
-
-    // _checkLocationPermission();
-    debugPrint("lat****** ${Latitude}");
-    debugPrint("lng***** ${Longitude}");
-
-    // apis();
 
     if (mounted) {
       setState(() {});
@@ -268,10 +270,18 @@ class _ExploreState extends State<Explore> {
                             onTap: () {
                               // openBottomForfilter(context);
                               Get.to(() => Filter(
-                                    catid: nearcontro.nearbymodel.value!
-                                        .nearbyService![0].categoryId
-                                        .toString(),
-                                  ));
+                                        catid: nearcontro.nearbymodel.value!
+                                            .nearbyService![0].categoryId
+                                            .toString(),
+                                      ))!
+                                  .then((_) {
+                                setState(() {
+                                  print(
+                                      "<<selectedCategories>>:${filtercontro.selectedCategories}");
+                                  print(
+                                      "<<selectedSubCate>>:${filtercontro.selectedSubCate}");
+                                });
+                              });
                             },
                             child: Image.asset(
                               'assets/images/menu1.png',
@@ -332,15 +342,17 @@ class _ExploreState extends State<Explore> {
                                                 child: Column(
                                                   children: [
                                                     sizeBoxHeight(40),
-                                                    filtercontro
-                                                            .isnavfilter.value
-                                                        ? Column(
-                                                            children: [
-                                                              filter_clear(),
-                                                              filterlisting(),
-                                                            ],
-                                                          ) // Show the listing if isnavfilter is true
-                                                        : listing(),
+                                                    Obx(
+                                                      () => filtercontro
+                                                              .isnavfilter.value
+                                                          ? Column(
+                                                              children: [
+                                                                filter_clear(),
+                                                                filterlisting(),
+                                                              ],
+                                                            ) // Show the listing if isnavfilter is true
+                                                          : listing(),
+                                                    )
                                                   ],
                                                 ),
                                               );
@@ -564,46 +576,105 @@ class _ExploreState extends State<Explore> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: filtercontro.selectedCategories.value.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 5),
-                            child: Container(
-                              height: 30,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(6),
-                                  color: Colors.white,
-                                  border: Border.all(color: AppColors.blue)),
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    sizeBoxWidth(10),
-                                    SizedBox(
-                                      child: label(
-                                        filtercontro.selectedCategories.value
-                                                .isNotEmpty
-                                            ? filtercontro.selectedCategories[
-                                                index] // Convert list to a string
-                                            : 'No Category Selected',
-                                        fontSize: 10,
-                                        maxLines: 2,
-                                        textColor: Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                    filtercontro.selectedCategories.isNotEmpty &&
+                            filtercontro.selectedCategories.first.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                filtercontro.selectedCategories.value.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Container(
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: Colors.white,
+                                      border:
+                                          Border.all(color: AppColors.blue)),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        sizeBoxWidth(10),
+                                        SizedBox(
+                                          child: label(
+                                            filtercontro.selectedCategories
+                                                    .value.isNotEmpty
+                                                ? filtercontro
+                                                        .selectedCategories[
+                                                    index] // Convert list to a string
+                                                : 'No Category Selected',
+                                            fontSize: 10,
+                                            maxLines: 2,
+                                            textColor: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        sizeBoxWidth(10),
+                                      ],
                                     ),
-                                    sizeBoxWidth(10),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ),
-                          );
-                        }),
-                    sizeBoxWidth(15),
+                              );
+                            })
+                        : SizedBox.shrink(),
+                    filtercontro.selectedSubCate.isNotEmpty &&
+                            filtercontro.selectedSubCate.first.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount:
+                                filtercontro.selectedSubCate.value.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Container(
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(6),
+                                      color: Colors.white,
+                                      border:
+                                          Border.all(color: AppColors.blue)),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        sizeBoxWidth(10),
+                                        SizedBox(
+                                          child: label(
+                                            filtercontro.selectedSubCate.value
+                                                    .isNotEmpty
+                                                ? filtercontro.selectedSubCate[
+                                                    index] // Convert list to a string
+                                                : 'No Subcategory Selected',
+                                            fontSize: 10,
+                                            maxLines: 2,
+                                            textColor: Colors.black,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                        sizeBoxWidth(10),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            })
+                        : SizedBox.shrink(),
+                    filtercontro.selectedSubCate.isNotEmpty &&
+                            filtercontro.selectedSubCate.first.isNotEmpty
+                        ? sizeBoxHeight(5)
+                        : SizedBox.shrink(),
                     filtercontro.selectedRating.value > 0
                         ? Container(
                             height: 30,
@@ -612,34 +683,71 @@ class _ExploreState extends State<Explore> {
                                 color: Colors.white,
                                 border: Border.all(color: AppColors.blue)),
                             child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  sizeBoxWidth(10),
-                                  label(
-                                    // (filtercontro.selectedRating.value != null &&
-                                    //         filtercontro.selectedRating.value > 0)
-                                    //     ? '${filtercontro.selectedRating.value} Star'
-                                    //     : 'No Rating Selected',
-
-                                    filtercontro.selectedRating.value > 0
-                                        ? '${filtercontro.selectedRating.value} Star'
-                                        : 'No Rating Selected',
-                                    fontSize: 10,
-                                    textColor: Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  sizeBoxWidth(5),
-                                  Icon(
-                                    Icons.close,
-                                    size: 12,
-                                  ),
-                                  sizeBoxWidth(10),
-                                ],
-                              ),
+                              child: label(
+                                filtercontro.selectedRating.value > 0
+                                    ? '${filtercontro.selectedRating.value} Star'
+                                    : 'No Rating Selected',
+                                fontSize: 10,
+                                textColor: Colors.black,
+                                fontWeight: FontWeight.w400,
+                              ).paddingSymmetric(horizontal: 5),
                             ),
                           )
+                        : SizedBox.shrink(),
+                    filtercontro.selectedRating.value > 0
+                        ? sizeBoxWidth(10)
+                        : SizedBox.shrink(),
+                    filtercontro.selectedPrice.value > 0
+                        ? Container(
+                            height: 30,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(6),
+                                color: Colors.white,
+                                border: Border.all(color: AppColors.blue)),
+                            child: Center(
+                              child: label(
+                                filtercontro.selectedPrice.value > 0
+                                    ? '${filtercontro.selectedPrice.value} Price'
+                                    : 'No Rating Selected',
+                                fontSize: 10,
+                                textColor: Colors.black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ).paddingSymmetric(horizontal: 5),
+                          )
+                        : SizedBox.shrink(),
+                    filtercontro.selectedPrice.value > 0
+                        ? sizeBoxWidth(10)
+                        : SizedBox.shrink(),
+                    filtercontro.selectedType.isNotEmpty &&
+                            filtercontro.selectedType.first.isNotEmpty
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: filtercontro.selectedType.value.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                height: 30,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(6),
+                                    color: Colors.white,
+                                    border: Border.all(color: AppColors.blue)),
+                                child: Center(
+                                  child: SizedBox(
+                                    child: label(
+                                      filtercontro.selectedType.value.isNotEmpty
+                                          ? filtercontro.selectedType[
+                                              index] // Convert list to a string
+                                          : 'No Type Selected',
+                                      fontSize: 10,
+                                      maxLines: 2,
+                                      textColor: Colors.black,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ).paddingSymmetric(horizontal: 5),
+                              );
+                            })
                         : SizedBox.shrink(),
                   ],
                 ),
@@ -969,11 +1077,9 @@ class _ExploreState extends State<Explore> {
     if (nearcontro.nearbymodel.value?.nearbyService == null) {
       return; // Exit early if there's no data
     }
-
-    for (int i = 0;
-        i < nearcontro.nearbymodel.value!.nearbyService!.length;
-        i++) {
-      final service = nearcontro.nearbymodel.value!.nearbyService![i];
+    markerList.clear();
+    for (int i = 0; i < nearcontro.nearbylist.length; i++) {
+      final service = nearcontro.nearbylist[i];
 
       // Check for null lat or lon before parsing
       if (service.lat == null || service.lon == null) {
@@ -989,8 +1095,7 @@ class _ExploreState extends State<Explore> {
           ),
           icon: await getCustomIcon(),
           onTap: () {
-            if (i >= 0 &&
-                i < nearcontro.nearbymodel.value!.nearbyService!.length) {
+            if (i >= 0 && i < nearcontro.nearbylist.length) {
               _scrollToIndex(i);
             }
           },
@@ -1304,7 +1409,9 @@ class _ExploreState extends State<Explore> {
               height: Get.height,
               width: Get.width,
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: themeContro.isLightMode.value
+                      ? Colors.white
+                      : AppColors.darkMainBlack,
                   borderRadius: BorderRadius.only(
                       topLeft: ui.Radius.circular(15),
                       topRight: ui.Radius.circular(15))),
@@ -1335,9 +1442,14 @@ class _ExploreState extends State<Explore> {
                             width: Get.width * 0.90,
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
-                                color: Colors.white,
-                                border:
-                                    Border.all(color: Colors.grey.shade300)),
+                                color: themeContro.isLightMode.value
+                                    ? Colors.white
+                                    : AppColors.darkGray,
+                                border: Border.all(
+                                    color: themeContro.isLightMode.value
+                                        ? Colors.grey.shade300
+                                        : AppColors.color000000
+                                            .withOpacity(0.8))),
                             child: Row(
                               children: [
                                 Container(
@@ -1347,8 +1459,15 @@ class _ExploreState extends State<Explore> {
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(9),
                                           bottomLeft: Radius.circular(9)),
-                                      border: Border.all(color: Colors.white),
+                                      border: Border.all(
+                                          color: themeContro.isLightMode.value
+                                              ? Colors.grey.shade300
+                                              : AppColors.color000000
+                                                  .withOpacity(0.8)),
                                       image: DecorationImage(
+                                          onError: (exception, stackTrace) {
+                                            Icon(Icons.error);
+                                          },
                                           image: NetworkImage(nearcontro
                                               .nearbylist[index]
                                               .serviceImages![0]
@@ -1448,7 +1567,13 @@ class _ExploreState extends State<Explore> {
                                                             .isLike ==
                                                         0
                                                     ? Image.asset(
-                                                        AppAsstes.heart)
+                                                        AppAsstes.heart,
+                                                        color: themeContro
+                                                                .isLightMode
+                                                                .value
+                                                            ? AppColors.black
+                                                            : AppColors.grey1,
+                                                      )
                                                     : Image.asset(
                                                         AppAsstes.fill_heart),
                                               )),
@@ -1462,7 +1587,9 @@ class _ExploreState extends State<Explore> {
                                             .toString(),
                                         fontSize: 11,
                                         maxLines: 1,
-                                        textColor: AppColors.brown,
+                                        textColor: themeContro.isLightMode.value
+                                            ? AppColors.brown
+                                            : AppColors.white,
                                         fontWeight: FontWeight.w600,
                                       ).paddingOnly(left: 10),
                                     ),
@@ -1480,7 +1607,10 @@ class _ExploreState extends State<Explore> {
                                             padding: const EdgeInsets.all(6.0),
                                             child: Image.asset(
                                               'assets/images/location1.png',
-                                              color: Colors.black,
+                                              color:
+                                                  themeContro.isLightMode.value
+                                                      ? Colors.black
+                                                      : AppColors.blue,
                                             ),
                                           ),
                                         ),
@@ -1492,7 +1622,10 @@ class _ExploreState extends State<Explore> {
                                                 .toString(),
                                             maxLines: 1,
                                             fontSize: 10,
-                                            textColor: AppColors.black,
+                                            textColor:
+                                                themeContro.isLightMode.value
+                                                    ? AppColors.black
+                                                    : AppColors.brown,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -1531,7 +1664,10 @@ class _ExploreState extends State<Explore> {
                                         label(
                                           '(${nearcontro.nearbylist[index].totalReviewCount} Review)',
                                           fontSize: 10,
-                                          textColor: AppColors.black,
+                                          textColor:
+                                              themeContro.isLightMode.value
+                                                  ? AppColors.black
+                                                  : AppColors.white,
                                           fontWeight: FontWeight.w400,
                                         ),
                                       ],

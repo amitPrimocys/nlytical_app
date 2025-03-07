@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nlytical_app/auth/profile_details.dart';
 import 'package:nlytical_app/auth/welcome.dart';
 import 'package:nlytical_app/User/screens/bottamBar/newtabbar.dart';
 import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
@@ -50,24 +51,26 @@ class SplashScreenState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    assignValueForMode();
-    animationController = new AnimationController(
-        vsync: this, duration: new Duration(seconds: 2));
-    animation = new CurvedAnimation(
-        parent: animationController!, curve: Curves.easeOut);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      assignValueForMode();
+      animationController = new AnimationController(
+          vsync: this, duration: new Duration(seconds: 2));
+      animation = new CurvedAnimation(
+          parent: animationController!, curve: Curves.easeOut);
 
-    // ignore: unnecessary_this
-    animation!.addListener(() => this.setState(() {}));
-    animationController!.forward();
+      // ignore: unnecessary_this
+      animation!.addListener(() => this.setState(() {}));
+      animationController!.forward();
 
-    setState(() {
-      _visible = !_visible;
+      setState(() {
+        _visible = !_visible;
+      });
+      startTime();
+
+      // getCurrentLocation().then((_) async {
+      //   setState(() {});
+      // });
     });
-    startTime();
-
-    // getCurrentLocation().then((_) async {
-    //   setState(() {});
-    // });
   }
 
   assignValueForMode() async {
@@ -127,9 +130,19 @@ class SplashScreenState extends State<SplashScreen>
       return Welcome();
     } else if (userid != null) {
       SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID);
+      String? userName =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERFNAME);
+      String? userMobile =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERMOBILE);
+      String? userEmail =
+          SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USEREMAIL);
       print("ROLE: ${prefs.getString(SharedPreferencesKey.ROlE)}");
       Get.find<HomeContro>().checkLocationPermission();
-      return TabbarScreen(currentIndex: 0);
+      if (userName.isEmpty) {
+        return ProfileDetails(number: userMobile, email: userEmail);
+      } else {
+        return TabbarScreen(currentIndex: 0);
+      }
     } else if (vendorid != null) {
       String? storeId = prefs.getString(SharedPreferencesKey.STORE_ID);
       if (prefs.getString(SharedPreferencesKey.SUBSCRIBE)?.isEmpty ?? true) {

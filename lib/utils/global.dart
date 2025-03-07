@@ -27,6 +27,8 @@ String userIMAGE = '';
 String Latitude = '';
 String Longitude = '';
 
+String googleMapKey = "AIzaSyAMZ4GbRFYSevy7tMaiH5s0JmMBBXc0qBA";
+
 closekeyboard() {
   FocusManager.instance.primaryFocus?.unfocus();
 }

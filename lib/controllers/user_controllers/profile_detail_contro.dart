@@ -20,7 +20,10 @@ class ProfileDetailContro extends GetxController {
     required String uname,
     required String fname,
     required String laname,
-    required String email,
+    required bool isEmail,
+    String? email,
+    String? number,
+    String? code,
     String? file,
   }) async {
     try {
@@ -30,13 +33,27 @@ class ProfileDetailContro extends GetxController {
 
       var request = http.MultipartRequest('POST', url);
 
-      request.fields.addAll({
-        'username': uname,
-        'first_name': fname,
-        'last_name': laname,
-        'email': email,
-        'user_id': SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID),
-      });
+      if (isEmail == false) {
+        request.fields.addAll({
+          'username': uname,
+          'first_name': fname,
+          'last_name': laname,
+          'email': email!,
+          'user_id':
+              SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID),
+        });
+      } else {
+        request.fields.addAll({
+          'username': uname,
+          'first_name': fname,
+          'last_name': laname,
+          'email': email!,
+          'country_code': code!,
+          'mobile': code + number!,
+          'user_id':
+              SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERID),
+        });
+      }
 
       if (file != null && file.isNotEmpty) {
         request.files.add(await http.MultipartFile.fromPath('image', file));

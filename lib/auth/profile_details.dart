@@ -1,8 +1,11 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, avoid_print
 
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:nlytical_app/auth/splash.dart';
+import 'package:nlytical_app/utils/common_widgets.dart';
 import 'package:nlytical_app/utils/spinkit_loader.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,7 +20,8 @@ import 'package:nlytical_app/utils/size_config.dart';
 
 class ProfileDetails extends StatefulWidget {
   String? number;
-  ProfileDetails({super.key, this.number});
+  String? email;
+  ProfileDetails({super.key, this.number, this.email});
 
   @override
   State<ProfileDetails> createState() => _ProfileDetailsState();
@@ -59,6 +63,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
   @override
   void initState() {
     phonecontroller.text = widget.number.toString();
+    emailcontroller.text = widget.email.toString();
     usernamecontroller.addListener(fieldcheck);
     lnamecontroller.addListener(fieldcheck);
     fnamecontroller.addListener(fieldcheck);
@@ -236,6 +241,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                         lable: "Email Address",
                         lable2: ' *',
                         controller: emailcontroller,
+                        isEmail: true,
                         onEditingComplete: () {
                           FocusScope.of(context)
                               .requestFocus(signUpPasswordFocusNode);
@@ -243,6 +249,7 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                         focusNode: signUpEmailIDFocusNode,
                         hintText: 'Email Address',
                         context: context,
+                        isOnlyRead: widget.email!.isEmpty ? false : true,
                         imagePath: 'assets/images/sms.png',
                         suffixIcon: Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -254,44 +261,145 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                                 color: Colors.grey.shade200),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/sms.png',
-                                color: Colors.grey.shade500,
-                                height: 20,
-                              ),
+                              child: widget.email!.isEmpty
+                                  ? Image.asset(
+                                      'assets/images/sms.png',
+                                      color: Colors.grey.shade500,
+                                      height: 20,
+                                    )
+                                  : Image.asset(
+                                      'assets/images/Frame (1).png',
+                                      height: 20,
+                                    ),
                             ),
                           ),
                         )).paddingSymmetric(horizontal: 20),
                     sizeBoxHeight(10),
-                    globalTextField(
-                        lable: 'Mobile Number',
-                        lable2: " *",
-                        controller: phonecontroller,
-                        onEditingComplete: () {
-                          FocusScope.of(context)
-                              .requestFocus(phonenamepassFocusNode);
-                        },
-                        focusNode: phonenameFocusNode,
-                        hintText: 'Mobile Number',
-                        context: context,
-                        suffixIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: 26,
-                            width: 26,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.grey.shade200),
-                            child: Padding(
+                    widget.number!.isNotEmpty
+                        ? globalTextField(
+                            lable: 'Mobile Number',
+                            lable2: " *",
+                            isOnlyRead: true,
+                            controller: phonecontroller,
+                            onEditingComplete: () {
+                              FocusScope.of(context)
+                                  .requestFocus(phonenamepassFocusNode);
+                            },
+                            focusNode: phonenameFocusNode,
+                            hintText: 'Mobile Number',
+                            context: context,
+                            suffixIcon: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Image.asset(
-                                'assets/images/Frame (1).png',
-                                // color: Colors.grey.shade500,
-                                height: 20,
+                              child: Container(
+                                height: 26,
+                                width: 26,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Colors.grey.shade200),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Image.asset(
+                                    'assets/images/Frame (1).png',
+                                    // color: Colors.grey.shade500,
+                                    height: 20,
+                                  ),
+                                ),
                               ),
+                            )).paddingSymmetric(horizontal: 20)
+                        : IntlPhoneField(
+                            showCountryFlag: true,
+                            showDropdownIcon: false,
+                            initialCountryCode: "IN",
+                            onCountryChanged: (value) {
+                              contrycode = value.dialCode;
+                              print('+$contrycode');
+                            },
+                            onChanged: (number) {
+                              print(number);
+                            },
+                            dropdownTextStyle: TextStyle(
+                                fontSize: 14,
+                                color: themeContro.isLightMode.value
+                                    ? Colors.black
+                                    : AppColors.white,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Poppins"),
+                            cursorColor: themeContro.isLightMode.value
+                                ? AppColors.blue
+                                : Colors.white,
+                            autofocus: false,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: themeContro.isLightMode.value
+                                    ? Colors.black
+                                    : AppColors.white,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: "Poppins"),
+                            controller: phonecontroller,
+                            keyboardType: TextInputType.number,
+                            flagsButtonPadding: const EdgeInsets.only(left: 5),
+                            decoration: InputDecoration(
+                              counterText: '',
+                              filled: true,
+                              fillColor: themeContro.isLightMode.value
+                                  ? Colors.transparent
+                                  : AppColors.darkGray,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 20),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide.none),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide:
+                                      const BorderSide(color: AppColors.blue)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide(
+                                      color: themeContro.isLightMode.value
+                                          ? AppColors.colorEFEFEF
+                                          : AppColors.grey1)),
+                              disabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: BorderSide.none),
+                              errorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: const BorderSide(
+                                      color: Colors.redAccent)),
+                              focusedErrorBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide: const BorderSide(
+                                      color: Colors.redAccent)),
+                              hintText: "Enter Your Mobile Number".tr,
+                              hintStyle: const TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.colorB0B0B0,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Poppins"),
+                              suffixIcon: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height: 26,
+                                  width: 26,
+                                  decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: AppColors.sufcolor),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image.asset(
+                                      'assets/images/call.png',
+                                      color: Colors.grey.shade500,
+                                      height: 20,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              errorStyle: const TextStyle(
+                                  color: Colors.redAccent, fontSize: 11),
                             ),
-                          ),
-                        )).paddingSymmetric(horizontal: 20),
+                          ).paddingSymmetric(horizontal: 20),
                     sizeBoxHeight(25),
                     Obx(() {
                       return profiledetailcontro.isLoading.value
@@ -304,13 +412,32 @@ class _ProfileDetailsState extends State<ProfileDetails> {
                                 // );
 
                                 if (_keyform.currentState!.validate()) {
-                                  profiledetailcontro.newupdateApi(
-                                    file: selectedImages?.path,
-                                    uname: usernamecontroller.text,
-                                    fname: fnamecontroller.text,
-                                    laname: lnamecontroller.text,
-                                    email: emailcontroller.text,
-                                  );
+                                  if (widget.email!.isNotEmpty) {
+                                    if (phonecontroller.text
+                                        .trim()
+                                        .isNotEmpty) {
+                                      profiledetailcontro.newupdateApi(
+                                          isEmail: true,
+                                          file: selectedImages?.path,
+                                          uname: usernamecontroller.text,
+                                          fname: fnamecontroller.text,
+                                          laname: lnamecontroller.text,
+                                          email: emailcontroller.text,
+                                          code: contrycode,
+                                          number: phonecontroller.text);
+                                    } else {
+                                      snackBar("Enter Valid Mobile number");
+                                    }
+                                  } else {
+                                    profiledetailcontro.newupdateApi(
+                                      isEmail: false,
+                                      file: selectedImages?.path,
+                                      uname: usernamecontroller.text,
+                                      fname: fnamecontroller.text,
+                                      laname: lnamecontroller.text,
+                                      email: emailcontroller.text,
+                                    );
+                                  }
                                 }
                               },
                               child: Container(
@@ -593,7 +720,6 @@ class _ProfileDetailsState extends State<ProfileDetails> {
 
         // profileController.getProfile(selectedImages!);
       } else {
-        // ignore: avoid_print
         print("No image selected");
       }
     });
@@ -607,7 +733,6 @@ class _ProfileDetailsState extends State<ProfileDetails> {
         selectedImages = File(pickedFile.path);
         // profileController.getProfile(selectedImages!);
       } else {
-        // ignore: avoid_print
         print("No image selected");
       }
     });

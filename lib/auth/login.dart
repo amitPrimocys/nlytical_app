@@ -332,7 +332,7 @@ class _LoginState extends State<Login> {
                         GestureDetector(
                           onTap: () {
                             Get.to(
-                              const Register(),
+                              () => const Register(),
                               transition: Transition.rightToLeft,
                             );
                           },

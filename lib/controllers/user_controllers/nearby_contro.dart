@@ -91,6 +91,7 @@
 // ignore_for_file: avoid_print, unnecessary_brace_in_string_interps, unused_local_variable
 
 import 'dart:convert';
+import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:nlytical_app/models/user_models/nearby_model.dart';
@@ -153,6 +154,7 @@ class NearbyContro extends GetxController {
         }
 
         print("allcatelist ${nearbylist.length}");
+        log("allcatelist ${jsonEncode(nearbylist)}");
 
         isnear.value = false;
 

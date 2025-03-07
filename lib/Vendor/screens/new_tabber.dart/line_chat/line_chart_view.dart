@@ -1,5 +1,7 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
+
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/line_chat/line_chart_painter.dart';
 import 'package:nlytical_app/Vendor/screens/new_tabber.dart/line_chat/my_weight.dart';
 import 'package:touchable/touchable.dart';
@@ -34,6 +36,7 @@ class _LineChartViewState extends State<LineChartView>
   @override
   void initState() {
     super.initState();
+
     _startListenAnimation();
     _controller.forward();
   }

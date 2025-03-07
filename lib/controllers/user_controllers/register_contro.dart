@@ -58,14 +58,6 @@ class RegisterContro extends GetxController {
 
       if (registerModel.value!.status == true) {
         isLoading.value = false;
-
-        // SharedPreferences preferencesToken =
-        //     await SharedPreferences.getInstance();
-        // preferencesToken.setString(SharedPreferencesKey.LOGGED_IN_USERID,
-        //     registerModel.value!.userId.toString());
-        // userID =
-        //     preferencesToken.getString(SharedPreferencesKey.LOGGED_IN_USERID)!;
-
         // ignore: unused_local_variable
         String userResponseStr = json.encode(data);
 

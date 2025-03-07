@@ -61,6 +61,13 @@ class OtpController extends GetxController {
         otpmodel.value = OtpModel.fromJson(data);
 
         if (otpmodel.value?.status == true) {
+          if (email != null && email.isNotEmpty) {
+            SharedPrefs.setString(
+                SharedPreferencesKey.LOGGED_IN_USEREMAIL, email);
+          } else if (mobile != null && mobile.isNotEmpty) {
+            SharedPrefs.setString(
+                SharedPreferencesKey.LOGGED_IN_USERMOBILE, mobile);
+          }
           if (otpmodel.value!.role!.toLowerCase() == "user") {
             await SharedPrefs.setString(
               SharedPreferencesKey.LOGGED_IN_USERID,
@@ -77,9 +84,8 @@ class OtpController extends GetxController {
             String userFName =
                 SharedPrefs.getString(SharedPreferencesKey.LOGGED_IN_USERFNAME);
             if (userFName.isEmpty) {
-              Get.offAll(() => ProfileDetails(
-                    number: otpmodel.value!.mobile,
-                  ));
+              Get.offAll(() =>
+                  ProfileDetails(number: otpmodel.value!.mobile, email: ""));
             } else {
               Get.offAll(() => TabbarScreen(currentIndex: 0));
             }

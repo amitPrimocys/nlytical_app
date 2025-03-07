@@ -44,11 +44,7 @@ Widget globalTextField({
           themeContro.isLightMode.value ? Colors.black : AppColors.white,
           FontWeight.w500,
         ),
-        style2: poppinsFont(
-          11,
-          Colors.redAccent,
-          FontWeight.w600,
-        ),
+        style2: poppinsFont(11, Colors.redAccent, FontWeight.w600),
         mainAxisAlignment: MainAxisAlignment.start,
       ),
       (lable == null || lable == "")
@@ -56,10 +52,12 @@ Widget globalTextField({
           : sizeBoxHeight(5),
       Theme(
         data: Theme.of(context).copyWith(
-            textSelectionTheme: TextSelectionThemeData(
-                selectionHandleColor: AppColors.blue,
-                cursorColor: AppColors.blue,
-                selectionColor: AppColors.blue.withOpacity(0.5))),
+          textSelectionTheme: TextSelectionThemeData(
+            selectionHandleColor: AppColors.blue,
+            cursorColor: AppColors.blue,
+            selectionColor: AppColors.blue.withOpacity(0.5),
+          ),
+        ),
         child: TextFormField(
           controller: controller,
           onTap: onTap,
@@ -68,9 +66,10 @@ Widget globalTextField({
           onEditingComplete: onEditingComplete,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           style: poppinsFont(
-              14,
-              themeContro.isLightMode.value ? AppColors.black : AppColors.white,
-              FontWeight.normal),
+            14,
+            themeContro.isLightMode.value ? AppColors.black : AppColors.white,
+            FontWeight.normal,
+          ),
           focusNode: focusNode,
           maxLength: maxLength,
           onFieldSubmitted: (value) {
@@ -97,14 +96,15 @@ Widget globalTextField({
             floatingLabelBehavior: FloatingLabelBehavior.always,
             contentPadding: contentPadding ??
                 EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: (hintText == "Comments" ||
-                            hintText == "Address" ||
-                            hintText == "Business Description")
-                        ? 12
-                        : hintText == "Notes"
-                            ? 14
-                            : 0),
+                  horizontal: 16,
+                  vertical: (hintText == "Comments" ||
+                          hintText == "Address" ||
+                          hintText == "Business Description")
+                      ? 12
+                      : hintText == "Notes"
+                          ? 14
+                          : 0,
+                ),
             fillColor: themeContro.isLightMode.value
                 ? Colors.transparent
                 : AppColors.darkGray,
@@ -112,31 +112,42 @@ Widget globalTextField({
             hintText: hintText,
             hintStyle: poppinsFont(14, AppColors.colorB0B0B0, FontWeight.w400),
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none),
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide.none,
+            ),
             focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide:
-                    BorderSide(color: focusedBorderColor ?? AppColors.blue)),
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: focusedBorderColor ?? AppColors.blue,
+              ),
+            ),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                    color: themeContro.isLightMode.value
-                        ? AppColors.colorEFEFEF
-                        : AppColors.grey1)),
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide(
+                color: themeContro.isLightMode.value
+                    ? AppColors.colorEFEFEF
+                    : AppColors.grey1,
+              ),
+            ),
             disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none),
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: BorderSide.none,
+            ),
             errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: const BorderSide(color: Colors.redAccent)),
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(color: Colors.redAccent),
+            ),
             focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: const BorderSide(color: Colors.redAccent)),
+              borderRadius: BorderRadius.circular(10.0),
+              borderSide: const BorderSide(color: Colors.redAccent),
+            ),
             errorStyle: poppinsFont(12, Colors.redAccent, FontWeight.normal),
             labelText: isLabel ? hintText : null,
-            counterStyle:
-                poppinsFont(0, AppColors.colorB4B4B4, FontWeight.normal),
+            counterStyle: poppinsFont(
+              0,
+              AppColors.colorB4B4B4,
+              FontWeight.normal,
+            ),
             labelStyle: poppinsFont(12, AppColors.colorB0B0B0, FontWeight.w400),
           ),
           // validator: validator

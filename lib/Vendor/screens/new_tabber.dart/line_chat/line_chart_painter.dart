@@ -31,7 +31,7 @@ class LineChartPainter extends CustomPainter {
   late final ceilMax = maxWeight.ceil() + 1.0;
   late final floorMin = minWeight.floor() - 1.0;
 
-  final qtyYLabels = 5;
+  final qtyYLabels = 0;
 
   final paddingTop = 30.0;
   final paddingBottom = 30.0;
@@ -111,10 +111,13 @@ class LineChartPainter extends CustomPainter {
     final paint = Paint()..color = _backgroundColor;
     canvas.drawPaint(paint);
 
+    List<DateTime> weekStartDates = getWeekStartDates(myWeightProgress);
+    int numberOfWeeks = weekStartDates.length;
+
     // compute the drawable chart width and height
     final drawableHeight = size.height - paddingTop - paddingBottom;
     final drawableWidth = size.width - paddingLeft - paddingRight;
-    final widthColumn = (drawableWidth / myWeightProgress.length).toDouble();
+    final widthColumn = (drawableWidth / numberOfWeeks).toDouble();
     final heightColumn = drawableHeight;
 
     // escape if invalid
@@ -531,4 +534,26 @@ class LineChartPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
+}
+
+List<DateTime> getWeekStartDates(List<MyWeight> myWeightProgress) {
+  Set<DateTime> weekStartDates = {};
+
+  // Loop through your weight progress data and find the week start dates
+  for (var progress in myWeightProgress) {
+    // Assuming `progress.date` is a DateTime object that represents the date of progress
+    DateTime date = progress.dateTime;
+
+    // Get the start of the week (assuming the week starts on Sunday)
+    DateTime startOfWeek = date.subtract(Duration(days: date.weekday));
+
+    // Add the start of the week to the set (set automatically avoids duplicates)
+    weekStartDates.add(startOfWeek);
+  }
+
+  // Convert the set to a list and sort it by date
+  List<DateTime> sortedWeekStartDates = weekStartDates.toList();
+  sortedWeekStartDates.sort((a, b) => a.compareTo(b));
+
+  return sortedWeekStartDates;
 }

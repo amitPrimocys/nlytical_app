@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "231154851270-kbhgsjkj81m4dd30h7p0md180l65vur9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nlytical_app.primo",
+            "certificate_hash": "cf69cec5ca90530b0b856c6f50b5b4af0c47b6eb"
+          }
+        },
+        {
           "client_id": "231154851270-tks4mjt8ath5r04vces667jq905j52nf.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

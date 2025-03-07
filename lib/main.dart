@@ -9,7 +9,9 @@ import 'package:nlytical_app/User/screens/controller/user_tab_controller.dart';
 import 'package:nlytical_app/auth/splash.dart';
 import 'package:nlytical_app/controllers/user_controllers/home_contro.dart';
 import 'package:nlytical_app/controllers/user_controllers/login_contro.dart';
+import 'package:nlytical_app/controllers/vendor_controllers/insights_controller.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/lang_controller.dart';
+import 'package:nlytical_app/controllers/vendor_controllers/payment_history_controller.dart';
 import 'package:nlytical_app/controllers/vendor_controllers/profile_cotroller.dart';
 import 'package:nlytical_app/shared_preferences/shared_prefkey.dart';
 import 'package:nlytical_app/utils/custome_data_empty.dart';
@@ -35,33 +37,37 @@ Future<void> main() async {
   Get.put(UserTabController());
   Get.put(HomeContro());
   Get.put(ProfileCotroller());
+  Get.put(PaymentHistoryController());
+  Get.put(InsightsController());
 
   await SharedPreferences.getInstance().then((prefs) {
     final themeCollection = ThemeCollection(themes: {});
-    runApp(DynamicTheme(
-      themeCollection: themeCollection,
-      builder: (context, theme) {
-        // belowe brightness methos show mobile device wise dark or light mode
-        final Brightness brightness =
-            PlatformDispatcher.instance.platformBrightness;
-        final bool isDarkMode = brightness == Brightness.dark;
+    runApp(
+      DynamicTheme(
+        themeCollection: themeCollection,
+        builder: (context, theme) {
+          // belowe brightness methos show mobile device wise dark or light mode
+          final Brightness brightness =
+              PlatformDispatcher.instance.platformBrightness;
+          final bool isDarkMode = brightness == Brightness.dark;
 
-        print("System Theme Mode: ${isDarkMode ? "Dark" : "Light"}");
-        return GetMaterialApp(
-          themeMode: ThemeMode.system,
-          builder: (BuildContext context, Widget? widget) {
-            ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-              return CustomError(errorDetails: errorDetails);
-            };
-            return widget!;
-          },
-          color: Colors.white,
-          locale: const Locale('en', 'US'),
-          debugShowCheckedModeBanner: false,
-          home: SplashScreen(prefs),
-        );
-      },
-    ));
+          print("System Theme Mode: ${isDarkMode ? "Dark" : "Light"}");
+          return GetMaterialApp(
+            themeMode: ThemeMode.system,
+            builder: (BuildContext context, Widget? widget) {
+              ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+                return CustomError(errorDetails: errorDetails);
+              };
+              return widget!;
+            },
+            color: Colors.white,
+            locale: const Locale('en', 'US'),
+            debugShowCheckedModeBanner: false,
+            home: SplashScreen(prefs),
+          );
+        },
+      ),
+    );
   });
 }
 

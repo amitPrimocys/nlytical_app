@@ -10,6 +10,7 @@ class ApiHelper {
 // -------------User
 
   String guest = "$baseUrl/guest-user";
+  String getGoalspayment = "$baseUrl/get-goalspayment";
   String userRegister = "$baseUrl/newuser-registeraccount";
   String otp = "$baseUrl/verify-user";
   String login = "$baseUrl/user-login";
@@ -42,6 +43,7 @@ class ApiHelper {
   String getprofile = "$baseUrl/get-userprofile";
   String nearby = "$baseUrl/nearby-services";
   String vendorinfo = "$baseUrl/vendor-info";
+  String serviceinsights = "$baseUrl/get-serviceinsights";
   // String updateUserProfile = "$baseUrl/update-userprofile";
   // String subscriptionPlan = "$baseUrl/subscription-plan";
   // String paymentSuccess = "$baseUrl/payment-success";
